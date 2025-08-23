@@ -1,6 +1,5 @@
 package com.helpmepls.slidepuzzle.act
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Size
 import android.view.MenuItem
@@ -9,11 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.helpmepls.slidepuzzle.R
-import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
-import com.helpmepls.slidepuzzle.vm.BoardTitledSize
 import com.helpmepls.slidepuzzle.game.GameBoard
-
-data class BoardActivityParams(val bitmap: Bitmap, val size: BoardTitledSize)
+import com.helpmepls.slidepuzzle.model.BoardActivityParams
+import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
 
 class GameActivity : AppCompatActivity() {
     companion object {
@@ -26,20 +23,20 @@ class GameActivity : AppCompatActivity() {
 
     private fun mountBoard() {
         val board = findViewById<GameBoard>(R.id.boardView)
-
-        viewModel.boardSize.observe(this, Observer {
-            it?.let {
-                board.resize(
-                    Size(it.width, it.height),
-                    viewModel.boardImage.value
-                )
+        viewModel.boardSize.observe(
+            /* owner = */ this,
+            /* observer = */ Observer {
+                it?.let {
+                    board.resize(
+                        size = Size(it.width, it.height),
+                        image = viewModel.boardImage.value
+                    )
+                }
             }
-        })
-
+        )
         findViewById<Button>(R.id.shuffle).setOnClickListener {
             board.shuffle()
         }
-
         findViewById<Button>(R.id.reset).setOnClickListener {
             board.shuffle(true)
         }
@@ -50,12 +47,9 @@ class GameActivity : AppCompatActivity() {
             boardSize.value = initialConfig.size
             boardImage.value = initialConfig.bitmap
         }
-
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.game_activity)
         setSupportActionBar(findViewById(R.id.board_options_toolbar))
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mountBoard()
     }

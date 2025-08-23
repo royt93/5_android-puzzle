@@ -10,16 +10,16 @@ import android.view.*
 import android.widget.*
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import com.helpmepls.slidepuzzle.act.BoardActivityParams
 import com.helpmepls.slidepuzzle.act.GameActivity
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
+import com.helpmepls.slidepuzzle.model.BoardActivityParams
 import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
 import com.helpmepls.slidepuzzle.model.TitledCardInfo
 
 class ImageCardsAdapterGridView(
     private val parentContext: Context,
-    private val cards: Array<TitledCardInfo>
+    private val cards: Array<TitledCardInfo>,
 ) : BaseAdapter() {
     override fun getCount(): Int {
         return cards.size
@@ -62,7 +62,7 @@ class BoardOptionsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val view = inflater.inflate(R.layout.board_options_fragment, container, false)
         (activity as AppCompatActivity).setSupportActionBar(

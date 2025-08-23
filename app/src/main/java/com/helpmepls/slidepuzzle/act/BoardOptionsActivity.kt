@@ -12,9 +12,16 @@ class BoardOptionsActivity : AppCompatActivity() {
         setContentView(R.layout.board_options_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, BoardOptionsFragment.Companion.newInstance())
+                .replace(
+                    /* containerViewId = */ R.id.container,
+                    /* fragment = */ BoardOptionsFragment.Companion.newInstance()
+                )
                 .commitNow()
         }
+        setupViews()
     }
 
+    private fun setupViews() {
+
+    }
 }
