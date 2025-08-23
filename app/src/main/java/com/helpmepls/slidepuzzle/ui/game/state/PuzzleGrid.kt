@@ -1,9 +1,9 @@
-package com.example.slidepuzzle.ui.game.state
+package com.helpmepls.slidepuzzle.ui.game.state
 
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.util.Size
-import com.example.slidepuzzle.ui.game.utils.BitmapTile
+import com.helpmepls.slidepuzzle.ui.game.utils.BitmapTile
 import kotlin.*
 
 typealias Puzzle2DArray = Array<Array<PuzzleDescriptor?>>

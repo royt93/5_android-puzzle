@@ -1,4 +1,4 @@
-package com.example.slidepuzzle.ui.game.state
+package com.helpmepls.slidepuzzle.ui.game.state
 
 import android.graphics.Bitmap
 

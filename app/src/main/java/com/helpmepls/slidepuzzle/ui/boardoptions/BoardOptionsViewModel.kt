@@ -1,9 +1,9 @@
-package com.example.slidepuzzle.ui.boardoptions
+package com.helpmepls.slidepuzzle.ui.boardoptions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.graphics.Bitmap
-import com.example.slidepuzzle.R
+import com.helpmepls.slidepuzzle.R
 import java.io.Serializable
 
 typealias TitledResourcePair = Pair<Int, String>

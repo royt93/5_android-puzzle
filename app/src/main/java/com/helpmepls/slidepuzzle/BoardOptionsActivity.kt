@@ -1,8 +1,8 @@
-package com.example.slidepuzzle
+package com.helpmepls.slidepuzzle
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.slidepuzzle.ui.boardoptions.BoardOptionsFragment
+import com.helpmepls.slidepuzzle.ui.boardoptions.BoardOptionsFragment
 
 class BoardOptionsActivity : AppCompatActivity() {
 

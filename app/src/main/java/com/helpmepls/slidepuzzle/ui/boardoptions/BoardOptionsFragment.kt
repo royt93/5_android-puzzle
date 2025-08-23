@@ -1,18 +1,17 @@
-package com.example.slidepuzzle.ui.boardoptions
+package com.helpmepls.slidepuzzle.ui.boardoptions
 
 import `in`.srain.cube.views.GridViewWithHeaderAndFooter
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import com.example.slidepuzzle.R
+import com.helpmepls.slidepuzzle.R
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.view.*
 import android.widget.*
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import com.example.slidepuzzle.BoardActivityParams
-import com.example.slidepuzzle.GameActivity
+import com.helpmepls.slidepuzzle.BoardActivityParams
+import com.helpmepls.slidepuzzle.GameActivity
 import android.view.LayoutInflater
 
 class ImageCardsAdapterGridView(

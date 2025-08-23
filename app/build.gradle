@@ -3,10 +3,10 @@ apply plugin: 'kotlin-android'
 //apply plugin: 'kotlin-android-extensions'
 
 android {
-    namespace("com.example.slidepuzzle")
+    namespace("com.helpmepls.slidepuzzle")
     compileSdk 36
     defaultConfig {
-        applicationId "com.example.slidepuzzle"
+        applicationId "com.helpmepls.slidepuzzle"
         minSdkVersion 23
         targetSdkVersion 36
         versionCode 20250824

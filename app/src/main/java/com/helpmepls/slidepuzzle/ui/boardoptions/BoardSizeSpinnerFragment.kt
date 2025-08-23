@@ -1,16 +1,15 @@
-package com.example.slidepuzzle.ui.boardoptions
+package com.helpmepls.slidepuzzle.ui.boardoptions
 
 import androidx.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import com.example.slidepuzzle.R
+import com.helpmepls.slidepuzzle.R
 
 typealias BoardSizeAdapter = ArrayAdapter<BoardTitledSize>
 

@@ -1,4 +1,4 @@
-package com.example.slidepuzzle.ui.boardoptions
+package com.helpmepls.slidepuzzle.ui.boardoptions
 
 import android.graphics.Bitmap
 
