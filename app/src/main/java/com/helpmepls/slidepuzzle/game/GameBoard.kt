@@ -3,6 +3,7 @@ package com.helpmepls.slidepuzzle.game
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -11,13 +12,16 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.game.state.PuzzleGrid
+import kotlin.math.ceil
 
-class GameBoard(context: Context, attrs: AttributeSet) : View(context, attrs) {
+@SuppressLint("ClickableViewAccessibility")
+class GameBoard(
+    context: Context,
+    attrs: AttributeSet,
+) : View(context, attrs) {
     private val highlightColor = ContextCompat.getColor(context, R.color.board_active)
-
     private val paint = Paint()
     private var animator: ValueAnimator? = null
-
     private val tileSpacing = 3
     private var tileSize = Rect(0, 0, 0, 0)
     private var renderOffset = Rect(0, 0, 0, 0)
@@ -26,8 +30,8 @@ class GameBoard(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private lateinit var activeSlide: Point
 
     private var grid = PuzzleGrid(
-        null,
-        Size(4, 4)
+        sourceImage = null,
+        size = Size(/* width = */ 4, /* height = */ 4)
     )
 
     init {
@@ -37,9 +41,9 @@ class GameBoard(context: Context, attrs: AttributeSet) : View(context, attrs) {
         setOnTouchListener { _, event ->
             onSlide(
                 getSlideCoordinates(
-                    PointF(
-                        event.x,
-                        event.y
+                    p = PointF(
+                        /* x = */ event.x,
+                        /* y = */ event.y
                     )
                 )
             )
@@ -49,13 +53,17 @@ class GameBoard(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private fun getSlideCoordinates(p: PointF): Point {
         return Point(
-            (p.x / width * grid.size.width).toInt(),
-            (p.y / height * grid.size.height).toInt()
+            /* x = */ (p.x / width * grid.size.width).toInt(),
+            /* y = */ (p.y / height * grid.size.height).toInt()
         )
     }
 
-    fun resize(size: Size, image: Bitmap? = null, shuffle: Boolean = true) {
-        grid.regenerate(size, image, shuffle)
+    fun resize(
+        size: Size,
+        image: Bitmap? = null,
+        shuffle: Boolean = true,
+    ) {
+        grid.regenerate(newSize = size, newImage = image, shuffle = shuffle)
         requestLayout()
     }
 
@@ -104,34 +112,38 @@ class GameBoard(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
         grid.let {
             tileSize.set(
-                0,
-                0,
-                Math.ceil(MeasureSpec.getSize(widthMeasureSpec).toDouble() / it.size.width).toInt(),
-                Math.ceil(MeasureSpec.getSize(heightMeasureSpec).toDouble() / it.size.height)
+                /* left = */ 0,
+                /* top = */ 0,
+                /* right = */ ceil(MeasureSpec.getSize(widthMeasureSpec).toDouble() / it.size.width).toInt(),
+                /* bottom = */ ceil(MeasureSpec.getSize(heightMeasureSpec).toDouble() / it.size.height)
                     .toInt()
             )
         }
     }
 
-    private fun drawSlideTitle(canvas: Canvas, offset: Rect, text: String) {
+    private fun drawSlideTitle(
+        canvas: Canvas,
+        offset: Rect,
+        text: String,
+    ) {
         // fill
         paint.strokeWidth = 4.0f
         paint.style = Paint.Style.STROKE
         paint.color = Color.WHITE
         canvas.drawText(
-            text,
-            offset.left + 5.0f,
-            offset.top + 13.0f,
-            paint
+            /* text = */ text,
+            /* x = */ offset.left + 5.0f,
+            /* y = */ offset.top + 13.0f,
+            /* paint = */ paint
         )
 
         paint.style = Paint.Style.FILL
         paint.color = Color.BLACK
         canvas.drawText(
-            text,
-            offset.left + 5.0f,
-            offset.top + 13.0f,
-            paint
+            /* text = */ text,
+            /* x = */ offset.left + 5.0f,
+            /* y = */ offset.top + 13.0f,
+            /* paint = */ paint
         )
     }
 
@@ -149,10 +161,10 @@ class GameBoard(context: Context, attrs: AttributeSet) : View(context, attrs) {
                     val y = j * tileSize.height()
 
                     renderOffset.set(
-                        x + tileSpacing / 2,
-                        y + tileSpacing / 2,
-                        x + tileSize.width() - tileSpacing,
-                        y + tileSize.height() - tileSpacing
+                        /* left = */ x + tileSpacing / 2,
+                        /* top = */ y + tileSpacing / 2,
+                        /* right = */ x + tileSize.width() - tileSpacing,
+                        /* bottom = */ y + tileSize.height() - tileSpacing
                     )
 
                     if (active) {
@@ -163,17 +175,17 @@ class GameBoard(context: Context, attrs: AttributeSet) : View(context, attrs) {
                     }
 
                     canvas.drawBitmap(
-                        puzzle.bitmap,
-                        null,
-                        renderOffset,
-                        null
+                        /* bitmap = */ puzzle.bitmap,
+                        /* src = */ null,
+                        /* dst = */ renderOffset,
+                        /* paint = */ null
                     )
 
                     // fill
                     drawSlideTitle(
-                        canvas,
-                        renderOffset,
-                        (puzzle.index + 1).toString()
+                        canvas = canvas,
+                        offset = renderOffset,
+                        text = (puzzle.index + 1).toString()
                     )
 
                     // Draw border around active
@@ -183,8 +195,8 @@ class GameBoard(context: Context, attrs: AttributeSet) : View(context, attrs) {
                         paint.color = highlightColor
 
                         canvas.drawRect(
-                            renderOffset,
-                            paint
+                            /* r = */ renderOffset,
+                            /* paint = */ paint
                         )
                     }
                 }
