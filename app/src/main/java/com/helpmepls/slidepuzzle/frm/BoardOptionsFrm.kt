@@ -35,7 +35,7 @@ class BoardOptionsFrm : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         val view = inflater.inflate(
-            /* resource = */ R.layout.board_options_fragment,
+            /* resource = */ R.layout.frm_board_options,
             /* root = */ container,
             /* attachToRoot = */ false
         )
@@ -57,7 +57,7 @@ class BoardOptionsFrm : Fragment() {
             val layoutInflater = LayoutInflater.from(view?.context)
             board.addHeaderView(
                 layoutInflater.inflate(
-                    /* resource = */ R.layout.board_options_grid_header,
+                    /* resource = */ R.layout.item_board_options_grid_header,
                     /* root = */ null
                 )
             )

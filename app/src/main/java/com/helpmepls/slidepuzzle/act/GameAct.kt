@@ -48,7 +48,7 @@ class GameAct : AppCompatActivity() {
             boardImage.value = initialConfig.bitmap
         }
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.game_activity)
+        setContentView(R.layout.act_game)
         setSupportActionBar(findViewById(R.id.board_options_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mountBoard()

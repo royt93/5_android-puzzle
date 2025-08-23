@@ -36,7 +36,7 @@ class ImageCardsAdt(
         var newView: View? = convertView
         if (newView == null) {
             val vi = parentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            newView = vi.inflate(R.layout.titled_image_card_fragment, null)
+            newView = vi.inflate(R.layout.frm_titled_image_card, null)
             newView.tag = cards[position]
         }
 

@@ -27,14 +27,14 @@ class BoardSizeSpinnerFrm : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         val view = inflater.inflate(
-            /* resource = */ R.layout.board_size_spinner_fragment,
+            /* resource = */ R.layout.frm_board_size_spinner,
             /* root = */ container,
             /* attachToRoot = */ false
         )
         val sizeSpinner = view.findViewById<Spinner>(R.id.board_size_spinner)
         val arrayAdapter = BoardSizeAdapter(
             /* context = */ activity as Context,
-            /* resource = */ R.layout.game_toolbar_spinner_item,
+            /* resource = */ R.layout.item_game_toolbar_spinner,
             /* objects = */ BoardOptionsVm.PREDEFINED_BOARD_SIZE
         )
 
