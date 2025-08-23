@@ -15,7 +15,7 @@ import com.helpmepls.slidepuzzle.act.GameAct
 import com.helpmepls.slidepuzzle.adt.ImageCardsAdt
 import com.helpmepls.slidepuzzle.model.BoardActivityParams
 import com.helpmepls.slidepuzzle.model.TitledCardInfo
-import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
+import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 import `in`.srain.cube.views.GridViewWithHeaderAndFooter
 
 class BoardOptionsFrm : Fragment() {
@@ -23,9 +23,9 @@ class BoardOptionsFrm : Fragment() {
         fun newInstance() = BoardOptionsFrm()
     }
 
-    private val viewModel: BoardOptionsViewModel? by lazy {
+    private val viewModel: BoardOptionsVm? by lazy {
         activity?.let {
-            ViewModelProviders.of(it)[BoardOptionsViewModel::class.java]
+            ViewModelProviders.of(it)[BoardOptionsVm::class.java]
         }
     }
 
@@ -64,7 +64,7 @@ class BoardOptionsFrm : Fragment() {
 
             board.adapter = ImageCardsAdt(
                 parentContext = context,
-                cards = BoardOptionsViewModel.Companion.PREDEFINED_IMAGES.map { (id, name) ->
+                cards = BoardOptionsVm.Companion.PREDEFINED_IMAGES.map { (id, name) ->
                     TitledCardInfo(
                         image = BitmapFactory.decodeResource(
                             /* res = */ resources,

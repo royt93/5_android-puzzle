@@ -1,6 +1,10 @@
 package com.helpmepls.slidepuzzle.model
 
 import android.graphics.Bitmap
-import com.helpmepls.slidepuzzle.vm.BoardTitledSize
+import androidx.annotation.Keep
 
-data class BoardActivityParams(val bitmap: Bitmap, val size: BoardTitledSize)
+@Keep
+data class BoardActivityParams(
+    val bitmap: Bitmap,
+    val size: BoardTitledSize,
+)

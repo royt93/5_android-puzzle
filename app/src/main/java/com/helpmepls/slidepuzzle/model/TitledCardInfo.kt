@@ -1,5 +1,10 @@
 package com.helpmepls.slidepuzzle.model
 
 import android.graphics.Bitmap
+import androidx.annotation.Keep
 
-data class TitledCardInfo(val image: Bitmap, val title: String)
+@Keep
+data class TitledCardInfo(
+    val image: Bitmap,
+    val title: String,
+)

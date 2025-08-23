@@ -11,13 +11,13 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.adt.BoardSizeAdapter
-import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
-import com.helpmepls.slidepuzzle.vm.BoardTitledSize
+import com.helpmepls.slidepuzzle.model.BoardTitledSize
+import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
 class BoardSizeSpinnerFrm : Fragment() {
-    private val viewModel: BoardOptionsViewModel? by lazy {
+    private val viewModel: BoardOptionsVm? by lazy {
         activity?.let {
-            ViewModelProviders.of(it)[BoardOptionsViewModel::class.java]
+            ViewModelProviders.of(it)[BoardOptionsVm::class.java]
         }
     }
 
@@ -35,7 +35,7 @@ class BoardSizeSpinnerFrm : Fragment() {
         val arrayAdapter = BoardSizeAdapter(
             /* context = */ activity as Context,
             /* resource = */ R.layout.game_toolbar_spinner_item,
-            /* objects = */ BoardOptionsViewModel.PREDEFINED_BOARD_SIZE
+            /* objects = */ BoardOptionsVm.PREDEFINED_BOARD_SIZE
         )
 
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

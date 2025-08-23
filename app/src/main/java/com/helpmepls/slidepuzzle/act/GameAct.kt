@@ -10,15 +10,15 @@ import androidx.lifecycle.ViewModelProviders
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.game.GameBoard
 import com.helpmepls.slidepuzzle.model.BoardActivityParams
-import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
+import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
 class GameAct : AppCompatActivity() {
     companion object Companion {
         lateinit var initialConfig: BoardActivityParams
     }
 
-    private val viewModel: BoardOptionsViewModel by lazy {
-        ViewModelProviders.of(this).get(BoardOptionsViewModel::class.java)
+    private val viewModel: BoardOptionsVm by lazy {
+        ViewModelProviders.of(this).get(BoardOptionsVm::class.java)
     }
 
     private fun mountBoard() {
