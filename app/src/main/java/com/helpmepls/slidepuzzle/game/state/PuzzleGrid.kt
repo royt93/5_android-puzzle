@@ -3,19 +3,16 @@ package com.helpmepls.slidepuzzle.game.state
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.util.Size
+import androidx.annotation.Keep
 import com.helpmepls.slidepuzzle.game.utils.BitmapTile
 import kotlin.*
 
-typealias Puzzle2DArray = Array<Array<PuzzleDescriptor?>>
-
-enum class Direction(val offsetX: Int, val offsetY: Int) {
-    TOP(0, -1),
-    BOTTOM(0, 1),
-    LEFT(-1, 0),
-    RIGHT(1, 0)
-}
-
-class PuzzleGrid(val sourceImage: Bitmap?, var size: Size, private val missingSlides: Int = 1) {
+@Keep
+class PuzzleGrid(
+    val sourceImage: Bitmap?,
+    var size: Size,
+    private val missingSlides: Int = 1,
+) {
     lateinit var puzzles: Puzzle2DArray
         private set
 
@@ -23,17 +20,24 @@ class PuzzleGrid(val sourceImage: Bitmap?, var size: Size, private val missingSl
 
     init {
         sourceImage?.let {
-            regenerate(size, sourceImage)
+            regenerate(
+                newSize = size,
+                newImage = sourceImage
+            )
         }
     }
 
-    fun regenerate(newSize: Size, newImage: Bitmap? = null, shuffle: Boolean = false) {
+    fun regenerate(
+        newSize: Size,
+        newImage: Bitmap? = null,
+        shuffle: Boolean = false,
+    ) {
         size = newSize
-        bitmapTile = BitmapTile(newImage ?: sourceImage!!, newSize)
+        bitmapTile = BitmapTile(image = newImage ?: sourceImage!!, size = newSize)
         puzzles = genRandomSlides(shuffle)
     }
 
-    private fun genRandomSlides(shuffle: Boolean = true): Puzzle2DArray  {
+    private fun genRandomSlides(shuffle: Boolean = true): Puzzle2DArray {
         val len = size.width * size.height
         val list = MutableList(len) { index ->
             if (index >= len - missingSlides)
@@ -59,10 +63,11 @@ class PuzzleGrid(val sourceImage: Bitmap?, var size: Size, private val missingSl
     fun checkSlideMoveDirection(p: Point): Direction? {
         enumValues<Direction>().forEach { dir ->
             if (dir.offsetX + p.x < size.width
-                    && dir.offsetY + p.y < size.height
-                    && dir.offsetX + p.x >= 0
-                    && dir.offsetY + p.y >= 0
-                    && puzzles[p.y + dir.offsetY][p.x + dir.offsetX] == null) {
+                && dir.offsetY + p.y < size.height
+                && dir.offsetX + p.x >= 0
+                && dir.offsetY + p.y >= 0
+                && puzzles[p.y + dir.offsetY][p.x + dir.offsetX] == null
+            ) {
                 return dir
             }
         }
