@@ -11,7 +11,7 @@
             android:id="@+id/board_options"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".frm.BoardOptionsFragment">
+            tools:context=".frm.BoardOptionsFrm">
         <in.srain.cube.views.GridViewWithHeaderAndFooter
                 android:id="@+id/images_grid"
                 android:layout_width="match_parent"

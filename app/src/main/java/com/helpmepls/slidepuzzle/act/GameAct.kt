@@ -12,8 +12,8 @@ import com.helpmepls.slidepuzzle.game.GameBoard
 import com.helpmepls.slidepuzzle.model.BoardActivityParams
 import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
 
-class GameActivity : AppCompatActivity() {
-    companion object {
+class GameAct : AppCompatActivity() {
+    companion object Companion {
         lateinit var initialConfig: BoardActivityParams
     }
 
