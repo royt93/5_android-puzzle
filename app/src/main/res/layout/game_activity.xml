@@ -17,7 +17,7 @@
                 android:elevation="4dp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@drawable/board_shape"
+                android:background="@drawable/shape_board"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 app:layout_constraintDimensionRatio="H,1:1"

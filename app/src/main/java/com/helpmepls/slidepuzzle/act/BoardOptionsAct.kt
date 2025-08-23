@@ -9,7 +9,7 @@ class BoardOptionsAct : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.board_options_activity)
+        setContentView(R.layout.act_board_options)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(
