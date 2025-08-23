@@ -4,13 +4,13 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     namespace("com.example.slidepuzzle")
-    compileSdkVersion 33
+    compileSdk 36
     defaultConfig {
         applicationId "com.example.slidepuzzle"
         minSdkVersion 23
-        targetSdkVersion 33
-        versionCode 20221124
-        versionName "2022.11.24"
+        targetSdkVersion 36
+        versionCode 20250824
+        versionName "2025.08.24"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
