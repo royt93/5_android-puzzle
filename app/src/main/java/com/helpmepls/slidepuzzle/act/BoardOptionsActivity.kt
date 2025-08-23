@@ -1,8 +1,9 @@
-package com.helpmepls.slidepuzzle
+package com.helpmepls.slidepuzzle.act
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.helpmepls.slidepuzzle.ui.boardoptions.BoardOptionsFragment
+import androidx.appcompat.app.AppCompatActivity
+import com.helpmepls.slidepuzzle.R
+import com.helpmepls.slidepuzzle.frm.BoardOptionsFragment
 
 class BoardOptionsActivity : AppCompatActivity() {
 
@@ -11,7 +12,7 @@ class BoardOptionsActivity : AppCompatActivity() {
         setContentView(R.layout.board_options_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, BoardOptionsFragment.newInstance())
+                .replace(R.id.container, BoardOptionsFragment.Companion.newInstance())
                 .commitNow()
         }
     }

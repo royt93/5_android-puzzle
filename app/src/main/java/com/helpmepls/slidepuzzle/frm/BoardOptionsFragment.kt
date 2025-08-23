@@ -1,4 +1,4 @@
-package com.helpmepls.slidepuzzle.ui.boardoptions
+package com.helpmepls.slidepuzzle.frm
 
 import `in`.srain.cube.views.GridViewWithHeaderAndFooter
 import androidx.lifecycle.ViewModelProviders
@@ -10,9 +10,12 @@ import android.view.*
 import android.widget.*
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import com.helpmepls.slidepuzzle.BoardActivityParams
-import com.helpmepls.slidepuzzle.GameActivity
+import com.helpmepls.slidepuzzle.act.BoardActivityParams
+import com.helpmepls.slidepuzzle.act.GameActivity
 import android.view.LayoutInflater
+import androidx.fragment.app.Fragment
+import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
+import com.helpmepls.slidepuzzle.model.TitledCardInfo
 
 class ImageCardsAdapterGridView(
     private val parentContext: Context,
@@ -46,7 +49,7 @@ class ImageCardsAdapterGridView(
     }
 }
 
-class BoardOptionsFragment : androidx.fragment.app.Fragment() {
+class BoardOptionsFragment : Fragment() {
     companion object {
         fun newInstance() = BoardOptionsFragment()
     }
@@ -82,10 +85,12 @@ class BoardOptionsFragment : androidx.fragment.app.Fragment() {
 
             board.adapter = ImageCardsAdapterGridView(
                 context,
-                BoardOptionsViewModel.PREDEFINED_IMAGES.map { (id, name) -> TitledCardInfo(
-                    BitmapFactory.decodeResource(resources, id),
-                    name
-                )}.toTypedArray()
+                BoardOptionsViewModel.Companion.PREDEFINED_IMAGES.map { (id, name) ->
+                    TitledCardInfo(
+                        BitmapFactory.decodeResource(resources, id),
+                        name
+                    )
+                }.toTypedArray()
             )
 
             board.setOnItemClickListener { _, view, _, _ ->

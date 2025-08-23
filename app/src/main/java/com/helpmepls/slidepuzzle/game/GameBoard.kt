@@ -1,4 +1,4 @@
-package com.helpmepls.slidepuzzle.ui.game
+package com.helpmepls.slidepuzzle.game
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -10,7 +10,7 @@ import android.util.Size
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.helpmepls.slidepuzzle.R
-import com.helpmepls.slidepuzzle.ui.game.state.PuzzleGrid
+import com.helpmepls.slidepuzzle.game.state.PuzzleGrid
 
 class GameBoard(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val highlightColor = ContextCompat.getColor(context, R.color.board_active)

@@ -1,4 +1,4 @@
-package com.helpmepls.slidepuzzle.ui.game.utils
+package com.helpmepls.slidepuzzle.game.utils
 
 import android.graphics.Bitmap
 import android.util.Size

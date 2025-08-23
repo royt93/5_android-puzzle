@@ -1,4 +1,4 @@
-package com.helpmepls.slidepuzzle.ui.boardoptions
+package com.helpmepls.slidepuzzle.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

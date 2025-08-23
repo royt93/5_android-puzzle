@@ -1,4 +1,4 @@
-package com.helpmepls.slidepuzzle
+package com.helpmepls.slidepuzzle.act
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -8,9 +8,10 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.helpmepls.slidepuzzle.ui.boardoptions.BoardOptionsViewModel
-import com.helpmepls.slidepuzzle.ui.boardoptions.BoardTitledSize
-import com.helpmepls.slidepuzzle.ui.game.GameBoard
+import com.helpmepls.slidepuzzle.R
+import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
+import com.helpmepls.slidepuzzle.vm.BoardTitledSize
+import com.helpmepls.slidepuzzle.game.GameBoard
 
 data class BoardActivityParams(val bitmap: Bitmap, val size: BoardTitledSize)
 

@@ -1,4 +1,4 @@
-package com.helpmepls.slidepuzzle.ui.boardoptions
+package com.helpmepls.slidepuzzle.frm
 
 import androidx.lifecycle.ViewModelProviders
 import android.content.Context
@@ -9,11 +9,14 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.fragment.app.Fragment
 import com.helpmepls.slidepuzzle.R
+import com.helpmepls.slidepuzzle.vm.BoardOptionsViewModel
+import com.helpmepls.slidepuzzle.vm.BoardTitledSize
 
 typealias BoardSizeAdapter = ArrayAdapter<BoardTitledSize>
 
-class BoardSizeSpinnerFragment : androidx.fragment.app.Fragment() {
+class BoardSizeSpinnerFragment : Fragment() {
     private val viewModel: BoardOptionsViewModel? by lazy {
         activity?.let {
             ViewModelProviders.of(it).get(BoardOptionsViewModel::class.java)

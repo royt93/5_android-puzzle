@@ -5,14 +5,14 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="@color/app_background_color"
-             tools:context=".GameActivity">
+             tools:context=".act.GameActivity">
 
     <include layout="@layout/game_toolbar"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <com.helpmepls.slidepuzzle.ui.game.GameBoard
+        <com.helpmepls.slidepuzzle.game.GameBoard
                 android:id="@+id/boardView"
                 android:elevation="4dp"
                 android:layout_width="0dp"
