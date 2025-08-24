@@ -83,9 +83,10 @@ class BoardOptionsFrm : Fragment() {
                         bitmap = it.boardImage.value!!,
                         size = it.boardSize.value!!
                     )
-                    startActivity(
-                        Intent(this.activity, GameAct::class.java)
-                    )
+                    val intent = Intent(this.activity, GameAct::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    startActivity(intent)
+                    this.activity?.overridePendingTransition(0, 0)
                 }
             }
         }

@@ -1,8 +1,6 @@
 package com.helpmepls.slidepuzzle.act
 
-import android.R.attr.bitmap
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import android.view.MenuItem
 import android.widget.Button
@@ -103,5 +101,11 @@ class GameAct : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(0, 0)
     }
 }
