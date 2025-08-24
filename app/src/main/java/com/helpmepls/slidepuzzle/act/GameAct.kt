@@ -7,12 +7,12 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.game.GameBoard
 import com.helpmepls.slidepuzzle.model.BoardActivityParams
 import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
-//TODO roy93~ dialog khi button shuffle, reset
 //TODO roy93~ show anh goc ben tren
 class GameAct : AppCompatActivity() {
     companion object Companion {
@@ -38,10 +38,24 @@ class GameAct : AppCompatActivity() {
         )
         findViewById<Button>(R.id.btShuffle).setOnClickListener {
             board.shuffle()
+            showDlg()
         }
         findViewById<Button>(R.id.btReset).setOnClickListener {
             board.shuffle(true)
         }
+    }
+
+    private fun showDlg() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Confirmation")
+            .setMessage("Are you sure you want to continue?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
