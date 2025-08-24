@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,29 +8,20 @@
     android:orientation="vertical"
     tools:context=".act.GameAct">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/item_game_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include layout="@layout/item_game_toolbar" />
 
     <ImageView
         android:id="@+id/ivOriginal"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:layout_gravity="end"
         android:contentDescription="@string/app_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:src="@mipmap/ic_launcher" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/layoutBottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivOriginal">
+        android:layout_weight="1">
 
         <com.helpmepls.slidepuzzle.game.GameBoard
             android:id="@+id/boardView"
@@ -48,13 +39,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/layoutBottom"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center">
 
         <android.widget.Button
             android:id="@+id/btShuffle"
@@ -75,4 +63,4 @@
             android:textColor="@color/white"
             android:textSize="16dp" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
