@@ -2,6 +2,7 @@ package com.helpmepls.slidepuzzle.act
 
 import android.R.attr.bitmap
 import android.os.Bundle
+import android.util.Log
 import android.util.Size
 import android.view.MenuItem
 import android.widget.Button
@@ -30,6 +31,7 @@ class GameAct : AppCompatActivity() {
         viewModel.boardSize.observe(
             /* owner = */ this,
             /* observer = */ Observer {
+//                Log.d("roy93~", "observe")
                 it?.let {
                     ivOriginal.setImageBitmap(viewModel.boardImage.value)
                     boardView.resize(
