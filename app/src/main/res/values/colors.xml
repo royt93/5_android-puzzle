@@ -11,7 +11,7 @@
     <color name="app_background_color">#FAFAFA</color>
     <color name="black_overlay">#000</color>
     <color name="board_background">#FFF</color>
-    <color name="board_active">#448AFF</color>
+    <color name="board_active">#00ff00</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
 </resources>

@@ -190,7 +190,7 @@ class GameBoard(
 
                     // Draw border around active
                     if (active) {
-                        paint.strokeWidth = 4.0f
+                        paint.strokeWidth = 16.0f
                         paint.style = Paint.Style.STROKE
                         paint.color = highlightColor
 
