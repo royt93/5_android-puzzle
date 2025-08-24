@@ -48,6 +48,7 @@ class BoardOptionsVm : ViewModel() {
             TitledResourcePair(first = R.drawable.b7, second = ""),
             TitledResourcePair(first = R.drawable.b8, second = ""),
             TitledResourcePair(first = R.drawable.b9, second = ""),
+
         )
     }
 

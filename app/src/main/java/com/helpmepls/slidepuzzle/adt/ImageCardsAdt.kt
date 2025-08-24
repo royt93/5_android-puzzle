@@ -15,35 +15,39 @@ class ImageCardsAdt(
     private val parentContext: Context,
     private val cards: Array<TitledCardInfo>,
 ) : BaseAdapter() {
-    override fun getCount(): Int {
-        return cards.size
-    }
 
-    override fun getItemId(position: Int): Long {
-        return 0
-    }
-
-    override fun getItem(position: Int): Any {
-        return cards[position]
-    }
+    override fun getCount(): Int = cards.size
+    override fun getItemId(position: Int): Long = position.toLong()
+    override fun getItem(position: Int): Any = cards[position]
 
     @SuppressLint("InflateParams")
-    override fun getView(
-        position: Int,
-        convertView: View?,
-        parent: ViewGroup,
-    ): View? {
-        var newView: View? = convertView
-        if (newView == null) {
-            val vi = parentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            newView = vi.inflate(R.layout.frm_titled_image_card, null)
-            newView.tag = cards[position]
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val holder: ViewHolder
+        val view: View
+
+        if (convertView == null) {
+            val vi = LayoutInflater.from(parentContext)
+            view = vi.inflate(R.layout.frm_titled_image_card, parent, false)
+            holder = ViewHolder(
+                view.findViewById(R.id.title),
+                view.findViewById(R.id.image)
+            )
+            view.tag = holder
+        } else {
+            view = convertView
+            holder = view.tag as ViewHolder
         }
 
-        val tag: TitledCardInfo = newView?.tag as TitledCardInfo
-        newView.findViewById<TextView>(R.id.title).text = tag.title
-        newView.findViewById<ImageView>(R.id.image).setImageBitmap(tag.image)
+        // ✅ Luôn cập nhật data mới
+        val card = cards[position]
+        holder.title.text = card.title
+        holder.image.setImageBitmap(card.image)
 
-        return newView
+        return view
     }
+
+    private data class ViewHolder(
+        val title: TextView,
+        val image: ImageView,
+    )
 }
