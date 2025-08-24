@@ -37,22 +37,42 @@ class GameAct : AppCompatActivity() {
             }
         )
         findViewById<Button>(R.id.btShuffle).setOnClickListener {
-            board.shuffle()
-            showDlg()
+            showDlg(
+                onYes = {
+                    // Xử lý khi nhấn Yes
+                    board.shuffle()
+                },
+                onNo = {
+                    // Xử lý khi nhấn No
+                }
+            )
         }
         findViewById<Button>(R.id.btReset).setOnClickListener {
-            board.shuffle(true)
+            showDlg(
+                onYes = {
+                    // Xử lý khi nhấn Yes
+                    board.shuffle(true)
+                },
+                onNo = {
+                    // Xử lý khi nhấn No
+                }
+            )
         }
     }
 
-    private fun showDlg() {
+    private fun showDlg(
+        onYes: () -> Unit,
+        onNo: () -> Unit,
+    ) {
         MaterialAlertDialogBuilder(this)
             .setTitle("Confirmation")
             .setMessage("Are you sure you want to continue?")
             .setPositiveButton("Yes") { dialog, _ ->
+                onYes()
                 dialog.dismiss()
             }
             .setNegativeButton("No") { dialog, _ ->
+                onNo()
                 dialog.dismiss()
             }
             .show()
