@@ -1,9 +1,11 @@
 package com.helpmepls.slidepuzzle.act
 
+import android.R.attr.bitmap
 import android.os.Bundle
 import android.util.Size
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -23,11 +25,13 @@ class GameAct : AppCompatActivity() {
     }
 
     private fun mountBoard() {
+        val ivOriginal = findViewById<ImageView>(R.id.ivOriginal)
         val boardView = findViewById<GameBoard>(R.id.boardView)
         viewModel.boardSize.observe(
             /* owner = */ this,
             /* observer = */ Observer {
                 it?.let {
+                    ivOriginal.setImageBitmap(viewModel.boardImage.value)
                     boardView.resize(
                         size = Size(it.width, it.height),
                         image = viewModel.boardImage.value
