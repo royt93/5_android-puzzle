@@ -28,6 +28,16 @@ class BoardOptionsVm : ViewModel() {
             TitledResourcePair(first = R.drawable.i7, second = ""),
             TitledResourcePair(first = R.drawable.i8, second = ""),
             TitledResourcePair(first = R.drawable.i9, second = ""),
+
+            TitledResourcePair(first = R.drawable.a1, second = ""),
+            TitledResourcePair(first = R.drawable.a2, second = ""),
+            TitledResourcePair(first = R.drawable.a3, second = ""),
+            TitledResourcePair(first = R.drawable.a4, second = ""),
+            TitledResourcePair(first = R.drawable.a5, second = ""),
+            TitledResourcePair(first = R.drawable.a6, second = ""),
+            TitledResourcePair(first = R.drawable.a7, second = ""),
+            TitledResourcePair(first = R.drawable.a8, second = ""),
+            TitledResourcePair(first = R.drawable.a9, second = ""),
         )
     }
 
