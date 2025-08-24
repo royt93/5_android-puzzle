@@ -19,18 +19,7 @@ class BoardOptionsVm : ViewModel() {
         )
 
         val PREDEFINED_IMAGES: Array<TitledResourcePair> = arrayOf(
-            TitledResourcePair(first = R.drawable.cat, second = "kotek"),
-            TitledResourcePair(first = R.drawable.doge, second = "piesek"),
-            TitledResourcePair(first = R.drawable.spiderman, second = "spajdemen"),
-            TitledResourcePair(first = R.drawable.spiderman_office, second = "smuteczek"),
-            TitledResourcePair(first = R.drawable.yeti, second = "yeti"),
-            TitledResourcePair(first = R.drawable.pigeon, second = "szczur"),
-            TitledResourcePair(first = R.drawable.spiderman_ok, second = "spajdermen okej"),
-            TitledResourcePair(first = R.drawable.pepe, second = "żabka"),
-            TitledResourcePair(first = R.drawable.dolan, second = "kaczka"),
-            TitledResourcePair(first = R.drawable.original_pepe, second = "pepe"),
             TitledResourcePair(first = R.drawable.alien, second = "alien"),
-            TitledResourcePair(first = R.drawable.wat, second = "wat")
         )
     }
 
