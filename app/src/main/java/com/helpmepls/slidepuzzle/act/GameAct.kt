@@ -13,23 +13,22 @@ import com.helpmepls.slidepuzzle.game.GameBoard
 import com.helpmepls.slidepuzzle.model.BoardActivityParams
 import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
-//TODO roy93~ show anh goc ben tren
 class GameAct : AppCompatActivity() {
     companion object Companion {
         lateinit var initialConfig: BoardActivityParams
     }
 
     private val viewModel: BoardOptionsVm by lazy {
-        ViewModelProviders.of(this).get(BoardOptionsVm::class.java)
+        ViewModelProviders.of(this)[BoardOptionsVm::class.java]
     }
 
     private fun mountBoard() {
-        val board = findViewById<GameBoard>(R.id.boardView)
+        val boardView = findViewById<GameBoard>(R.id.boardView)
         viewModel.boardSize.observe(
             /* owner = */ this,
             /* observer = */ Observer {
                 it?.let {
-                    board.resize(
+                    boardView.resize(
                         size = Size(it.width, it.height),
                         image = viewModel.boardImage.value
                     )
@@ -40,7 +39,7 @@ class GameAct : AppCompatActivity() {
             showDlg(
                 onYes = {
                     // Xử lý khi nhấn Yes
-                    board.shuffle()
+                    boardView.shuffle()
                 },
                 onNo = {
                     // Xử lý khi nhấn No
@@ -51,7 +50,7 @@ class GameAct : AppCompatActivity() {
             showDlg(
                 onYes = {
                     // Xử lý khi nhấn Yes
-                    board.shuffle(true)
+                    boardView.shuffle(true)
                 },
                 onNo = {
                     // Xử lý khi nhấn No
