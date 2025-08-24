@@ -3,6 +3,7 @@
     package="com.helpmepls.slidepuzzle">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:configChanges="orientation|keyboardHidden|screenSize"
         android:icon="@mipmap/ic_launcher"
