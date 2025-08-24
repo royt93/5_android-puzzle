@@ -77,7 +77,9 @@ class BoardOptionsFrm : Fragment() {
 
             board.setOnItemClickListener { _, view, _, _ ->
                 viewModel?.let {
-                    it.boardImage.value = (view.tag as TitledCardInfo).image
+                    // Lấy dữ liệu từ tag đã đặt
+                    val cardInfo = view.getTag(R.id.tag_card_data) as TitledCardInfo
+                    it.boardImage.value = cardInfo.image
 
                     GameAct.initialConfig = BoardActivityParams(
                         bitmap = it.boardImage.value!!,
