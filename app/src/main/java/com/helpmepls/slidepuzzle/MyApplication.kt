@@ -17,7 +17,7 @@ import android.app.Application
 //done mckimquyen
 //rename app
 //sdk 35 edge to edge
-//TODO roy93~ splash screen
+//splash screen
 //leak canary
 class MyApplication : Application() {
     override fun onCreate() {
