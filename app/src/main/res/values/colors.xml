@@ -12,4 +12,5 @@
     <color name="black_overlay">#000</color>
     <color name="board_background">#FFF</color>
     <color name="board_active">#448AFF</color>
+    <color name="white">#ffffff</color>
 </resources>

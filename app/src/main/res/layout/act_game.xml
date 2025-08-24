@@ -30,22 +30,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="72dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:gravity="center"
-        android:paddingBottom="4dp">
+        android:gravity="center">
 
         <android.widget.Button
             android:id="@+id/shuffle"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="@string/shuffle" />
+            android:background="@drawable/btn_red_blue_selector"
+            android:text="@string/shuffle"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
 
         <android.widget.Button
             android:id="@+id/reset"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="@string/reset" />
+            android:background="@drawable/btn_red_blue_selector"
+            android:text="@string/reset"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
     </LinearLayout>
 </FrameLayout>
