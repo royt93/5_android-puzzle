@@ -10,6 +10,8 @@
         android:id="@+id/vgBoardOptions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
         tools:context=".frm.BoardOptionsFrm">
 
         <in.srain.cube.views.GridViewWithHeaderAndFooter
