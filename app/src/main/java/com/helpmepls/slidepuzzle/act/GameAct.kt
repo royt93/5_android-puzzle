@@ -12,6 +12,7 @@ import com.helpmepls.slidepuzzle.game.GameBoard
 import com.helpmepls.slidepuzzle.model.BoardActivityParams
 import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
+//TODO roy93~ dialog khi button shuffle, reset
 class GameAct : AppCompatActivity() {
     companion object Companion {
         lateinit var initialConfig: BoardActivityParams
