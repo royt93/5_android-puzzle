@@ -5,7 +5,6 @@ import android.app.Application
 //TODO roy93~ admob
 //TODO roy93~ ad applovin
 
-//TODO roy93~ sdk 35 edge to edge
 //TODO roy93~ review in app
 //TODO roy93~ add lottie trang tri cho dep
 //TODO roy93~ splash screen
@@ -20,6 +19,7 @@ import android.app.Application
 
 //done mckimquyen
 //rename app
+//sdk 35 edge to edge
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
