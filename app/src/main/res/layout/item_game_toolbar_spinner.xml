@@ -8,4 +8,4 @@
     android:paddingBottom="0dp"
     android:textColor="@color/colorIcons"
     android:textSize="16sp"
-    android:textStyle="bold" />
+    android:textStyle="normal" />
