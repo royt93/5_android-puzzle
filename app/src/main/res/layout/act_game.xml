@@ -10,6 +10,14 @@
 
     <include layout="@layout/item_game_toolbar" />
 
+    <ImageView
+        android:id="@+id/ivOriginal"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="end"
+        android:contentDescription="@string/app_name"
+        tools:src="@mipmap/ic_launcher" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
