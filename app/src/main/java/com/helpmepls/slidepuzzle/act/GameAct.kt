@@ -13,6 +13,7 @@ import com.helpmepls.slidepuzzle.model.BoardActivityParams
 import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
 //TODO roy93~ dialog khi button shuffle, reset
+//TODO roy93~ show anh goc ben tren
 class GameAct : AppCompatActivity() {
     companion object Companion {
         lateinit var initialConfig: BoardActivityParams

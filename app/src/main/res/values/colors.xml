@@ -13,4 +13,5 @@
     <color name="board_background">#FFF</color>
     <color name="board_active">#448AFF</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
 </resources>
