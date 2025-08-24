@@ -36,10 +36,10 @@ class GameAct : AppCompatActivity() {
                 }
             }
         )
-        findViewById<Button>(R.id.shuffle).setOnClickListener {
+        findViewById<Button>(R.id.btShuffle).setOnClickListener {
             board.shuffle()
         }
-        findViewById<Button>(R.id.reset).setOnClickListener {
+        findViewById<Button>(R.id.btReset).setOnClickListener {
             board.shuffle(true)
         }
     }
@@ -51,7 +51,7 @@ class GameAct : AppCompatActivity() {
         }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_game)
-        setSupportActionBar(findViewById(R.id.board_options_toolbar))
+        setSupportActionBar(findViewById(R.id.tbBoardOptions))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mountBoard()
     }

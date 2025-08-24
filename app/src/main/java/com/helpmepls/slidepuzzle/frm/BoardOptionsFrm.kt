@@ -40,7 +40,7 @@ class BoardOptionsFrm : Fragment() {
             /* attachToRoot = */ false
         )
         (activity as AppCompatActivity).setSupportActionBar(
-            view.findViewById(R.id.board_options_toolbar)
+            view.findViewById(R.id.tbBoardOptions)
         )
         return view
     }
@@ -51,7 +51,7 @@ class BoardOptionsFrm : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val context = this.context
-        val board = view?.findViewById<GridViewWithHeaderAndFooter>(R.id.images_grid)
+        val board = view?.findViewById<GridViewWithHeaderAndFooter>(R.id.gvImages)
 
         if (context != null && board != null) {
             val layoutInflater = LayoutInflater.from(view?.context)

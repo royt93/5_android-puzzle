@@ -35,7 +35,7 @@
         android:gravity="center">
 
         <android.widget.Button
-            android:id="@+id/shuffle"
+            android:id="@+id/btShuffle"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_red_blue_selector"
@@ -44,7 +44,7 @@
             android:textSize="16dp" />
 
         <android.widget.Button
-            android:id="@+id/reset"
+            android:id="@+id/btReset"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
