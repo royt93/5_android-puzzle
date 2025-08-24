@@ -19,7 +19,10 @@ class BoardOptionsVm : ViewModel() {
         )
 
         val PREDEFINED_IMAGES: Array<TitledResourcePair> = arrayOf(
-            TitledResourcePair(first = R.drawable.alien, second = "alien"),
+            TitledResourcePair(first = R.drawable.i1, second = ""),
+            TitledResourcePair(first = R.drawable.i2, second = ""),
+            TitledResourcePair(first = R.drawable.i3, second = ""),
+            TitledResourcePair(first = R.drawable.i4, second = ""),
         )
     }
 
