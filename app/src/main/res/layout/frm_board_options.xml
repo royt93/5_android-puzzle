@@ -1,37 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/colorPrimary">
 
-    <include layout="@layout/item_game_toolbar" />
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
-        <ImageView
+        <include layout="@layout/item_game_toolbar" />
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/app_name"
-            android:scaleType="centerCrop"
-            android:src="@drawable/bkg" />
+            android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/vgBoardOptions"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
-            tools:context=".frm.BoardOptionsFrm">
-
-            <in.srain.cube.views.GridViewWithHeaderAndFooter
-                android:id="@+id/gvImages"
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:numColumns="2"
-                android:stretchMode="columnWidth" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bkg" />
 
-    </FrameLayout>
-</LinearLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/vgBoardOptions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                tools:context=".frm.BoardOptionsFrm">
+
+                <in.srain.cube.views.GridViewWithHeaderAndFooter
+                    android:id="@+id/gvImages"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:numColumns="2"
+                    android:stretchMode="columnWidth" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

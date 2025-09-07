@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.helpmepls.sdkadbmob.UIUtils
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.act.GameAct
 import com.helpmepls.slidepuzzle.adt.ImageCardsAdt
@@ -34,10 +35,15 @@ class BoardOptionsFrm : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        UIUtils.setupEdgeToEdge1(window = requireActivity().window)
         val view = inflater.inflate(
             /* resource = */ R.layout.frm_board_options,
             /* root = */ container,
             /* attachToRoot = */ false
+        )
+        UIUtils.setupEdgeToEdge2(
+            rootView = view.findViewById(R.id.layoutRoot),
+            paddingBottom = false
         )
         (activity as AppCompatActivity).setSupportActionBar(
             view.findViewById(R.id.tbBoardOptions)
