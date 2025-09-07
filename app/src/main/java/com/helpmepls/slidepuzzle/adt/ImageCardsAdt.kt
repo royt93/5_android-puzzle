@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.model.TitledCardInfo
 
@@ -37,7 +38,10 @@ class ImageCardsAdt(
 
         val card = cards[position]
         holder.titleView.text = card.title
-        holder.imageView.setImageBitmap(card.image)
+//        holder.imageView.setImageBitmap(card.image)
+        Glide.with(holder.imageView.context)
+            .load(card.image)
+            .into(holder.imageView)
 
         // Lưu dữ liệu card vào view để sử dụng trong click listener
         view.setTag(R.id.tag_card_data, card)
