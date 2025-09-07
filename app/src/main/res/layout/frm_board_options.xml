@@ -37,7 +37,9 @@
                     android:id="@+id/gvImages"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:clipToPadding="false"
                     android:numColumns="2"
+                    android:paddingBottom="128dp"
                     android:stretchMode="columnWidth" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
