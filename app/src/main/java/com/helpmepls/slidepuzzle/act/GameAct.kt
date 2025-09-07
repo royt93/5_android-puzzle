@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.helpmepls.sdkadbmob.UIUtils
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.game.GameBoard
 import com.helpmepls.slidepuzzle.model.BoardActivityParams
@@ -87,7 +88,12 @@ class GameAct : AppCompatActivity() {
             boardImage.value = initialConfig.bitmap
         }
         super.onCreate(savedInstanceState)
+        UIUtils.setupEdgeToEdge1(window = window)
         setContentView(R.layout.act_game)
+        UIUtils.setupEdgeToEdge2(
+            rootView = findViewById(R.id.layoutRoot),
+//            paddingBottom = false
+        )
         setSupportActionBar(findViewById(R.id.tbBoardOptions))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mountBoard()
