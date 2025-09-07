@@ -9,8 +9,8 @@ android {
         applicationId "com.helpmepls.slidepuzzle"
         minSdkVersion 23
         targetSdkVersion 36
-        versionCode 20250828
-        versionName "2025.08.28"
+        versionCode 20250906
+        versionName "2025.09.06"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     compileOptions {
@@ -65,6 +65,6 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'in.srain.cube:grid-view-with-header-footer:1.0.12'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "com.google.android.material:material:1.12.0"
+    implementation "com.google.android.material:material:1.13.0"
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 }
