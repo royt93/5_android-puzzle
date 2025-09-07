@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.helpmepls.sdkadbmob.UIUtils
 import com.helpmepls.slidepuzzle.R
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -14,7 +14,9 @@ import kotlinx.coroutines.launch
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        UIUtils.setupEdgeToEdge1(window)
         setContentView(R.layout.activity_splash)
+        UIUtils.setupEdgeToEdge2(findViewById(R.id.layoutRoot))
         goToMain()
     }
 
