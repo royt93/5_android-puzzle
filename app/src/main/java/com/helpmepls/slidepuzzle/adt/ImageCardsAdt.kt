@@ -8,6 +8,8 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.model.TitledCardInfo
 
@@ -41,6 +43,8 @@ class ImageCardsAdt(
 //        holder.imageView.setImageBitmap(card.image)
         Glide.with(holder.imageView.context)
             .load(card.image)
+            .override(SIZE_ORIGINAL, SIZE_ORIGINAL)
+            .format(DecodeFormat.PREFER_ARGB_8888)
             .into(holder.imageView)
 
         // Lưu dữ liệu card vào view để sử dụng trong click listener
