@@ -3,6 +3,8 @@ package com.helpmepls.slidepuzzle.act
 import android.os.Bundle
 import android.util.Size
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +21,23 @@ import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 class GameAct : AppCompatActivity() {
     companion object Companion {
         lateinit var initialConfig: BoardActivityParams
+    }
+
+    private fun View.addSpringClickAnimation() {
+        this.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    val pressAnimation = AnimationUtils.loadAnimation(context, R.anim.spring_button_press)
+                    view.startAnimation(pressAnimation)
+                    view.performClick()
+                }
+                android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                    val releaseAnimation = AnimationUtils.loadAnimation(context, R.anim.spring_button_release)
+                    view.startAnimation(releaseAnimation)
+                }
+            }
+            true
+        }
     }
 
     private val viewModel: BoardOptionsVm by lazy {
@@ -41,7 +60,13 @@ class GameAct : AppCompatActivity() {
                 }
             }
         )
-        findViewById<Button>(R.id.btShuffle).setOnClickListener {
+        val shuffleButton = findViewById<Button>(R.id.btShuffle)
+        val resetButton = findViewById<Button>(R.id.btReset)
+
+        shuffleButton.addSpringClickAnimation()
+        resetButton.addSpringClickAnimation()
+
+        shuffleButton.setOnClickListener {
             showDlg(
                 onYes = {
                     // Xử lý khi nhấn Yes
@@ -52,7 +77,7 @@ class GameAct : AppCompatActivity() {
                 }
             )
         }
-        findViewById<Button>(R.id.btReset).setOnClickListener {
+        resetButton.setOnClickListener {
             showDlg(
                 onYes = {
                     // Xử lý khi nhấn Yes
@@ -69,7 +94,7 @@ class GameAct : AppCompatActivity() {
         onYes: () -> Unit,
         onNo: () -> Unit,
     ) {
-        MaterialAlertDialogBuilder(this)
+        val dialog = MaterialAlertDialogBuilder(this)
             .setTitle("Confirmation")
             .setMessage("Are you sure you want to continue?")
             .setPositiveButton("Yes") { dialog, _ ->
@@ -86,7 +111,15 @@ class GameAct : AppCompatActivity() {
                     onNo()
                 }
             }
-            .show()
+            .create()
+
+        dialog.show()
+
+        // Add entrance animation to dialog
+        dialog.window?.let { window ->
+            val bounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_scale_in)
+            window.decorView.startAnimation(bounceAnimation)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,11 +141,34 @@ class GameAct : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 finish()
-                overridePendingTransition(0, 0)
+                overridePendingTransition(R.anim.smooth_slide_in_left, R.anim.smooth_slide_out_right)
             }
         })
 
         mountBoard()
+
+        // Add elegant entrance animations
+        val ivOriginal = findViewById<ImageView>(R.id.ivOriginal)
+        val boardView = findViewById<GameBoard>(R.id.boardView)
+
+        // Stagger the animations for better visual effect
+        ivOriginal.alpha = 0f
+        boardView.alpha = 0f
+
+        val elegantFadeIn = AnimationUtils.loadAnimation(this, R.anim.elegant_fade_in)
+        val bounceScaleIn = AnimationUtils.loadAnimation(this, R.anim.bounce_scale_in)
+
+        // Start image animation first
+        ivOriginal.postDelayed({
+            ivOriginal.alpha = 1f
+            ivOriginal.startAnimation(elegantFadeIn)
+        }, 200)
+
+        // Start board animation with delay for staggered effect
+        boardView.postDelayed({
+            boardView.alpha = 1f
+            boardView.startAnimation(bounceScaleIn)
+        }, 600)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

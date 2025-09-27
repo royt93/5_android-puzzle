@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -60,6 +61,15 @@ class BoardOptionsFrm : Fragment() {
         val board = view?.findViewById<GridViewWithHeaderAndFooter>(R.id.gvImages)
 
         if (context != null && board != null) {
+            // Add elegant staggered entrance animation for grid view
+            board.alpha = 0f
+            val staggeredAnimation = AnimationUtils.loadAnimation(context, R.anim.staggered_grid_item)
+
+            board.postDelayed({
+                board.alpha = 1f
+                board.startAnimation(staggeredAnimation)
+            }, 300)
+
             val layoutInflater = LayoutInflater.from(view?.context)
             board.addHeaderView(
                 layoutInflater.inflate(
@@ -92,9 +102,8 @@ class BoardOptionsFrm : Fragment() {
                         size = it.boardSize.value!!
                     )
                     val intent = Intent(this.activity, GameAct::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                     startActivity(intent)
-                    this.activity?.overridePendingTransition(0, 0)
+                    this.activity?.overridePendingTransition(R.anim.smooth_slide_in_right, R.anim.smooth_slide_out_left)
                 }
             }
         }

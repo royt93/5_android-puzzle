@@ -3,6 +3,8 @@ package com.helpmepls.slidepuzzle.act
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.helpmepls.sdkadbmob.UIUtils
@@ -17,6 +19,12 @@ class SplashActivity : AppCompatActivity() {
         UIUtils.setupEdgeToEdge1(window)
         setContentView(R.layout.activity_splash)
         UIUtils.setupEdgeToEdge2(findViewById(R.id.layoutRoot))
+
+        // Add logo animation
+        val logo = findViewById<ImageView>(R.id.logo)
+        val logoAnimation = AnimationUtils.loadAnimation(this, R.anim.elegant_splash_logo)
+        logo.startAnimation(logoAnimation)
+
         goToMain()
     }
 
@@ -25,7 +33,7 @@ class SplashActivity : AppCompatActivity() {
             delay(1000)
             val intent = Intent(this@SplashActivity, BoardOptionsAct::class.java)
             startActivity(intent)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            overridePendingTransition(R.anim.smooth_slide_in_right, R.anim.elegant_fade_out)
             window.decorView.postDelayed({ finish() }, 300)
         }
     }
