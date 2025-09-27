@@ -9,6 +9,8 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.Size
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.core.content.ContextCompat
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.game.state.PuzzleGrid
@@ -72,6 +74,33 @@ class GameBoard(
         invalidate()
     }
 
+    fun shuffleWithAnimation() {
+        // Enhanced shuffle với animation effects
+        val shuffleAnimator = ValueAnimator.ofFloat(0.0f, 1.0f).apply {
+            duration = 500
+            interpolator = AccelerateDecelerateInterpolator()
+
+            addUpdateListener {
+                // Tạo shake effect cho toàn bộ board
+                val progress = it.animatedValue as Float
+                val shakeAmount = (1.0f - progress) * 10.0f
+                translationX = (Math.random() * shakeAmount - shakeAmount / 2).toFloat()
+                translationY = (Math.random() * shakeAmount - shakeAmount / 2).toFloat()
+            }
+
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    translationX = 0f
+                    translationY = 0f
+                    grid.shuffle(false)
+                    invalidate()
+                }
+            })
+
+            start()
+        }
+    }
+
     private fun onSlide(p: Point) {
         val direction = grid.checkSlideMoveDirection(p)
         if (animator != null || direction == null)
@@ -81,14 +110,16 @@ class GameBoard(
         animOffset.set(0.0f, 0.0f)
         activeSlide = p
 
-        // start animation
+        // start enhanced animation
         animator = ValueAnimator.ofFloat(0.0f, 1.0f).apply {
-            duration = 250
+            duration = 300 // Tăng duration để mượt hơn
+            interpolator = OvershootInterpolator(0.5f) // Spring effect
 
             addUpdateListener {
+                val progress = it.animatedValue as Float
                 animOffset.set(
-                    direction.offsetX * tileSize.width() * (it.animatedValue as Float),
-                    direction.offsetY * tileSize.height() * (it.animatedValue as Float)
+                    direction.offsetX * tileSize.width() * progress,
+                    direction.offsetY * tileSize.height() * progress
                 )
                 invalidate()
             }

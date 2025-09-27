@@ -40,6 +40,27 @@ class GameAct : AppCompatActivity() {
         }
     }
 
+    private fun performShuffleWithAnimation(boardView: GameBoard) {
+        // Sử dụng built-in shuffle animation của GameBoard
+        boardView.shuffleWithAnimation()
+    }
+
+    private fun performResetWithAnimation(boardView: GameBoard) {
+        // Fade out effect trước khi reset
+        val fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.puzzle_reset_effect)
+
+        boardView.startAnimation(fadeOutAnimation)
+
+        // Reset sau khi fade out
+        boardView.postDelayed({
+            boardView.shuffle(true) // true = reset
+
+            // Fade in với bounce effect
+            val restoreAnimation = AnimationUtils.loadAnimation(this, R.anim.puzzle_reset_restore)
+            boardView.startAnimation(restoreAnimation)
+        }, 300)
+    }
+
     private val viewModel: BoardOptionsVm by lazy {
         ViewModelProvider(this)[BoardOptionsVm::class.java]
     }
@@ -68,9 +89,11 @@ class GameAct : AppCompatActivity() {
 
         shuffleButton.setOnClickListener {
             showDlg(
+                title = "Shuffle Puzzle",
+                message = "Do you want to shuffle the puzzle pieces?",
                 onYes = {
-                    // Xử lý khi nhấn Yes
-                    boardView.shuffle()
+                    // Thêm shuffle animation effect
+                    performShuffleWithAnimation(boardView)
                 },
                 onNo = {
                     // Xử lý khi nhấn No
@@ -79,9 +102,11 @@ class GameAct : AppCompatActivity() {
         }
         resetButton.setOnClickListener {
             showDlg(
+                title = "Reset Puzzle",
+                message = "Do you want to reset the puzzle to its original state?",
                 onYes = {
-                    // Xử lý khi nhấn Yes
-                    boardView.shuffle(true)
+                    // Thêm reset animation effect
+                    performResetWithAnimation(boardView)
                 },
                 onNo = {
                     // Xử lý khi nhấn No
@@ -91,12 +116,14 @@ class GameAct : AppCompatActivity() {
     }
 
     private fun showDlg(
+        title: String = "Confirmation",
+        message: String = "Are you sure you want to continue?",
         onYes: () -> Unit,
         onNo: () -> Unit,
     ) {
         val dialog = MaterialAlertDialogBuilder(this)
-            .setTitle("Confirmation")
-            .setMessage("Are you sure you want to continue?")
+            .setTitle(title)
+            .setMessage(message)
             .setPositiveButton("Yes") { dialog, _ ->
                 dialog.dismiss()
                 // Post to next frame to prevent ANR
