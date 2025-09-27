@@ -48,13 +48,20 @@
         <!-- Component customizations -->
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
+
+        <!-- Toolbar text colors -->
+        <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
     </style>
 
     <!-- Modern Toolbar Theme -->
-    <style name="AppToolbarTheme" parent="ThemeOverlay.Material3.Toolbar.Surface">
+    <style name="AppToolbarTheme" parent="ThemeOverlay.Material3.Dark">
         <item name="android:background">@color/md_theme_primary</item>
+        <item name="android:textColorPrimary">@color/md_theme_onPrimary</item>
+        <item name="android:textColorSecondary">@color/md_theme_onPrimary</item>
         <item name="colorOnSurface">@color/md_theme_onPrimary</item>
         <item name="colorControlNormal">@color/md_theme_onPrimary</item>
+        <item name="titleTextColor">@color/md_theme_onPrimary</item>
+        <item name="subtitleTextColor">@color/md_theme_onPrimary</item>
     </style>
 
     <!-- Splash Screen Theme -->
@@ -86,6 +93,14 @@
         <item name="strokeWidth">1dp</item>
         <item name="strokeColor">@color/md_theme_outlineVariant</item>
         <item name="cardBackgroundColor">@color/md_theme_surface</item>
+    </style>
+
+    <!-- Toolbar Style -->
+    <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextColor">@color/md_theme_onPrimary</item>
+        <item name="subtitleTextColor">@color/md_theme_onPrimary</item>
+        <item name="android:textColorPrimary">@color/md_theme_onPrimary</item>
+        <item name="android:textColorSecondary">@color/md_theme_onPrimary</item>
     </style>
 
     <!-- Game specific styles -->

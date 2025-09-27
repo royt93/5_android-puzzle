@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:theme="@style/AppToolbarTheme"
-    android:titleTextColor="@color/colorIcons">
+    android:titleTextColor="@color/md_theme_onPrimary"
+    android:subtitleTextColor="@color/md_theme_onPrimary">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_board_size_spinner"
