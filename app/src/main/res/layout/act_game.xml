@@ -29,8 +29,8 @@
 
             <ImageView
                 android:id="@+id/ivOriginal"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="@dimen/image_preview_size"
+                android:layout_height="@dimen/image_preview_size"
                 android:contentDescription="@string/app_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,24 +70,29 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <android.widget.Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btShuffle"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_red_blue_selector"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="@dimen/game_button_width"
+                    android:layout_height="@dimen/game_button_height"
                     android:text="@string/shuffle"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textAppearance="@style/TextAppearance.App.ButtonText"
+                    app:backgroundTint="@color/md_theme_primary"
+                    app:cornerRadius="@dimen/button_corner_radius"
+                    app:elevation="@dimen/elevation_button" />
 
-                <android.widget.Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btReset"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/btn_red_blue_selector"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="@dimen/game_button_width"
+                    android:layout_height="@dimen/game_button_height"
+                    android:layout_marginStart="@dimen/spacing_lg"
                     android:text="@string/reset"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textAppearance="@style/TextAppearance.App.LabelLarge"
+                    android:textColor="@color/md_theme_primary"
+                    app:cornerRadius="@dimen/button_corner_radius"
+                    app:strokeColor="@color/md_theme_primary"
+                    app:strokeWidth="2dp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

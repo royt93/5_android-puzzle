@@ -1,12 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#F44336</color>
-    <color name="colorPrimaryDark">#D32F2F</color>
-    <color name="colorAccent">#FF5252</color>
-    <color name="colorIcons">#FFFFFF</color>
-    <color name="board_background">#FFF</color>
-    <color name="board_active">#00ff00</color>
-    <color name="board_active_trans">#9900ff00</color>
-    <color name="white">#ffffff</color>
+    <!-- Material Design 3 Color Scheme - Modern Red Theme -->
+
+    <!-- Primary Colors - Red Theme -->
+    <color name="md_theme_primary">#F44336</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#FFCDD2</color>
+    <color name="md_theme_onPrimaryContainer">#8B0000</color>
+
+    <!-- Secondary Colors -->
+    <color name="md_theme_secondary">#757575</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#E0E0E0</color>
+    <color name="md_theme_onSecondaryContainer">#212121</color>
+
+    <!-- Tertiary Colors -->
+    <color name="md_theme_tertiary">#FF5722</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#FFE0DB</color>
+    <color name="md_theme_onTertiaryContainer">#BF360C</color>
+
+    <!-- Surface Colors -->
+    <color name="md_theme_surface">#FFFBFE</color>
+    <color name="md_theme_onSurface">#1C1B1F</color>
+    <color name="md_theme_surfaceVariant">#F4EFF4</color>
+    <color name="md_theme_onSurfaceVariant">#49454F</color>
+
+    <!-- Background -->
+    <color name="md_theme_background">#FFFBFE</color>
+    <color name="md_theme_onBackground">#1C1B1F</color>
+
+    <!-- Outline & Other -->
+    <color name="md_theme_outline">#79747E</color>
+    <color name="md_theme_outlineVariant">#CAC4D0</color>
+    <color name="md_theme_shadow">#000000</color>
+    <color name="md_theme_surfaceTint">#6750A4</color>
+
+    <!-- Legacy color mappings for backward compatibility -->
+    <color name="colorPrimary">@color/md_theme_primary</color>
+    <color name="colorPrimaryDark">@color/md_theme_onPrimaryContainer</color>
+    <color name="colorAccent">@color/md_theme_secondary</color>
+    <color name="colorIcons">@color/md_theme_onPrimary</color>
+
+    <!-- Game-specific colors with modern touch -->
+    <color name="board_background">@color/md_theme_surface</color>
+    <color name="board_active">#4CAF50</color>
+    <color name="board_active_trans">#804CAF50</color>
+
+    <!-- Basic colors -->
+    <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+    <!-- Status colors -->
+    <color name="success">#4CAF50</color>
+    <color name="error">#F44336</color>
+    <color name="warning">#FF9800</color>
+    <color name="info">#2196F3</color>
 </resources>
