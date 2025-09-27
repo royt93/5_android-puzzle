@@ -73,12 +73,18 @@ class GameAct : AppCompatActivity() {
             .setTitle("Confirmation")
             .setMessage("Are you sure you want to continue?")
             .setPositiveButton("Yes") { dialog, _ ->
-                onYes()
                 dialog.dismiss()
+                // Post to next frame to prevent ANR
+                findViewById<android.view.View>(android.R.id.content).post {
+                    onYes()
+                }
             }
             .setNegativeButton("No") { dialog, _ ->
-                onNo()
                 dialog.dismiss()
+                // Post to next frame to prevent ANR
+                findViewById<android.view.View>(android.R.id.content).post {
+                    onNo()
+                }
             }
             .show()
     }
