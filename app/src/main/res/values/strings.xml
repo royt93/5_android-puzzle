@@ -2,6 +2,6 @@
     <string name="app_name">Quick Puzzle</string>
     <string name="shuffle">Shuffle</string>
     <string name="reset">Reset</string>
-    <string name="or">Or</string>
     <string name="choose_image">Select an image:</string>
+    <string name="ads_disclaimer">Please note: this action may show ads</string>
 </resources>

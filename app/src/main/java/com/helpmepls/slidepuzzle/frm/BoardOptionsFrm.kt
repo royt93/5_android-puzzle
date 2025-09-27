@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.helpmepls.sdkadbmob.UIUtils
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.act.GameAct
@@ -26,7 +26,7 @@ class BoardOptionsFrm : Fragment() {
 
     private val viewModel: BoardOptionsVm? by lazy {
         activity?.let {
-            ViewModelProviders.of(it)[BoardOptionsVm::class.java]
+            ViewModelProvider(it)[BoardOptionsVm::class.java]
         }
     }
 

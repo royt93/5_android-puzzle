@@ -7,7 +7,8 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import androidx.activity.OnBackPressedCallback
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.helpmepls.sdkadbmob.UIUtils
 import com.helpmepls.slidepuzzle.R
@@ -21,7 +22,7 @@ class GameAct : AppCompatActivity() {
     }
 
     private val viewModel: BoardOptionsVm by lazy {
-        ViewModelProviders.of(this)[BoardOptionsVm::class.java]
+        ViewModelProvider(this)[BoardOptionsVm::class.java]
     }
 
     private fun mountBoard() {
@@ -96,22 +97,25 @@ class GameAct : AppCompatActivity() {
         )
         setSupportActionBar(findViewById(R.id.tbBoardOptions))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Setup OnBackPressedCallback
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+                overridePendingTransition(0, 0)
+            }
+        })
+
         mountBoard()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        super.onBackPressed()
-        overridePendingTransition(0, 0)
     }
 }

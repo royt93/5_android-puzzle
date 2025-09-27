@@ -77,7 +77,7 @@
                     android:background="@drawable/btn_red_blue_selector"
                     android:text="@string/shuffle"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
 
                 <android.widget.Button
                     android:id="@+id/btReset"
@@ -87,7 +87,7 @@
                     android:background="@drawable/btn_red_blue_selector"
                     android:text="@string/reset"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

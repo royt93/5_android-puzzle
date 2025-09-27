@@ -1,6 +1,6 @@
 package com.helpmepls.slidepuzzle.frm
 
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +17,7 @@ import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 class BoardSizeSpinnerFrm : Fragment() {
     private val viewModel: BoardOptionsVm? by lazy {
         activity?.let {
-            ViewModelProviders.of(it)[BoardOptionsVm::class.java]
+            ViewModelProvider(it)[BoardOptionsVm::class.java]
         }
     }
 
