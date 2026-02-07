@@ -4,4 +4,7 @@
     <string name="reset">Reset</string>
     <string name="choose_image">Select an image:</string>
     <string name="ads_disclaimer">Please note: this action may show ads</string>
+    <string name="rate_app">Rate</string>
+    <string name="more_apps">More</string>
+    <string name="share_app">Share</string>
 </resources>

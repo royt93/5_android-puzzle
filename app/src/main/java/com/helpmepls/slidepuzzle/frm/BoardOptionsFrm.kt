@@ -104,5 +104,33 @@ class BoardOptionsFrm : Fragment() {
                 }
             }
         }
+        
+        // App Features Logic
+        view?.findViewById<View>(R.id.btnRate)?.setOnClickListener {
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse("market://details?id=${context?.packageName}")))
+            } catch (e: Exception) {
+                startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://play.google.com/store/apps/details?id=${context?.packageName}")))
+            }
+        }
+
+        view?.findViewById<View>(R.id.btnMore)?.setOnClickListener {
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse("market://search?q=pub:SAIGON PHANTOM LABS")))
+            } catch (e: Exception) {
+                try {
+                startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse("market://details?id=${context?.packageName}")))
+                } catch (e2: Exception) {}
+            }
+        }
+
+        view?.findViewById<View>(R.id.btnShare)?.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+            val shareMessage = "Check out this puzzle game! https://play.google.com/store/apps/details?id=${context?.packageName}"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_app)))
+        }
     }
 }

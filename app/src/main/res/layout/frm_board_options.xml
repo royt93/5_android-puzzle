@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -37,11 +37,70 @@
                 <in.srain.cube.views.GridViewWithHeaderAndFooter
                     android:id="@+id/gvImages"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:clipToPadding="false"
                     android:numColumns="2"
-                    android:paddingBottom="128dp"
-                    android:stretchMode="columnWidth" />
+                    android:paddingBottom="80dp"
+                    android:stretchMode="columnWidth"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/layoutFooter"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutFooter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    android:background="#99000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/btnRate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/rate_app"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        android:drawableTop="@drawable/ic_rate"
+                        android:drawablePadding="4dp"
+                        android:background="?selectableItemBackground"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:id="@+id/btnMore"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/more_apps"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        android:drawableTop="@drawable/ic_more"
+                        android:drawablePadding="4dp"
+                        android:background="?selectableItemBackground"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:id="@+id/btnShare"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/share_app"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        android:drawableTop="@drawable/ic_share"
+                        android:drawablePadding="4dp"
+                        android:background="?selectableItemBackground"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </FrameLayout>
