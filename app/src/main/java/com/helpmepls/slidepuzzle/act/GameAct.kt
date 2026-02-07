@@ -78,7 +78,7 @@ class GameAct : AppCompatActivity() {
     private fun updateTimerUI() {
         val mins = timerSeconds / 60
         val secs = timerSeconds % 60
-        findViewById<android.widget.TextView>(R.id.tvTimer)?.text = String.format("%02d:%02d", mins, secs)
+        findViewById<android.widget.TextView>(R.id.tvTimer)?.text = String.format("⏱ %02d:%02d", mins, secs)
     }
     
     private fun saveHighScore(moves: Int, time: Int) {
@@ -168,7 +168,7 @@ class GameAct : AppCompatActivity() {
              if (!isGameRunning && moves > 0 && !solved) {
                  startTimer()
              }
-             findViewById<android.widget.TextView>(R.id.tvMoves)?.text = "Moves: $moves"
+             findViewById<android.widget.TextView>(R.id.tvMoves)?.text = "📊 $moves"
              
              if (solved) {
                  stopTimer()
@@ -319,12 +319,18 @@ class GameAct : AppCompatActivity() {
             boardImage.value = initialConfig.bitmap
         }
         super.onCreate(savedInstanceState)
-        UIUtils.setupEdgeToEdge1(window = window)
+        
+        // REMOVED WindowCompat.setDecorFitsSystemWindows - it might be resetting colors
+        android.util.Log.d("roy93~", "GameAct: API Level = ${android.os.Build.VERSION.SDK_INT}")
+        
         setContentView(R.layout.act_game)
-        UIUtils.setupEdgeToEdge2(
-            rootView = findViewById(R.id.layoutRoot),
-//            paddingBottom = false
-        )
+        
+        // Ensure icon color is correct (white)
+        // Status bar background color is now handled by the red FrameLayout in XML
+        androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false 
+        }
+
         setSupportActionBar(findViewById(R.id.tbBoardOptions))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -371,6 +377,19 @@ class GameAct : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+    
+    override fun onResume() {
+        super.onResume()
+        // Force status bar color on resume to ensure it persists
+        val primaryColor = androidx.core.content.ContextCompat.getColor(this, R.color.md_theme_primary)
+        window.statusBarColor = primaryColor
+        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        androidx.core.view.WindowCompat.getInsetsController(window, window.decorView)?.apply {
+            isAppearanceLightStatusBars = false
+        }
+    }
+    
     override fun onDestroy() {
         super.onDestroy()
         stopTimer()

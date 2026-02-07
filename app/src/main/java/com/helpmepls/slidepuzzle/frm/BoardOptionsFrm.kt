@@ -36,16 +36,13 @@ class BoardOptionsFrm : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        UIUtils.setupEdgeToEdge1(window = requireActivity().window)
+        // Removed UIUtils.setupEdgeToEdge1 - causing transparent status bar
         val view = inflater.inflate(
             /* resource = */ R.layout.frm_board_options,
             /* root = */ container,
             /* attachToRoot = */ false
         )
-        UIUtils.setupEdgeToEdge2(
-            rootView = view.findViewById(R.id.layoutRoot),
-            paddingBottom = false
-        )
+        // Removed UIUtils.setupEdgeToEdge2 - using theme's status bar color instead
         (activity as AppCompatActivity).setSupportActionBar(
             view.findViewById(R.id.tbBoardOptions)
         )

@@ -16,9 +16,9 @@ import kotlinx.coroutines.launch
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIUtils.setupEdgeToEdge1(window)
+        // Removed UIUtils.setupEdgeToEdge1 - causes transparent status bar
         setContentView(R.layout.activity_splash)
-        UIUtils.setupEdgeToEdge2(findViewById(R.id.layoutRoot))
+        // Removed UIUtils.setupEdgeToEdge2 - using theme's status bar color instead
 
         // Add logo animation
         val logo = findViewById<ImageView>(R.id.logo)
