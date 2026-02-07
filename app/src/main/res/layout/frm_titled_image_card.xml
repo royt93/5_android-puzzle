@@ -8,11 +8,11 @@
     <com.google.android.material.card.MaterialCardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@color/md_theme_surface"
-        card_view:cardCornerRadius="8dp"
-        card_view:cardElevation="2dp"
+        android:backgroundTint="#CCFFFFFF"
+        card_view:cardCornerRadius="16dp"
+        card_view:cardElevation="6dp"
         card_view:cardUseCompatPadding="true"
-        card_view:strokeColor="@color/md_theme_outlineVariant"
+        card_view:strokeColor="#80FFFFFF"
         card_view:strokeWidth="1dp">
 
         <LinearLayout

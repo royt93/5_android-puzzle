@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom Dialog Theme -->
+    <!-- Custom Dialog Theme -->
+    <style name="Theme.App.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <!-- CRITICAL: Set window background to transparent to avoid "box within box" -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@null</item>
+        
+        <!-- Text Colors -->
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        
+        <!-- Link to Widget Style where background is actually set -->
+        <item name="alertDialogStyle">@style/Widget.App.AlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/Theme.App.Dialog.Alert</item>
+        
+        <!-- Button Colors -->
+        <item name="colorPrimary">#FFEB3B</item>
+        <item name="colorAccent">#FFEB3B</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button.TextButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.App.Button.TextButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button.TextButton</item>
+
+        <!-- Animations -->
+
+    </style>
+
+    <style name="Theme.App.Dialog.Alert" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+       <item name="android:windowBackground">@android:color/transparent</item>
+       <item name="android:background">@android:color/transparent</item>
+       <item name="colorSurface">@android:color/transparent</item>
+       <item name="alertDialogStyle">@style/Widget.App.AlertDialog</item>
+       <item name="materialAlertDialogTitleTextStyle">@style/TextAppearance.App.DialogTitle</item>
+       <item name="materialAlertDialogBodyTextStyle">@style/TextAppearance.App.DialogBody</item>
+    </style>
+
+    <style name="Widget.App.AlertDialog" parent="MaterialAlertDialog.Material3">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.Dialog</item>
+        <!-- Apply background ONCE here -->
+        <item name="background">@drawable/bg_dialog_clean</item>
+    </style>
+
+    <style name="Widget.App.Button.TextButton" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">#FFEB3B</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ShapeAppearance.App.Dialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="TextAppearance.App.DialogTitle" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textColor">#FFEB3B</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TextAppearance.App.DialogBody" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+</resources>

@@ -11,16 +11,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.activity.OnBackPressedCallback
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+
 import com.helpmepls.sdkadbmob.UIUtils
 import com.helpmepls.slidepuzzle.R
+import com.helpmepls.slidepuzzle.DialogUtils
 import com.helpmepls.slidepuzzle.game.GameBoard
 import com.helpmepls.slidepuzzle.model.BoardActivityParams
 import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
 class GameAct : AppCompatActivity() {
     companion object Companion {
-        lateinit var initialConfig: BoardActivityParams
+        var initialConfig: BoardActivityParams? = null
     }
 
     private fun View.addSpringClickAnimation() {
@@ -82,8 +83,9 @@ class GameAct : AppCompatActivity() {
     }
     
     private fun saveHighScore(moves: Int, time: Int) {
+        val size = viewModel.boardSize.value ?: return
         val prefs = getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
-        val key = "best_${initialConfig.size.width}x${initialConfig.size.height}"
+        val key = "best_${size.width}x${size.height}"
         val currentBest = prefs.getInt(key, Int.MAX_VALUE)
         if (moves < currentBest) {
              prefs.edit().putInt(key, moves).apply()
@@ -92,15 +94,16 @@ class GameAct : AppCompatActivity() {
     }
     
     private fun loadHighScore() {
+        val size = viewModel.boardSize.value ?: return
         val prefs = getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
-        val key = "best_${initialConfig.size.width}x${initialConfig.size.height}"
+        val key = "best_${size.width}x${size.height}"
         bestScore = prefs.getInt(key, 0)
         if (bestScore == Int.MAX_VALUE) bestScore = 0
     }
 
     private fun showWinDialog(moves: Int) {
         stopTimer()
-        val isNewBest = bestScore > 0 && moves <= bestScore // Simplified check, strictly speaking if best was MAX_VALUE, any score is best.
+        val isNewBest = bestScore > 0 && moves <= bestScore
         
         // Save score
         saveHighScore(moves, timerSeconds)
@@ -108,23 +111,19 @@ class GameAct : AppCompatActivity() {
         val timerText = findViewById<android.widget.TextView>(R.id.tvTimer)?.text ?: "00:00"
         val newBestText = if (isNewBest) "\n\n🏆 NEW HIGH SCORE! 🏆" else ""
         
-        MaterialAlertDialogBuilder(this)
-            .setTitle("🎉 Congratulations! 🎉")
-            .setMessage("You solved the puzzle in $moves moves and $timerText!$newBestText")
-            .setPositiveButton("Share") { dialog, _ ->
-                dialog.dismiss()
+        DialogUtils.showGameDialog(
+            context = this,
+            title = "🎉 VICTORY! 🎉",
+            message = "You solved it in $moves moves and $timerText!$newBestText",
+            yesText = "SHARE",
+            noText = "CLOSE",
+            onYes = {
                 shareSuccess()
+            },
+            onNo = {
+                // Just close
             }
-            .setNegativeButton("Close") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setNeutralButton("Replay") { dialog, _ ->
-                dialog.dismiss()
-                findViewById<Button>(R.id.btReset).performClick()
-            }
-            .show()
-            
-        // Play success sound / vibration here if Audio implemented
+        )
     }
 
     private fun shareSuccess() {
@@ -248,82 +247,78 @@ class GameAct : AppCompatActivity() {
 
 
         shuffleButton.setOnClickListener {
-            showDlg(
-                title = "Shuffle Puzzle",
-                message = "Do you want to shuffle the puzzle pieces?",
-                onYes = {
-                    // Thêm shuffle animation effect
-                    performShuffleWithAnimation(boardView)
-                    resetTimer()
-                    undoCount = 3
-                },
-                onNo = {
-                    // Xử lý khi nhấn No
-                }
-            )
+            showShuffleDialog(boardView)
         }
         resetButton.setOnClickListener {
-            showDlg(
-                title = "Reset Puzzle",
-                message = "Do you want to reset the puzzle to its original state?",
-                onYes = {
-                    // Thêm reset animation effect
-                    performResetWithAnimation(boardView)
-                    resetTimer()
-                    undoCount = 3
-                },
-                onNo = {
-                    // Xử lý khi nhấn No
-                }
-            )
+            showResetDialog(boardView)
         }
     }
 
-    private fun showDlg(
-        title: String = "Confirmation",
-        message: String = "Are you sure you want to continue?",
-        onYes: () -> Unit,
-        onNo: () -> Unit,
-    ) {
-        val dialog = MaterialAlertDialogBuilder(this)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("Yes") { dialog, _ ->
-                dialog.dismiss()
-                // Post to next frame to prevent ANR
-                findViewById<android.view.View>(android.R.id.content).post {
-                    onYes()
-                }
+    // Unified Dialog Function removed, use DialogUtils instead.
+    
+    private fun showShuffleDialog(boardView: GameBoard) {
+        DialogUtils.showGameDialog(
+            context = this,
+            title = "SHUFFLE PUZZLE",
+            message = "Do you want to shuffle\nthe puzzle pieces?",
+            yesText = "YES",
+            noText = "NO",
+            onYes = {
+                 performShuffleWithAnimation(boardView)
+                 resetTimer()
+                 undoCount = 3
             }
-            .setNegativeButton("No") { dialog, _ ->
-                dialog.dismiss()
-                // Post to next frame to prevent ANR
-                findViewById<android.view.View>(android.R.id.content).post {
-                    onNo()
-                }
+        )
+    }
+
+    private fun showResetDialog(boardView: GameBoard) {
+        DialogUtils.showGameDialog(
+            context = this,
+            title = "RESET PUZZLE",
+            message = "Do you want to reset\nto original state?",
+            yesText = "RESET",
+            noText = "CANCEL",
+            onYes = {
+                performResetWithAnimation(boardView)
+                resetTimer()
+                undoCount = 3
             }
-            .create()
-
-        dialog.show()
-
-        // Add entrance animation to dialog
-        dialog.window?.let { window ->
-            val bounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_scale_in)
-            window.decorView.startAnimation(bounceAnimation)
-        }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Enable window content transitions
+        window.requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS)
+        window.enterTransition = android.transition.Fade()
+        window.exitTransition = android.transition.Fade()
+        
         viewModel.apply {
-            boardSize.value = initialConfig.size
-            boardImage.value = initialConfig.bitmap
+            initialConfig?.let {
+                boardSize.value = it.size
+                boardImage.value = it.bitmap
+            }
+            // Clear static reference to avoid memory leak
+            initialConfig = null
         }
         super.onCreate(savedInstanceState)
+        
+        // Postpone enter transition until image is loaded (though we have bitmap in memory)
+        supportPostponeEnterTransition()
         
         // REMOVED WindowCompat.setDecorFitsSystemWindows - it might be resetting colors
         android.util.Log.d("roy93~", "GameAct: API Level = ${android.os.Build.VERSION.SDK_INT}")
         
         setContentView(R.layout.act_game)
+        
+        // Hero Animation: Set transition name on destination view
+        val ivOriginal = findViewById<ImageView>(R.id.ivOriginal)
+        val transitionName = intent.getStringExtra("TRANSITION_NAME")
+        if (transitionName != null && ivOriginal != null) {
+            androidx.core.view.ViewCompat.setTransitionName(ivOriginal, transitionName)
+        }
+        
+        // Start transition
+        supportStartPostponedEnterTransition()
         
         // Ensure icon color is correct (white)
         // Status bar background color is now handled by the red FrameLayout in XML
@@ -338,34 +333,22 @@ class GameAct : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 finish()
-                overridePendingTransition(R.anim.smooth_slide_in_left, R.anim.smooth_slide_out_right)
+                // Removed overridePendingTransition to allow ActivityOptions transition to work
             }
         })
 
         mountBoard()
 
-        // Add elegant entrance animations
-        val ivOriginal = findViewById<ImageView>(R.id.ivOriginal)
+        // Simple Animation as requested
+        val fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+        
+        ivOriginal.startAnimation(fadeIn)
+        
         val boardView = findViewById<GameBoard>(R.id.boardView)
-
-        // Stagger the animations for better visual effect
-        ivOriginal.alpha = 0f
-        boardView.alpha = 0f
-
-        val elegantFadeIn = AnimationUtils.loadAnimation(this, R.anim.elegant_fade_in)
-        val bounceScaleIn = AnimationUtils.loadAnimation(this, R.anim.bounce_scale_in)
-
-        // Start image animation first
-        ivOriginal.postDelayed({
-            ivOriginal.alpha = 1f
-            ivOriginal.startAnimation(elegantFadeIn)
-        }, 200)
-
-        // Start board animation with delay for staggered effect
-        boardView.postDelayed({
-            boardView.alpha = 1f
-            boardView.startAnimation(bounceScaleIn)
-        }, 600)
+        boardView.startAnimation(fadeIn)
+        
+        findViewById<android.view.View>(R.id.topInfoBar).visibility = View.VISIBLE
+        findViewById<android.view.View>(R.id.layoutBottom).visibility = View.VISIBLE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

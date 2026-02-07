@@ -98,9 +98,19 @@ class BoardOptionsFrm : Fragment() {
                         bitmap = it.boardImage.value!!,
                         size = it.boardSize.value!!
                     )
-                    val intent = Intent(this.activity, GameAct::class.java)
-                    startActivity(intent)
-                    this.activity?.overridePendingTransition(R.anim.smooth_slide_in_right, R.anim.smooth_slide_out_left)
+                    
+                    val transitionName = "hero_image_${cardInfo.title}"
+                    val intent = Intent(this.activity, GameAct::class.java).apply {
+                        putExtra("TRANSITION_NAME", transitionName)
+                    }
+                    
+                    val options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        androidx.core.util.Pair(view.findViewById(R.id.image), transitionName)
+                    )
+                    
+                    startActivity(intent, options.toBundle())
+                    // Removed overridePendingTransition to allow ActivityOptions transition to work
                 }
             }
         }

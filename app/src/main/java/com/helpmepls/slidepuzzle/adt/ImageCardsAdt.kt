@@ -46,6 +46,9 @@ class ImageCardsAdt(
             .override(SIZE_ORIGINAL, SIZE_ORIGINAL)
             .format(DecodeFormat.PREFER_ARGB_8888)
             .into(holder.imageView)
+        
+        // Hero Animation: Set unique transition name
+        androidx.core.view.ViewCompat.setTransitionName(holder.imageView, "hero_image_${card.title}")
 
         // Lưu dữ liệu card vào view để sử dụng trong click listener
         view.setTag(R.id.tag_card_data, card)

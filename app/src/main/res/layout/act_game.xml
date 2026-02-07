@@ -7,182 +7,167 @@
     tools:context=".act.GameAct">
 
     <FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/md_theme_primary">
-
-    <LinearLayout
-        android:id="@+id/layoutRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:attr/colorBackground"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:background="@drawable/bkg"
+        android:fitsSystemWindows="true">
 
-        <include layout="@layout/item_game_toolbar" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/layoutRoot"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
-            <ImageView
+            <include layout="@layout/item_game_toolbar" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bkg" />
+                android:layout_height="match_parent">
 
+                <!-- Removed static background to show Liquid Gradient -->
 
-
-
-
-            <LinearLayout
-                android:id="@+id/topInfoBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="12dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <ImageView
-                    android:id="@+id/ivOriginal"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:contentDescription="@string/app_name"
-                    android:scaleType="centerCrop"
-                    tools:src="@mipmap/ic_launcher" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/topInfoBar"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="12dp"
-                    app:cardBackgroundColor="#CC000000"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp"
-                    app:strokeWidth="0dp">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/ivOriginal"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:contentDescription="@string/app_name"
+                        android:padding="2dp"
+                        android:scaleType="centerCrop"
+                        tools:src="@mipmap/ic_launcher" />
+
+                    <!-- Glass Panel for Stats -->
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_glass_card"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingHorizontal="16dp"
-                        android:paddingVertical="10dp"
-                        android:gravity="center_vertical">
+                        android:paddingVertical="12dp">
 
                         <TextView
                             android:id="@+id/tvTimer"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
                             android:text="⏱ 00:00"
                             android:textColor="#FFEB3B"
                             android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:fontFamily="sans-serif-medium"/>
+                            android:textStyle="bold" />
 
                         <View
                             android:layout_width="1dp"
                             android:layout_height="16dp"
-                            android:background="#FFFFFF"
+                            android:layout_marginHorizontal="12dp"
                             android:alpha="0.3"
-                            android:layout_marginHorizontal="12dp"/>
+                            android:background="#FFFFFF" />
 
                         <TextView
                             android:id="@+id/tvMoves"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
                             android:text="📊 0"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:fontFamily="sans-serif-medium"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
+                </LinearLayout>
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/vgBoardContainer"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/layoutBottom"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topInfoBar">
-
-
-                <com.helpmepls.slidepuzzle.game.GameBoard
-                    android:id="@+id/boardView"
-                    android:layout_width="0dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/vgBoardContainer"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:background="@color/board_active_trans"
-                    android:elevation="4dp"
+                    app:layout_constraintBottom_toTopOf="@+id/layoutBottom"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/topInfoBar">
+
+
+                    <com.helpmepls.slidepuzzle.game.GameBoard
+                        android:id="@+id/boardView"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:background="@android:color/transparent"
+                        android:elevation="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="H,1:1"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Bottom Glass Dock -->
+                <LinearLayout
+                    android:id="@+id/layoutBottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/bg_glass_card"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="H,1:1"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btShuffle"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_glass_action"
+                        android:text="@string/shuffle"
+                        android:textAllCaps="true"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/btUndo"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/btn_glass_action"
+                        android:contentDescription="Undo"
+                        android:padding="12dp"
+                        android:scaleType="centerInside"
+                        android:src="@android:drawable/ic_menu_revert"
+                        android:tint="#FFFFFF" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btReset"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_glass_action"
+                        android:text="@string/reset"
+                        android:textAllCaps="true"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:id="@+id/layoutBottom"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btShuffle"
-                    style="@style/Widget.Material3.Button"
-                    android:layout_width="@dimen/game_button_width"
-                    android:layout_height="@dimen/game_button_height"
-                    android:text="@string/shuffle"
-                    android:textAppearance="@style/TextAppearance.App.ButtonText"
-                    app:backgroundTint="@color/md_theme_primary"
-                    app:cornerRadius="@dimen/button_corner_radius"
-                    app:elevation="@dimen/elevation_button" />
-
-                <ImageButton
-                    android:id="@+id/btUndo"
-                    style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-                    android:layout_width="56dp"
-                    android:layout_height="@dimen/game_button_height"
-                    android:layout_marginStart="8dp"
-                    android:src="@android:drawable/ic_menu_revert"
-                    android:contentDescription="Undo"
-                    android:padding="0dp"
-                    app:cornerRadius="@dimen/button_corner_radius"
-                    app:strokeColor="@color/md_theme_primary"
-                    app:strokeWidth="2dp" />
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btReset"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="@dimen/game_button_width"
-                    android:layout_height="@dimen/game_button_height"
-                    android:layout_marginStart="@dimen/spacing_lg"
-                    android:text="@string/reset"
-                    android:textAppearance="@style/TextAppearance.App.LabelLarge"
-                    android:textColor="@color/md_theme_primary"
-                    app:cornerRadius="@dimen/button_corner_radius"
-                    app:strokeColor="@color/md_theme_primary"
-                    app:strokeWidth="2dp" />
-            </LinearLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+        </LinearLayout>
     </FrameLayout>
 </FrameLayout>
