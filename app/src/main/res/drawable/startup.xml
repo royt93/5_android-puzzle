@@ -14,7 +14,7 @@
     <item
         android:width="220sp"
         android:height="220sp"
-        android:drawable="@drawable/ic_launcher"
+        android:drawable="@mipmap/ic_launcher"
         android:gravity="center"
         tools:ignore="UnusedAttribute" />
 </layer-list>

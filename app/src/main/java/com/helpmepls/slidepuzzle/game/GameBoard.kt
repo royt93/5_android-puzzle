@@ -14,6 +14,7 @@ import android.view.animation.OvershootInterpolator
 import androidx.core.content.ContextCompat
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.game.state.PuzzleGrid
+import com.helpmepls.slidepuzzle.game.state.Direction
 import kotlin.math.ceil
 
 @SuppressLint("ClickableViewAccessibility")
@@ -30,6 +31,10 @@ class GameBoard(
     private var animOffset = PointF(0.0f, 0.0f)
 
     private lateinit var activeSlide: Point
+    private val moveStack = java.util.Stack<Point>()
+    var onMoveListener: ((Int, Boolean) -> Unit)? = null // count, isSolved
+    private var moveCount = 0
+
 
     private var grid = PuzzleGrid(
         sourceImage = null,
@@ -60,17 +65,57 @@ class GameBoard(
         )
     }
 
+    fun undo(): Boolean {
+        if (moveStack.isEmpty() || animator != null) return false
+        val originalTilePos = moveStack.pop()
+        
+        // Stack stores the ORIGINAL position of the tile that was moved.
+        // To undo, move the tile from its current position back to originalTilePos.
+        // However, moveSlide() moves a tile INTO the empty space.
+        // So to reverse, we need to move the tile that is now where empty WAS.
+        // In short: the empty is now at originalTilePos (where tile came from),
+        // and the tile is at some adjacent position. We call moveSlide on the tile's NEW position
+        // to move it back into the empty (which is at originalTilePos).
+        // But actually since we stored original pos and empty moved there,
+        // calling moveSlide(originalTilePos) won't work because that's where empty is now.
+        // We need to find where the tile ended up (adjacent to originalTilePos) and call moveSlide on it.
+        
+        // Simpler fix: Store the position where tile ENDED UP (newCoordinates), then to undo,
+        // call moveSlide on that position again to swap it back.
+        // Actually current code already does this but comment was confusing. Let's verify:
+        // Push: moveStack.push(newCoordinates) - stores where tile moved TO
+        // Pop: lastMovePos = newCoordinates = where tile is NOW
+        // moveSlide(lastMovePos) tries to move tile at lastMovePos into empty
+        // This works IF empty is adjacent to lastMovePos - which it should be!
+        
+        grid.moveSlide(originalTilePos)?.let {
+             moveCount--
+             invalidate()
+             val solved = grid.isSolved()
+             onMoveListener?.invoke(moveCount, solved) 
+             return true
+        }
+        return false
+    }
+
+
     fun resize(
         size: Size,
         image: Bitmap? = null,
         shuffle: Boolean = true,
     ) {
         grid.regenerate(newSize = size, newImage = image, shuffle = shuffle)
+        moveStack.clear()
+        moveCount = 0
+        onMoveListener?.invoke(0, false)
         requestLayout()
     }
 
     fun shuffle(reset: Boolean = false) {
         grid.shuffle(reset)
+        moveStack.clear()
+        moveCount = 0
+        onMoveListener?.invoke(0, false)
         invalidate()
     }
 
@@ -93,6 +138,12 @@ class GameBoard(
                     translationX = 0f
                     translationY = 0f
                     grid.shuffle(false)
+                    
+                    // Critical Fix: State reset after shuffle
+                    moveStack.clear()
+                    moveCount = 0
+                    onMoveListener?.invoke(0, false)
+                    
                     invalidate()
                 }
             })
@@ -129,6 +180,15 @@ class GameBoard(
                     grid.moveSlide(p)?.let { newCoordinates ->
                         activeSlide = newCoordinates
                         animOffset.set(0.0f, 0.0f)
+                        
+                        // Move success
+                        moveStack.push(newCoordinates)
+                        moveCount++
+                        performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+                        
+                        val solved = grid.isSolved()
+                        onMoveListener?.invoke(moveCount, solved)
+                        
                         invalidate()
                     }
                 }
@@ -140,6 +200,8 @@ class GameBoard(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        
+        if (!grid.isConfigured()) return
 
         grid.let {
             tileSize.set(
@@ -180,6 +242,8 @@ class GameBoard(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        
+        if (!grid.isConfigured()) return
 
         for (j in 0 until grid.size.height) {
             for (i in 0 until grid.size.width) {

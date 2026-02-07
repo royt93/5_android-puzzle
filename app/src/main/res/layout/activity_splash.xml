@@ -17,7 +17,7 @@
             android:layout_width="256dp"
             android:layout_height="256dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_launcher"
+            android:src="@mipmap/ic_launcher"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

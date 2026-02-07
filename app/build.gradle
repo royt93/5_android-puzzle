@@ -2,6 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 //apply plugin: 'kotlin-android-extensions'
 
+// Load local.properties
+Properties localProperties = new Properties()
+File localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
 android {
     namespace("com.helpmepls.slidepuzzle")
     compileSdk 36
@@ -9,8 +16,8 @@ android {
         applicationId "com.helpmepls.slidepuzzle"
         minSdkVersion 23
         targetSdkVersion 36
-        versionCode 20260125
-        versionName "2026.01.25"
+        versionCode 20260207
+        versionName "2026.02.07"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     compileOptions {
@@ -24,9 +31,9 @@ android {
     signingConfigs {
         release {
             storeFile file("key/keystore.jks")
-            storePassword "27072000"
-            keyAlias "mckimquyen"
-            keyPassword "27072000"
+            storePassword localProperties['KEYSTORE_PASSWORD']
+            keyAlias localProperties['KEY_ALIAS']
+            keyPassword localProperties['KEY_PASSWORD']
         }
     }
     buildFeatures {
@@ -51,7 +58,7 @@ android {
             buildConfigField "String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3940256099942544/9257395921\""
 
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules-debug.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules-debug.pro'
         }
     }
 }
@@ -66,7 +73,7 @@ dependencies {
     implementation 'in.srain.cube:grid-view-with-header-footer:1.0.12'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "com.google.android.material:material:1.13.0"
-    implementation 'com.github.bumptech.glide:glide:5.0.4'
+    implementation 'com.github.bumptech.glide:glide:5.0.5'
 //    kapt 'com.github.bumptech.glide:compiler:5.0.4'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 }
