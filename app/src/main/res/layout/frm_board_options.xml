@@ -47,13 +47,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
+                <!-- Floating Footer Panel -->
                 <LinearLayout
                     android:id="@+id/layoutFooter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/bg_glass_panel"
                     android:orientation="horizontal"
-                    android:padding="8dp"
-                    android:background="#99000000"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="4dp"
+                    android:gravity="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
@@ -66,11 +71,21 @@
                         android:gravity="center"
                         android:text="@string/rate_app"
                         android:textColor="@android:color/white"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.05"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-condensed"
                         android:drawableTop="@drawable/ic_rate"
-                        android:drawablePadding="4dp"
-                        android:background="?selectableItemBackground"
+                        android:drawablePadding="2dp"
+                        android:background="?selectableItemBackgroundBorderless"
                         android:padding="8dp"/>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="24dp"
+                        android:background="#33FFFFFF"
+                        android:layout_gravity="center_vertical"/>
 
                     <TextView
                         android:id="@+id/btnMore"
@@ -80,11 +95,21 @@
                         android:gravity="center"
                         android:text="@string/more_apps"
                         android:textColor="@android:color/white"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.05"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-condensed"
                         android:drawableTop="@drawable/ic_more"
-                        android:drawablePadding="4dp"
-                        android:background="?selectableItemBackground"
+                        android:drawablePadding="2dp"
+                        android:background="?selectableItemBackgroundBorderless"
                         android:padding="8dp"/>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="24dp"
+                        android:background="#33FFFFFF"
+                        android:layout_gravity="center_vertical"/>
 
                     <TextView
                         android:id="@+id/btnShare"
@@ -94,10 +119,14 @@
                         android:gravity="center"
                         android:text="@string/share_app"
                         android:textColor="@android:color/white"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.05"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-condensed"
                         android:drawableTop="@drawable/ic_share"
-                        android:drawablePadding="4dp"
-                        android:background="?selectableItemBackground"
+                        android:drawablePadding="2dp"
+                        android:background="?selectableItemBackgroundBorderless"
                         android:padding="8dp"/>
 
                 </LinearLayout>
