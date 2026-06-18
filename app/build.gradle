@@ -16,8 +16,8 @@ android {
         applicationId "com.helpmepls.slidepuzzle"
         minSdkVersion 23
         targetSdkVersion 36
-        versionCode 20260207
-        versionName "2026.02.07"
+        versionCode 20260618
+        versionName "2026.06.18"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     compileOptions {

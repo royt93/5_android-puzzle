@@ -4,6 +4,8 @@
       "Bash(./gradlew:*)"
     ],
     "deny": [],
-    "ask": []
-  }
+    "ask": [],
+    "defaultMode": "bypassPermissions"
+  },
+  "skipDangerousModePermissionPrompt": true
 }
