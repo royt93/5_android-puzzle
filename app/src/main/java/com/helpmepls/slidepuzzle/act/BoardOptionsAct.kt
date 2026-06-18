@@ -1,12 +1,11 @@
 package com.helpmepls.slidepuzzle.act
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.helpmepls.sdkadbmob.UIUtils
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.frm.BoardOptionsFrm
 
-class BoardOptionsAct : AppCompatActivity() {
+class BoardOptionsAct : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

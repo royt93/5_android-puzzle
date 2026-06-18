@@ -152,7 +152,7 @@
                         android:padding="12dp"
                         android:scaleType="centerInside"
                         android:src="@android:drawable/ic_menu_revert"
-                        android:tint="#FFFFFF" />
+                        app:tint="#FFFFFF" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btReset"

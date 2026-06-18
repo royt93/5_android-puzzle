@@ -9,6 +9,10 @@ if (localPropertiesFile.exists()) {
     localProperties.load(new FileInputStream(localPropertiesFile))
 }
 
+def admobBannerId = localProperties['ADMOB_BANNER_ID'] ?: "~"
+def admobInterstitialId = localProperties['ADMOB_INTERSTITIAL_ID'] ?: "~"
+def admobAppOpenId = localProperties['ADMOB_APP_OPEN_ID'] ?: "~"
+
 android {
     namespace("com.helpmepls.slidepuzzle")
     compileSdk 36
@@ -42,9 +46,9 @@ android {
     buildTypes {
         release {
             // nhớ kiểm tra APPLICATION_ID trong manifest
-            buildConfigField "String", "ADMOB_BANNER_ID", "\"~\""
-            buildConfigField "String", "ADMOB_INTERSTITIAL_ID", "\"~\""
-            buildConfigField "String", "ADMOB_APP_OPEN_ID", "\"~\""
+            buildConfigField "String", "ADMOB_BANNER_ID", "\"${admobBannerId}\""
+            buildConfigField "String", "ADMOB_INTERSTITIAL_ID", "\"${admobInterstitialId}\""
+            buildConfigField "String", "ADMOB_APP_OPEN_ID", "\"${admobAppOpenId}\""
 
             signingConfig signingConfigs.release
             debuggable false
@@ -63,6 +67,16 @@ android {
     }
 }
 
+afterEvaluate {
+    tasks.matching { it.name == "preReleaseBuild" }.configureEach {
+        doFirst {
+            if ([admobBannerId, admobInterstitialId, admobAppOpenId].any { it == "~" }) {
+                throw new GradleException("Release build requires ADMOB_BANNER_ID, ADMOB_INTERSTITIAL_ID, and ADMOB_APP_OPEN_ID in local.properties or CI properties.")
+            }
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.20"
@@ -74,6 +88,11 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "com.google.android.material:material:1.13.0"
     implementation 'com.github.bumptech.glide:glide:5.0.5'
-//    kapt 'com.github.bumptech.glide:compiler:5.0.4'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:core:1.7.0'
+    androidTestImplementation 'androidx.test:rules:1.7.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 }

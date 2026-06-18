@@ -52,6 +52,6 @@ class BoardOptionsVm : ViewModel() {
         )
     }
 
-    val boardSize = MutableLiveData<BoardTitledSize>()
+    val boardSize = MutableLiveData(PREDEFINED_BOARD_SIZE[1])
     val boardImage = MutableLiveData<Bitmap>()
 }

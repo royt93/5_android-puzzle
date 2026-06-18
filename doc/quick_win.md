@@ -1,16 +1,16 @@
 # Quick Wins (Don dep & Toi uu nho)
 
-Cap nhat audit: 2026-06-18. Trang thai lint hien tai: `./gradlew lintDebug` FAIL voi 1 error (`act_game.xml:155`, `android:tint` -> `app:tint`) va 121 warnings.
+Cap nhat audit: 2026-06-18. Trang thai hien tai: `./gradlew lintDebug` PASS, `./gradlew testDebugUnitTest` PASS.
 
 ## 0. Picked / can lam ngay
 
-- [ ] Fix lint error `UseAppTint`: doi `android:tint` sang `app:tint` cho `btUndo` trong `act_game.xml`.
-- [ ] Doi `BoardOptionsAct` va `GameAct` sang `android:exported="false"` vi la Activity noi bo.
-- [ ] Doi `String.format(...)` trong `GameAct.kt` sang format co `Locale`.
-- [ ] Chuyen setup cua `BoardOptionsFrm` tu `onActivityCreated` sang `onViewCreated`.
-- [ ] Doi `android:drawableTop` sang `app:drawableTopCompat` trong `frm_board_options.xml`.
-- [ ] Refactor `ImageCardsAdt`/`BoardOptionsFrm`: adapter giu drawable resource id, khong decode tat ca anh thanh `Bitmap` ngay tu dau.
-- [ ] Sua touch handling trong `GameBoard`: chi xu ly gesture hop le, goi `performClick()`, them override `performClick()`.
+- [x] Fix lint error `UseAppTint`: doi `android:tint` sang `app:tint` cho `btUndo` trong `act_game.xml`.
+- [x] Doi `BoardOptionsAct` va `GameAct` sang `android:exported="false"` vi la Activity noi bo.
+- [x] Doi `String.format(...)` trong `GameAct.kt` sang format co `Locale`.
+- [x] Chuyen setup cua `BoardOptionsFrm` tu `onActivityCreated` sang `onViewCreated`.
+- [x] Doi `android:drawableTop` sang `app:drawableTopCompat` trong `frm_board_options.xml`.
+- [x] Refactor `ImageCardsAdt`/`BoardOptionsFrm`: adapter giu drawable resource id, khong decode tat ca anh thanh `Bitmap` ngay tu dau.
+- [x] Sua touch handling trong `GameBoard`: chi xu ly gesture hop le, goi `performClick()`, them override `performClick()`.
 
 ## 1. Unused Resources (Tài nguyên không sử dụng)
 

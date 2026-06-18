@@ -4,18 +4,18 @@ Cap nhat: 2026-06-18. Xem them audit tong hop tai `doc/audit.md`.
 
 ## Ket qua kiem tra
 
-- `./gradlew testDebugUnitTest`: PASS, nhung khong co unit test (`NO-SOURCE`).
-- `./gradlew lintDebug`: FAIL, 1 error + 121 warnings.
+- `./gradlew testDebugUnitTest`: PASS, co unit test JVM chay that.
+- `./gradlew lintDebug`: PASS.
 - LeakCanary da co trong `debugImplementation`, nhung chua co ket qua runtime leak tu thiet bi/emulator trong dot audit nay.
 
 ## Loi chan lint/build quality
 
-- [OPEN] `act_game.xml:155`: `android:tint` tren `ImageButton` phai doi sang `app:tint`.
+- [DONE] `act_game.xml:155`: da doi `android:tint` sang `app:tint`.
 
 ## Rui ro memory/lifecycle can uu tien
 
-- [OPEN] `BoardOptionsFrm.kt`: decode 27 anh drawable thanh `Bitmap` ngay khi mo man chon. Nen giu drawable resource id trong model/adapter va chi decode anh duoc chon.
-- [OPEN] `GameAct.kt`: `initialConfig` la static field giu `Bitmap`. Code da clear sau khi doc, nhung van co rui ro memory spike va mat state khi Activity recreate. Nen truyen image id qua Intent.
+- [DONE] `BoardOptionsFrm.kt`: khong con decode 27 anh drawable thanh `Bitmap` ngay khi mo man chon; adapter load drawable resource id.
+- [DONE] `GameAct.kt`: da bo static Bitmap handoff; Activity nhan image id va board size qua Intent.
 - [OPEN] `BitmapTile.kt`: moi lan resize tao nhieu tile bitmap moi. Can tranh resize lap lai khong can thiet, can nhac cache/reuse theo board size.
 - [OPEN] `DialogUtils.kt`: dialog dung Activity context; nen tranh show khi Activity dang finishing/destroyed neu goi tu callback async.
 
@@ -23,8 +23,8 @@ Cap nhat: 2026-06-18. Xem them audit tong hop tai `doc/audit.md`.
 
 - [OPEN] `frm_board_options.xml`: lint van bao overdraw o root background `@drawable/bkg`.
 - [OPEN] `act_game.xml`: nested weights co the tang chi phi measure.
-- [OPEN] `GameBoard.kt`: touch listener xu ly moi MotionEvent, nen chi xu ly click/up gesture de tranh move ngoai y muon va dung accessibility.
-- [OPEN] `AndroidManifest.xml`: Activity noi bo `BoardOptionsAct` va `GameAct` dang `exported=true`; nen doi `false`.
+- [DONE] `GameBoard.kt`: touch listener chi move tren `ACTION_UP`, co `performClick()` va guard bounds.
+- [DONE] `AndroidManifest.xml`: Activity noi bo `BoardOptionsAct` va `GameAct` da doi `exported=false`.
 - [OPEN] `AndroidManifest.xml`: portrait lock bi canh bao voi Android 16+. Neu game bat buoc portrait, can chap nhan/suppress co chu dich va test large screen.
 
 ## Dependency/config

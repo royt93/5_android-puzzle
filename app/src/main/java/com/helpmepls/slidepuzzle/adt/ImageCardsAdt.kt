@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.model.TitledCardInfo
 
@@ -42,13 +41,13 @@ class ImageCardsAdt(
         holder.titleView.text = card.title
 //        holder.imageView.setImageBitmap(card.image)
         Glide.with(holder.imageView.context)
-            .load(card.image)
-            .override(SIZE_ORIGINAL, SIZE_ORIGINAL)
+            .load(card.imageResId)
+            .override(parent.width.coerceAtLeast(360) / 2, parent.width.coerceAtLeast(360) / 2)
             .format(DecodeFormat.PREFER_ARGB_8888)
             .into(holder.imageView)
         
         // Hero Animation: Set unique transition name
-        androidx.core.view.ViewCompat.setTransitionName(holder.imageView, "hero_image_${card.title}")
+        androidx.core.view.ViewCompat.setTransitionName(holder.imageView, "hero_image_${card.imageResId}")
 
         // Lưu dữ liệu card vào view để sử dụng trong click listener
         view.setTag(R.id.tag_card_data, card)

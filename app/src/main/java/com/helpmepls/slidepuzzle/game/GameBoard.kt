@@ -45,17 +45,27 @@ class GameBoard(
         paint.isAntiAlias = true
         paint.typeface = Typeface.DEFAULT_BOLD
 
-        setOnTouchListener { _, event ->
-            onSlide(
-                getSlideCoordinates(
-                    p = PointF(
-                        /* x = */ event.x,
-                        /* y = */ event.y
+        setOnTouchListener { view, event ->
+            when (event.action) {
+                android.view.MotionEvent.ACTION_UP -> {
+                    view.performClick()
+                    onSlide(
+                        getSlideCoordinates(
+                            p = PointF(
+                                /* x = */ event.x,
+                                /* y = */ event.y
+                            )
+                        )
                     )
-                )
-            )
+                }
+            }
             true
         }
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
     }
 
     private fun getSlideCoordinates(p: PointF): Point {
@@ -153,6 +163,9 @@ class GameBoard(
     }
 
     private fun onSlide(p: Point) {
+        if (p.x !in 0 until grid.size.width || p.y !in 0 until grid.size.height)
+            return
+
         val direction = grid.checkSlideMoveDirection(p)
         if (animator != null || direction == null)
             return

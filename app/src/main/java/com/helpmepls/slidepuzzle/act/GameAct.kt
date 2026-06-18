@@ -1,38 +1,47 @@
 package com.helpmepls.slidepuzzle.act
 
 import android.os.Bundle
+import android.graphics.BitmapFactory
 import android.util.Size
+import android.view.MotionEvent
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.activity.OnBackPressedCallback
+import java.util.Locale
 
-import com.helpmepls.sdkadbmob.UIUtils
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.DialogUtils
 import com.helpmepls.slidepuzzle.game.GameBoard
-import com.helpmepls.slidepuzzle.model.BoardActivityParams
+import com.helpmepls.slidepuzzle.model.BoardTitledSize
 import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
-class GameAct : AppCompatActivity() {
+class GameAct : BaseActivity() {
     companion object Companion {
-        var initialConfig: BoardActivityParams? = null
+        const val EXTRA_IMAGE_RES_ID = "com.helpmepls.slidepuzzle.EXTRA_IMAGE_RES_ID"
+        const val EXTRA_BOARD_WIDTH = "com.helpmepls.slidepuzzle.EXTRA_BOARD_WIDTH"
+        const val EXTRA_BOARD_HEIGHT = "com.helpmepls.slidepuzzle.EXTRA_BOARD_HEIGHT"
     }
 
     private fun View.addSpringClickAnimation() {
         this.setOnTouchListener { view, motionEvent ->
             when (motionEvent.action) {
-                android.view.MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> {
                     val pressAnimation = AnimationUtils.loadAnimation(context, R.anim.spring_button_press)
                     view.startAnimation(pressAnimation)
-                    view.performClick()
                 }
-                android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                MotionEvent.ACTION_UP -> {
+                    val releaseAnimation = AnimationUtils.loadAnimation(context, R.anim.spring_button_release)
+                    view.startAnimation(releaseAnimation)
+                    if (motionEvent.x in 0f..view.width.toFloat() && motionEvent.y in 0f..view.height.toFloat()) {
+                        view.performClick()
+                    }
+                }
+                MotionEvent.ACTION_CANCEL -> {
                     val releaseAnimation = AnimationUtils.loadAnimation(context, R.anim.spring_button_release)
                     view.startAnimation(releaseAnimation)
                 }
@@ -79,7 +88,7 @@ class GameAct : AppCompatActivity() {
     private fun updateTimerUI() {
         val mins = timerSeconds / 60
         val secs = timerSeconds % 60
-        findViewById<android.widget.TextView>(R.id.tvTimer)?.text = String.format("⏱ %02d:%02d", mins, secs)
+        findViewById<android.widget.TextView>(R.id.tvTimer)?.text = String.format(Locale.US, "⏱ %02d:%02d", mins, secs)
     }
     
     private fun saveHighScore(moves: Int, time: Int) {
@@ -187,7 +196,6 @@ class GameAct : AppCompatActivity() {
         viewModel.boardSize.observe(
             /* owner = */ this,
             /* observer = */ Observer {
-//                Log.d("roy93~", "observe")
                 it?.let {
                     ivOriginal.setImageBitmap(viewModel.boardImage.value)
                     boardView.resize(
@@ -291,22 +299,21 @@ class GameAct : AppCompatActivity() {
         window.requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS)
         window.enterTransition = android.transition.Fade()
         window.exitTransition = android.transition.Fade()
-        
-        viewModel.apply {
-            initialConfig?.let {
-                boardSize.value = it.size
-                boardImage.value = it.bitmap
-            }
-            // Clear static reference to avoid memory leak
-            initialConfig = null
-        }
         super.onCreate(savedInstanceState)
+
+        val imageResId = intent.getIntExtra(
+            EXTRA_IMAGE_RES_ID,
+            BoardOptionsVm.PREDEFINED_IMAGES.first().first
+        )
+        val boardWidth = intent.getIntExtra(EXTRA_BOARD_WIDTH, BoardOptionsVm.PREDEFINED_BOARD_SIZE[1].width)
+        val boardHeight = intent.getIntExtra(EXTRA_BOARD_HEIGHT, BoardOptionsVm.PREDEFINED_BOARD_SIZE[1].height)
+        viewModel.apply {
+            boardSize.value = BoardTitledSize(width = boardWidth, height = boardHeight)
+            boardImage.value = decodeBoardBitmap(imageResId)
+        }
         
         // Postpone enter transition until image is loaded (though we have bitmap in memory)
         supportPostponeEnterTransition()
-        
-        // REMOVED WindowCompat.setDecorFitsSystemWindows - it might be resetting colors
-        android.util.Log.d("roy93~", "GameAct: API Level = ${android.os.Build.VERSION.SDK_INT}")
         
         setContentView(R.layout.act_game)
         
@@ -363,11 +370,6 @@ class GameAct : AppCompatActivity() {
     
     override fun onResume() {
         super.onResume()
-        // Force status bar color on resume to ensure it persists
-        val primaryColor = androidx.core.content.ContextCompat.getColor(this, R.color.md_theme_primary)
-        window.statusBarColor = primaryColor
-        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         androidx.core.view.WindowCompat.getInsetsController(window, window.decorView)?.apply {
             isAppearanceLightStatusBars = false
         }
@@ -376,5 +378,39 @@ class GameAct : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         stopTimer()
+    }
+
+    private fun decodeBoardBitmap(imageResId: Int): android.graphics.Bitmap {
+        val maxTextureSize = resources.displayMetrics.widthPixels.coerceAtLeast(1)
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+        BitmapFactory.decodeResource(resources, imageResId, options)
+
+        options.inSampleSize = calculateInSampleSize(
+            srcWidth = options.outWidth,
+            srcHeight = options.outHeight,
+            reqWidth = maxTextureSize,
+            reqHeight = maxTextureSize,
+        )
+        options.inJustDecodeBounds = false
+        return BitmapFactory.decodeResource(resources, imageResId, options)
+    }
+
+    private fun calculateInSampleSize(
+        srcWidth: Int,
+        srcHeight: Int,
+        reqWidth: Int,
+        reqHeight: Int,
+    ): Int {
+        var inSampleSize = 1
+        if (srcHeight > reqHeight || srcWidth > reqWidth) {
+            var halfHeight = srcHeight / 2
+            var halfWidth = srcWidth / 2
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        return inSampleSize
     }
 }
