@@ -1,4 +1,16 @@
-# Quick Wins (Dọn dẹp & Tối ưu nhỏ)
+# Quick Wins (Don dep & Toi uu nho)
+
+Cap nhat audit: 2026-06-18. Trang thai lint hien tai: `./gradlew lintDebug` FAIL voi 1 error (`act_game.xml:155`, `android:tint` -> `app:tint`) va 121 warnings.
+
+## 0. Picked / can lam ngay
+
+- [ ] Fix lint error `UseAppTint`: doi `android:tint` sang `app:tint` cho `btUndo` trong `act_game.xml`.
+- [ ] Doi `BoardOptionsAct` va `GameAct` sang `android:exported="false"` vi la Activity noi bo.
+- [ ] Doi `String.format(...)` trong `GameAct.kt` sang format co `Locale`.
+- [ ] Chuyen setup cua `BoardOptionsFrm` tu `onActivityCreated` sang `onViewCreated`.
+- [ ] Doi `android:drawableTop` sang `app:drawableTopCompat` trong `frm_board_options.xml`.
+- [ ] Refactor `ImageCardsAdt`/`BoardOptionsFrm`: adapter giu drawable resource id, khong decode tat ca anh thanh `Bitmap` ngay tu dau.
+- [ ] Sua touch handling trong `GameBoard`: chi xu ly gesture hop le, goi `performClick()`, them override `performClick()`.
 
 ## 1. Unused Resources (Tài nguyên không sử dụng)
 
@@ -47,6 +59,9 @@
 ## 2. Code Cleanup
 
 - **Namespaces**: Xóa khai báo `xmlns:tools` thừa trong `frm_board_options.xml`.
+- **Release config**: Thay AdMob placeholder `"~"` bang gia tri tu secret/local config hoac fail fast khi build release.
+- **High score**: `saveHighScore(moves, time)` dang khong dung `time`; can luu score theo moves/time hoac bo tham so.
+- **Undo**: them test cho move -> undo -> shuffle/reset de khoa logic toa do.
 
 ## 3. TODOs (Các task tồn đọng)
 

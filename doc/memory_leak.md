@@ -1,30 +1,34 @@
-# Báo cáo Lỗi và Memory Leak
+# Bao cao loi va memory leak
 
-## 1. Mức độ Nghiêm trọng: Cao (Bug / Memory Leak)
+Cap nhat: 2026-06-18. Xem them audit tong hop tai `doc/audit.md`.
 
-*Hiện tại không tìm thấy lỗi nghiêm trọng (Error) hoặc báo cáo Memory Leak trực tiếp từ Lint check.*
+## Ket qua kiem tra
 
-> **Lưu ý:**
->
-> - Trong `MyApplication.kt` có comment `//leak canary`.
-> - Dependency `leakcanary-android` đã được thêm vào `debugImplementation`.
-> - **Action**: Cần chạy app và kiểm tra thủ công bằng LeakCanary để phát hiện leak động.
+- `./gradlew testDebugUnitTest`: PASS, nhung khong co unit test (`NO-SOURCE`).
+- `./gradlew lintDebug`: FAIL, 1 error + 121 warnings.
+- LeakCanary da co trong `debugImplementation`, nhung chua co ket qua runtime leak tu thiet bi/emulator trong dot audit nay.
 
-## 2. Mức độ Nghiêm trọng: Trung bình (Warning / Performance / UX)
+## Loi chan lint/build quality
 
-### Hiệu năng (Performance) & Layout
+- [OPEN] `act_game.xml:155`: `android:tint` tren `ImageButton` phai doi sang `app:tint`.
 
-- [FIXED] **Overdraw**: `act_game.xml` và `frm_board_options.xml` có khả năng bị overdraw do set background cho root view trong khi theme đã có background. -> Đã xóa background thừa.
-- [SKIPPED] **MergeRootFrame**: `act_board_options.xml` dùng `FrameLayout` làm root. -> Giữ nguyên do cần ID `container` cho Fragment transaction.
-- [SUPPRESSED] **Locked Orientation**: Các Activity đang bị khóa chiều dọc (`portrait`). -> Đã thêm `tools:ignore="LockedOrientationActivity"` vì game yêu cầu portrait.
+## Rui ro memory/lifecycle can uu tien
 
-### Library & Dependencies
+- [OPEN] `BoardOptionsFrm.kt`: decode 27 anh drawable thanh `Bitmap` ngay khi mo man chon. Nen giu drawable resource id trong model/adapter va chi decode anh duoc chon.
+- [OPEN] `GameAct.kt`: `initialConfig` la static field giu `Bitmap`. Code da clear sau khi doc, nhung van co rui ro memory spike va mat state khi Activity recreate. Nen truyen image id qua Intent.
+- [OPEN] `BitmapTile.kt`: moi lan resize tao nhieu tile bitmap moi. Can tranh resize lap lai khong can thiet, can nhac cache/reuse theo board size.
+- [OPEN] `DialogUtils.kt`: dialog dung Activity context; nen tranh show khi Activity dang finishing/destroyed neu goi tu callback async.
 
-- [FIXED] **Gradle**: Có phiên bản mới hơn 8.13 -> 8.14.4. -> (Đã cập nhật dependencies liên quan, Gradle wrapper update cần lệnh riêng nhưng không ảnh hưởng code).
-- [FIXED] **Kotlin Stdlib**: Có phiên bản mới hơn 2.1.20 -> 2.2.0. -> Đã update `build.gradle`.
-- [FIXED] **Glide**: Có phiên bản mới hơn 5.0.4 -> 5.0.5. -> Đã update `build.gradle`.
+## Warning/performance/UX
 
-### UI/Icons
+- [OPEN] `frm_board_options.xml`: lint van bao overdraw o root background `@drawable/bkg`.
+- [OPEN] `act_game.xml`: nested weights co the tang chi phi measure.
+- [OPEN] `GameBoard.kt`: touch listener xu ly moi MotionEvent, nen chi xu ly click/up gesture de tranh move ngoai y muon va dung accessibility.
+- [OPEN] `AndroidManifest.xml`: Activity noi bo `BoardOptionsAct` va `GameAct` dang `exported=true`; nen doi `false`.
+- [OPEN] `AndroidManifest.xml`: portrait lock bi canh bao voi Android 16+. Neu game bat buoc portrait, can chap nhan/suppress co chu dich va test large screen.
 
-- [FIXED] **Launcher Icons**: Icon chưa đúng chuẩn shape. -> Đã xóa `res/drawable/ic_launcher.png` sai lệch. `mipmap` folders đã tồn tại.
-- [FIXED] **Adaptive Icon**: Thiếu tag `monochrome`. -> Đã thêm tag `<monochrome>` vào `ic_launcher.xml`.
+## Dependency/config
+
+- [OPEN] Gradle wrapper `8.13` co warning co ban moi `8.14.5`.
+- [OPEN] Kotlin stdlib `2.1.20`, Material `1.13.0`, Glide `5.0.5` co warning version moi.
+- [OPEN] Kotlin daemon co loi incremental cache va fallback compile thanh cong. Neu lap lai, chay `./gradlew --stop` va clean cache build cuc bo.
