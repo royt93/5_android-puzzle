@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@drawable/bg_game_dialog_panel"
+    android:background="@drawable/neon_glass_panel"
     android:gravity="center_horizontal">
 
     <TextView
@@ -13,14 +13,14 @@
         android:layout_height="wrap_content"
         android:text="Title"
         android:textSize="26sp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/neon_cyan"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_marginBottom="12dp"
-        android:shadowColor="#000000"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius="4" />
+        android:shadowColor="@color/neon_cyan_glow"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="12" />
 
     <TextView
         android:id="@+id/tvMessage"
@@ -28,13 +28,9 @@
         android:layout_height="wrap_content"
         android:text="Message content goes here..."
         android:textSize="18sp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/neon_text_primary"
         android:gravity="center"
-        android:layout_marginBottom="24dp"
-        android:shadowColor="#000000"
-        android:shadowDx="1"
-        android:shadowDy="1"
-        android:shadowRadius="2"/>
+        android:layout_marginBottom="24dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,15 +44,11 @@
             android:layout_height="56dp"
             android:layout_weight="1"
             android:layout_marginEnd="12dp"
-            android:background="@drawable/btn_game_no"
+            android:background="@drawable/neon_btn_danger"
             android:text="NO"
             android:textSize="20sp"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:shadowColor="#000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="2" />
+            android:textColor="@color/neon_text_primary"
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnYes"
@@ -64,15 +56,11 @@
             android:layout_height="56dp"
             android:layout_weight="1"
             android:layout_marginStart="12dp"
-            android:background="@drawable/btn_game_yes"
+            android:background="@drawable/neon_btn_success"
             android:text="YES"
             android:textSize="20sp"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:shadowColor="#000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="2" />
+            android:textColor="@color/neon_text_primary"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>

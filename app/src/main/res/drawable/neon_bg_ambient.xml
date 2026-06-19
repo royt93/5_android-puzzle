@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nen toi + 2 bloom radial (cyan goc tren-trai, magenta goc duoi-phai). Wave 1 F3. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/neon_bg_deep" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.18"
+                android:centerY="0.12"
+                android:gradientRadius="520dp"
+                android:startColor="#3338F9E4"
+                android:endColor="#0038F9E4" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.86"
+                android:centerY="0.9"
+                android:gradientRadius="560dp"
+                android:startColor="#2EFF5DCB"
+                android:endColor="#00FF5DCB" />
+        </shape>
+    </item>
+</layer-list>

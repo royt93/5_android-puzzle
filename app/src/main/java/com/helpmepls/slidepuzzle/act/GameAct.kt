@@ -413,6 +413,11 @@ class GameAct : BaseActivity() {
         }
         BitmapFactory.decodeResource(resources, imageResId, options)
 
+        // outWidth <= 0 => khong phai raster (vd VectorDrawable neon) -> render ra bitmap vuong.
+        if (options.outWidth <= 0) {
+            return renderDrawableToSquareBitmap(imageResId, maxTextureSize.coerceAtMost(1080))
+        }
+
         options.inSampleSize = calculateInSampleSize(
             srcWidth = options.outWidth,
             srcHeight = options.outHeight,
@@ -421,6 +426,21 @@ class GameAct : BaseActivity() {
         )
         options.inJustDecodeBounds = false
         return BitmapFactory.decodeResource(resources, imageResId, options)
+            ?: renderDrawableToSquareBitmap(imageResId, maxTextureSize.coerceAtMost(1080))
+    }
+
+    /** Render 1 drawable (vd VectorDrawable) thanh bitmap vuong size x size de lam anh ghep. */
+    private fun renderDrawableToSquareBitmap(resId: Int, size: Int): android.graphics.Bitmap {
+        val drawable = androidx.appcompat.content.res.AppCompatResources.getDrawable(this, resId)
+            ?: throw IllegalArgumentException("Khong load duoc drawable id=$resId")
+        val side = size.coerceAtLeast(1)
+        val bitmap = android.graphics.Bitmap.createBitmap(
+            side, side, android.graphics.Bitmap.Config.ARGB_8888
+        )
+        val canvas = android.graphics.Canvas(bitmap)
+        drawable.setBounds(0, 0, side, side)
+        drawable.draw(canvas)
+        return bitmap
     }
 
     private fun calculateInSampleSize(

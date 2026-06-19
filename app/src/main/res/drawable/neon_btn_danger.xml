@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nut danger (Reset/NO): glass + vien magenta glow + ripple magenta. Wave 1 F3. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/neon_magenta_glow">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/neon_bg_elevated" />
+            <corners android:radius="@dimen/neon_corner" />
+            <stroke
+                android:width="@dimen/glow_stroke"
+                android:color="@color/neon_magenta" />
+        </shape>
+    </item>
+</ripple>

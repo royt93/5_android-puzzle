@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nut success (YES): glass + vien lime glow + ripple lime. Wave 2. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/neon_lime_glow">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/neon_bg_elevated" />
+            <corners android:radius="@dimen/neon_corner" />
+            <stroke
+                android:width="@dimen/glow_stroke"
+                android:color="@color/neon_lime" />
+        </shape>
+    </item>
+</ripple>

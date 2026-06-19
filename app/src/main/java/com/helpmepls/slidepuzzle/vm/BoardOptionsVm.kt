@@ -49,6 +49,14 @@ class BoardOptionsVm : ViewModel() {
             TitledResourcePair(first = R.drawable.b8, second = ""),
             TitledResourcePair(first = R.drawable.b9, second = ""),
 
+            // Nhom Neon (vector tu tao - Wave 4)
+            TitledResourcePair(first = R.drawable.neon_img_1, second = "Neon"),
+            TitledResourcePair(first = R.drawable.neon_img_2, second = "Neon"),
+            TitledResourcePair(first = R.drawable.neon_img_3, second = "Neon"),
+            TitledResourcePair(first = R.drawable.neon_img_4, second = "Neon"),
+            TitledResourcePair(first = R.drawable.neon_img_5, second = "Neon"),
+            TitledResourcePair(first = R.drawable.neon_img_6, second = "Neon"),
+
         )
     }
 

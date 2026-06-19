@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Neon puzzle img 3: kim cuong long nhau (nested diamonds). Wave 4. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <path android:fillColor="@color/neon_bg_deep" android:pathData="M0,0h512v512h-512z" />
+    <path android:strokeColor="@color/neon_lime" android:strokeWidth="10" android:fillColor="#00000000"
+        android:pathData="M256,40L472,256L256,472L40,256Z" />
+    <path android:strokeColor="@color/neon_cyan" android:strokeWidth="9" android:fillColor="#00000000"
+        android:pathData="M256,120L392,256L256,392L120,256Z" />
+    <path android:strokeColor="@color/neon_magenta" android:strokeWidth="8" android:fillColor="#00000000"
+        android:pathData="M256,190L322,256L256,322L190,256Z" />
+</vector>

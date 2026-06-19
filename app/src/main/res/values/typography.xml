@@ -96,17 +96,41 @@
 
     <!-- Custom Game Styles -->
     <style name="TextAppearance.App.GameTitle" parent="TextAppearance.App.TitleLarge">
-        <item name="android:textColor">@color/md_theme_onSurface</item>
+        <item name="android:textColor">@color/neon_text_primary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.App.CardTitle" parent="TextAppearance.App.LabelMedium">
-        <item name="android:textColor">@color/md_theme_onSurfaceVariant</item>
+        <item name="android:textColor">@color/neon_text_secondary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.App.ButtonText" parent="TextAppearance.App.LabelLarge">
-        <item name="android:textColor">@color/md_theme_onPrimary</item>
+        <item name="android:textColor">@color/neon_text_primary</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- ===== Neon glow variants (Wave 1 F4): halo cyan dung shadowLayer ===== -->
+    <style name="TextAppearance.App.TitleLarge.Glow">
+        <item name="android:textColor">@color/neon_text_primary</item>
+        <item name="android:shadowColor">@color/neon_cyan_glow</item>
+        <item name="android:shadowRadius">12</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+    </style>
+
+    <style name="TextAppearance.App.HeadlineLarge.Glow">
+        <item name="android:textColor">@color/neon_text_primary</item>
+        <item name="android:shadowColor">@color/neon_cyan_glow</item>
+        <item name="android:shadowRadius">16</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+    </style>
+
+    <style name="TextAppearance.App.GameTitle.Glow">
+        <item name="android:shadowColor">@color/neon_cyan_glow</item>
+        <item name="android:shadowRadius">12</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
     </style>
 </resources>

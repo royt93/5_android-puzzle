@@ -3,5 +3,5 @@
     android:id="@+id/sBoardSize"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/colorIcons"
-    android:textColor="@color/colorIcons" />
+    android:backgroundTint="@color/neon_cyan"
+    android:textColor="@color/neon_text_primary" />

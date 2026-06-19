@@ -45,4 +45,31 @@
     <!-- Basic colors -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+    <!-- ============================================================ -->
+    <!-- NEON / GLOW DESIGN TOKENS (Wave 1 - candy-neon tren nen toi)  -->
+    <!-- Xem doc/task/README.md §2. Moi man dung token nay, khong hard-code hex. -->
+
+    <!-- Nen (dark base) -->
+    <color name="neon_bg_deep">#0E1230</color>
+    <color name="neon_bg_surface">#161B3D</color>
+    <color name="neon_bg_elevated">#232A63</color>
+    <color name="neon_bg_scrim">#CC0A0E24</color>
+
+    <!-- Glow accent -->
+    <color name="neon_cyan">#38F9E4</color>
+    <color name="neon_magenta">#FF5DCB</color>
+    <color name="neon_lime">#C6FF4E</color>
+    <color name="neon_violet">#8A6CFF</color>
+
+    <!-- Glow alpha (stroke / shadowLayer / halo) -->
+    <color name="neon_cyan_glow">#6638F9E4</color>
+    <color name="neon_magenta_glow">#66FF5DCB</color>
+    <color name="neon_lime_glow">#66C6FF4E</color>
+    <color name="glass_stroke">#33FFFFFF</color>
+
+    <!-- Text -->
+    <color name="neon_text_primary">#EAF2FF</color>
+    <color name="neon_text_secondary">#9FB0D9</color>
+    <color name="neon_text_on_accent">#0E1230</color>
 </resources>

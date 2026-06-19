@@ -6,6 +6,6 @@
     android:paddingTop="0dp"
     android:paddingEnd="0dp"
     android:paddingBottom="0dp"
-    android:textColor="@color/md_theme_onPrimary"
+    android:textColor="@color/neon_text_primary"
     android:textSize="16sp"
     android:textStyle="normal" />

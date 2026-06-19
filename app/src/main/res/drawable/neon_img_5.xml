@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Neon puzzle img 5: hinh vuong dong tam (concentric squares). Wave 4. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <path android:fillColor="@color/neon_bg_deep" android:pathData="M0,0h512v512h-512z" />
+    <path android:strokeColor="@color/neon_cyan" android:strokeWidth="10" android:fillColor="#00000000"
+        android:pathData="M56,56h400v400h-400z" />
+    <path android:strokeColor="@color/neon_magenta" android:strokeWidth="9" android:fillColor="#00000000"
+        android:pathData="M126,126h260v260h-260z" />
+    <path android:strokeColor="@color/neon_lime" android:strokeWidth="8" android:fillColor="#00000000"
+        android:pathData="M196,196h120v120h-120z" />
+</vector>

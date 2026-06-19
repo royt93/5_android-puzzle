@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Neon puzzle img 4: tia toa tron (starburst). Wave 4. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <path android:fillColor="@color/neon_bg_deep" android:pathData="M0,0h512v512h-512z" />
+    <path android:strokeColor="@color/neon_cyan" android:strokeWidth="6" android:fillColor="#00000000"
+        android:pathData="M256,256L256,20 M256,256L256,492 M256,256L20,256 M256,256L492,256" />
+    <path android:strokeColor="@color/neon_magenta" android:strokeWidth="5" android:fillColor="#00000000"
+        android:pathData="M256,256L60,60 M256,256L452,452 M256,256L452,60 M256,256L60,452" />
+    <path android:strokeColor="@color/neon_lime" android:strokeWidth="8" android:fillColor="#00000000"
+        android:pathData="M156,256a100,100 0 1,0 200,0a100,100 0 1,0 -200,0" />
+    <path android:fillColor="@color/neon_cyan"
+        android:pathData="M236,236h40v40h-40z" />
+</vector>

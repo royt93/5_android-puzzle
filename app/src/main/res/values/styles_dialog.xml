@@ -8,17 +8,17 @@
         <item name="android:background">@null</item>
         
         <!-- Text Colors -->
-        <item name="colorOnSurface">#FFFFFF</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        
+        <item name="colorOnSurface">@color/neon_text_primary</item>
+        <item name="android:textColor">@color/neon_text_primary</item>
+        <item name="android:textColorPrimary">@color/neon_text_primary</item>
+
         <!-- Link to Widget Style where background is actually set -->
         <item name="alertDialogStyle">@style/Widget.App.AlertDialog</item>
         <item name="materialAlertDialogTheme">@style/Theme.App.Dialog.Alert</item>
-        
+
         <!-- Button Colors -->
-        <item name="colorPrimary">#FFEB3B</item>
-        <item name="colorAccent">#FFEB3B</item>
+        <item name="colorPrimary">@color/neon_cyan</item>
+        <item name="colorAccent">@color/neon_cyan</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button.TextButton</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.App.Button.TextButton</item>
         <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button.TextButton</item>
@@ -39,11 +39,11 @@
     <style name="Widget.App.AlertDialog" parent="MaterialAlertDialog.Material3">
         <item name="shapeAppearance">@style/ShapeAppearance.App.Dialog</item>
         <!-- Apply background ONCE here -->
-        <item name="background">@drawable/bg_dialog_clean</item>
+        <item name="background">@drawable/neon_glass_panel</item>
     </style>
 
     <style name="Widget.App.Button.TextButton" parent="Widget.Material3.Button.TextButton">
-        <item name="android:textColor">#FFEB3B</item>
+        <item name="android:textColor">@color/neon_cyan</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -54,14 +54,14 @@
     </style>
 
     <style name="TextAppearance.App.DialogTitle" parent="MaterialAlertDialog.Material3.Title.Text">
-        <item name="android:textColor">#FFEB3B</item>
+        <item name="android:textColor">@color/neon_cyan</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
     </style>
 
     <style name="TextAppearance.App.DialogBody" parent="MaterialAlertDialog.Material3.Body.Text">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/neon_text_primary</item>
         <item name="android:textSize">18sp</item>
         <item name="android:gravity">center</item>
     </style>

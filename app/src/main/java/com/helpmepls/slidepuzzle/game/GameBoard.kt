@@ -11,10 +11,9 @@ import android.util.Size
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import androidx.core.content.ContextCompat
-import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.game.state.PuzzleGrid
 import com.helpmepls.slidepuzzle.game.state.Direction
+import com.helpmepls.slidepuzzle.util.NeonPalette
 import kotlin.math.ceil
 
 @SuppressLint("ClickableViewAccessibility")
@@ -22,8 +21,15 @@ class GameBoard(
     context: Context,
     attrs: AttributeSet,
 ) : View(context, attrs) {
-    private val highlightColor = ContextCompat.getColor(context, R.color.board_active)
+    // Neon: tile-active va halo board phat sang cyan (Wave 3).
+    private val highlightColor = NeonPalette.CYAN
     private val paint = Paint()
+    private val glowPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val tmpRectF = RectF()
+    private val boardRectF = RectF()
+    // Glow gia bang nhieu lop stroke (ngoai mo -> trong sang); chay tren hardware layer, khong can software.
+    private val glowLayerScale = floatArrayOf(3.0f, 2.0f, 1.0f)
+    private val glowLayerAlpha = intArrayOf(0x22, 0x55, 0xCC)
     private var animator: ValueAnimator? = null
     private val tileSpacing = 3
     private var tileSize = Rect(0, 0, 0, 0)
@@ -242,25 +248,34 @@ class GameBoard(
         offset: Rect,
         text: String,
     ) {
-        // fill
-        paint.strokeWidth = 4.0f
-        paint.style = Paint.Style.STROKE
-        paint.color = Color.WHITE
-        canvas.drawText(
-            /* text = */ text,
-            /* x = */ offset.left + 5.0f,
-            /* y = */ offset.top + 13.0f,
-            /* paint = */ paint
-        )
-
+        // So thu tu: text trang lanh + glow cyan (shadowLayer ho tro tot tu API 28; duoi do van hien ro chu).
         paint.style = Paint.Style.FILL
-        paint.color = Color.BLACK
+        paint.textSize = (offset.height() * 0.2f).coerceIn(16.0f, 56.0f)
+        paint.color = NeonPalette.TEXT_PRIMARY
+        paint.setShadowLayer(8.0f, 0.0f, 0.0f, NeonPalette.CYAN_GLOW)
         canvas.drawText(
             /* text = */ text,
-            /* x = */ offset.left + 5.0f,
-            /* y = */ offset.top + 13.0f,
+            /* x = */ offset.left + 8.0f,
+            /* y = */ offset.top + paint.textSize + 4.0f,
             /* paint = */ paint
         )
+        paint.clearShadowLayer()
+    }
+
+    // Ve vien glow (nhieu lop stroke) cho 1 round-rect. Tai dung cho tile-active va halo board.
+    private fun drawGlowRoundRect(
+        canvas: Canvas,
+        rect: RectF,
+        radius: Float,
+        baseColor: Int,
+        coreWidth: Float,
+    ) {
+        glowPaint.style = Paint.Style.STROKE
+        for (k in glowLayerScale.indices) {
+            glowPaint.strokeWidth = coreWidth * glowLayerScale[k]
+            glowPaint.color = (baseColor and 0x00FFFFFF) or (glowLayerAlpha[k] shl 24)
+            canvas.drawRoundRect(rect, radius, radius, glowPaint)
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -272,6 +287,10 @@ class GameBoard(
         // Kich thuoc 1 manh tren anh nguon (pixel goc), dung de cat src Rect.
         val srcTileW = image.width / grid.size.width
         val srcTileH = image.height / grid.size.height
+
+        // Halo cyan quanh khung board (ve 1 lan/frame, ngoai vong lap tile).
+        boardRectF.set(3.0f, 3.0f, width - 3.0f, height - 3.0f)
+        drawGlowRoundRect(canvas, boardRectF, 16.0f, highlightColor, 2.0f)
 
         for (j in 0 until grid.size.height) {
             for (i in 0 until grid.size.width) {
@@ -318,16 +337,10 @@ class GameBoard(
                         )
                     }
 
-                    // Draw border around active
+                    // Vien glow cyan quanh tile dang truot (chi 1 tile/frame).
                     if (active) {
-                        paint.strokeWidth = 16.0f
-                        paint.style = Paint.Style.STROKE
-                        paint.color = highlightColor
-
-                        canvas.drawRect(
-                            /* r = */ renderOffset,
-                            /* paint = */ paint
-                        )
+                        tmpRectF.set(renderOffset)
+                        drawGlowRoundRect(canvas, tmpRectF, 8.0f, highlightColor, 4.0f)
                     }
                 }
             }

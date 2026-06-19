@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Neon puzzle img 6: song chevron. Wave 4. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <path android:fillColor="@color/neon_bg_deep" android:pathData="M0,0h512v512h-512z" />
+    <path android:strokeColor="@color/neon_cyan" android:strokeWidth="7" android:fillColor="#00000000"
+        android:pathData="M0,160L128,96L256,160L384,96L512,160" />
+    <path android:strokeColor="@color/neon_magenta" android:strokeWidth="7" android:fillColor="#00000000"
+        android:pathData="M0,288L128,224L256,288L384,224L512,288" />
+    <path android:strokeColor="@color/neon_lime" android:strokeWidth="7" android:fillColor="#00000000"
+        android:pathData="M0,416L128,352L256,416L384,352L512,416" />
+    <path android:strokeColor="@color/neon_violet" android:strokeWidth="7" android:fillColor="#00000000"
+        android:pathData="M0,96L128,32L256,96L384,32L512,96" />
+</vector>

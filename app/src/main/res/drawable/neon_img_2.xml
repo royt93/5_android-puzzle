@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Neon puzzle img 2: luoi mach (mesh grid + nodes). Wave 4. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <path android:fillColor="@color/neon_bg_deep" android:pathData="M0,0h512v512h-512z" />
+    <path android:strokeColor="@color/neon_cyan" android:strokeWidth="4" android:fillColor="#00000000"
+        android:pathData="M0,128h512 M0,256h512 M0,384h512 M128,0v512 M256,0v512 M384,0v512" />
+    <path android:strokeColor="@color/neon_magenta" android:strokeWidth="3" android:fillColor="#00000000"
+        android:pathData="M0,0L512,512 M512,0L0,512" />
+    <path android:fillColor="@color/neon_lime"
+        android:pathData="M120,120h16v16h-16z M248,120h16v16h-16z M376,120h16v16h-16z M120,248h16v16h-16z M248,248h16v16h-16z M376,248h16v16h-16z M120,376h16v16h-16z M248,376h16v16h-16z M376,376h16v16h-16z" />
+</vector>

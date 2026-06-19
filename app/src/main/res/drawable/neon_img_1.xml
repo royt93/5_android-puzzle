@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Neon puzzle img 1: vong tron dong tam (rings). Wave 4. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <path android:fillColor="@color/neon_bg_deep" android:pathData="M0,0h512v512h-512z" />
+    <path android:strokeColor="@color/neon_cyan" android:strokeWidth="12" android:fillColor="#00000000"
+        android:pathData="M56,256a200,200 0 1,0 400,0a200,200 0 1,0 -400,0" />
+    <path android:strokeColor="@color/neon_magenta" android:strokeWidth="10" android:fillColor="#00000000"
+        android:pathData="M116,256a140,140 0 1,0 280,0a140,140 0 1,0 -280,0" />
+    <path android:strokeColor="@color/neon_lime" android:strokeWidth="8" android:fillColor="#00000000"
+        android:pathData="M176,256a80,80 0 1,0 160,0a80,80 0 1,0 -160,0" />
+    <path android:fillColor="@color/neon_cyan" android:pathData="M236,236h40v40h-40z" />
+</vector>
