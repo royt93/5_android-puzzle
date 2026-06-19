@@ -33,27 +33,16 @@
     <!-- Outline & Other -->
     <color name="md_theme_outline">#79747E</color>
     <color name="md_theme_outlineVariant">#CAC4D0</color>
-    <color name="md_theme_shadow">#000000</color>
-    <color name="md_theme_surfaceTint">#6750A4</color>
 
     <!-- Legacy color mappings for backward compatibility -->
     <color name="colorPrimary">@color/md_theme_primary</color>
-    <color name="colorPrimaryDark">@color/md_theme_onPrimaryContainer</color>
-    <color name="colorAccent">@color/md_theme_secondary</color>
     <color name="colorIcons">@color/md_theme_onPrimary</color>
 
     <!-- Game-specific colors with modern touch -->
-    <color name="board_background">@color/md_theme_surface</color>
     <color name="board_active">#4CAF50</color>
     <color name="board_active_trans">#804CAF50</color>
 
     <!-- Basic colors -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-
-    <!-- Status colors -->
-    <color name="success">#4CAF50</color>
-    <color name="error">#F44336</color>
-    <color name="warning">#FF9800</color>
-    <color name="info">#2196F3</color>
 </resources>

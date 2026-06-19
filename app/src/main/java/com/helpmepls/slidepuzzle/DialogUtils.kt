@@ -1,11 +1,10 @@
 package com.helpmepls.slidepuzzle
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
-import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -21,6 +20,10 @@ object DialogUtils {
         onYes: () -> Unit,
         onNo: (() -> Unit)? = null
     ) {
+        // Tranh crash khi callback async show dialog luc Activity da finishing/destroyed.
+        val activity = context as? Activity
+        if (activity != null && (activity.isFinishing || activity.isDestroyed)) return
+
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_game_custom, null)
         val dialog = AlertDialog.Builder(context)
             .setView(dialogView)

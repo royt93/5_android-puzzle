@@ -28,12 +28,22 @@ class GameBoard(
     private val tileSpacing = 3
     private var tileSize = Rect(0, 0, 0, 0)
     private var renderOffset = Rect(0, 0, 0, 0)
+    private val srcRect = Rect(0, 0, 0, 0)
     private var animOffset = PointF(0.0f, 0.0f)
 
     private lateinit var activeSlide: Point
     private val moveStack = java.util.Stack<Point>()
     var onMoveListener: ((Int, Boolean) -> Unit)? = null // count, isSolved
     private var moveCount = 0
+
+    // Tuy chon hien thi so thu tu tren tung manh ghep.
+    var showNumbers: Boolean = true
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidate()
+            }
+        }
 
 
     private var grid = PuzzleGrid(
@@ -257,6 +267,11 @@ class GameBoard(
         super.onDraw(canvas)
         
         if (!grid.isConfigured()) return
+        val image = grid.image ?: return
+
+        // Kich thuoc 1 manh tren anh nguon (pixel goc), dung de cat src Rect.
+        val srcTileW = image.width / grid.size.width
+        val srcTileH = image.height / grid.size.height
 
         for (j in 0 until grid.size.height) {
             for (i in 0 until grid.size.width) {
@@ -282,19 +297,26 @@ class GameBoard(
                         renderOffset.bottom += animOffset.y.toInt()
                     }
 
+                    // src Rect cua manh nay tren anh nguon, theo vi tri dung (index).
+                    val sx = (puzzle.index % grid.size.width) * srcTileW
+                    val sy = (puzzle.index / grid.size.width) * srcTileH
+                    srcRect.set(sx, sy, sx + srcTileW, sy + srcTileH)
+
                     canvas.drawBitmap(
-                        /* bitmap = */ puzzle.bitmap,
-                        /* src = */ null,
+                        /* bitmap = */ image,
+                        /* src = */ srcRect,
                         /* dst = */ renderOffset,
                         /* paint = */ null
                     )
 
                     // fill
-                    drawSlideTitle(
-                        canvas = canvas,
-                        offset = renderOffset,
-                        text = (puzzle.index + 1).toString()
-                    )
+                    if (showNumbers) {
+                        drawSlideTitle(
+                            canvas = canvas,
+                            offset = renderOffset,
+                            text = (puzzle.index + 1).toString()
+                        )
+                    }
 
                     // Draw border around active
                     if (active) {

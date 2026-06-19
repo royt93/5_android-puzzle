@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.util.Size
 import androidx.annotation.Keep
-import com.helpmepls.slidepuzzle.game.utils.BitmapTile
 import kotlin.*
 
 @Keep
@@ -20,7 +19,10 @@ class PuzzleGrid(
         return ::puzzles.isInitialized
     }
 
-    private lateinit var bitmapTile: BitmapTile
+    // Anh nguon dang dung de render. GameBoard ve tung manh truc tiep tu anh nay
+    // bang src Rect tinh theo index => khong cat bitmap con, khong cap phat bitmap thua.
+    var image: Bitmap? = sourceImage
+        private set
 
     init {
         sourceImage?.let {
@@ -37,7 +39,7 @@ class PuzzleGrid(
         shuffle: Boolean = false,
     ) {
         size = newSize
-        bitmapTile = BitmapTile(image = newImage ?: sourceImage!!, size = newSize)
+        image = newImage ?: image ?: sourceImage
         puzzles = genRandomSlides(shuffle)
     }
 
@@ -49,10 +51,7 @@ class PuzzleGrid(
             if (index >= len - missingSlides)
                 null
             else
-                PuzzleDescriptor(
-                    index,
-                    bitmapTile.tiles[index / size.width][index % size.width]
-                )
+                PuzzleDescriptor(index)
         }
 
         // Convert to 2D array

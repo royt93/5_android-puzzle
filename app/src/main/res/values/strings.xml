@@ -7,4 +7,5 @@
     <string name="rate_app">Rate</string>
     <string name="more_apps">More</string>
     <string name="share_app">Share</string>
+    <string name="show_tile_numbers">Show tile numbers</string>
 </resources>

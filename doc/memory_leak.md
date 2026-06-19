@@ -16,8 +16,8 @@ Cap nhat: 2026-06-18. Xem them audit tong hop tai `doc/audit.md`.
 
 - [DONE] `BoardOptionsFrm.kt`: khong con decode 27 anh drawable thanh `Bitmap` ngay khi mo man chon; adapter load drawable resource id.
 - [DONE] `GameAct.kt`: da bo static Bitmap handoff; Activity nhan image id va board size qua Intent.
-- [OPEN] `BitmapTile.kt`: moi lan resize tao nhieu tile bitmap moi. Can tranh resize lap lai khong can thiet, can nhac cache/reuse theo board size.
-- [OPEN] `DialogUtils.kt`: dialog dung Activity context; nen tranh show khi Activity dang finishing/destroyed neu goi tu callback async.
+- [DONE] `BitmapTile.kt` da xoa han. `PuzzleDescriptor` chi giu `index`; `GameBoard` ve tung manh truc tiep tu anh nguon bang `src Rect` (canvas.drawBitmap voi src/dst). Khong con cat N bitmap con => khong cap phat/recycle bitmap thua. Verify: 6/6 instrumented test PASS (OPPO CPH2577, Pixel 7 Pro), smoke render dung tren OPPO.
+- [DONE] `DialogUtils.kt`: them guard bo qua `showGameDialog` khi Activity dang `isFinishing`/`isDestroyed` (tranh crash khi goi tu callback async).
 
 ## Warning/performance/UX
 

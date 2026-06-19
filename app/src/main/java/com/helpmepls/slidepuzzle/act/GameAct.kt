@@ -56,6 +56,17 @@ class GameAct : BaseActivity() {
     private var isGameRunning = false
     private var bestScore = 0
     private var undoCount = 3
+    private var showNumbers = true
+
+    private fun loadShowNumbers(): Boolean {
+        return getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
+            .getBoolean("show_numbers", true)
+    }
+
+    private fun saveShowNumbers(value: Boolean) {
+        getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
+            .edit().putBoolean("show_numbers", value).apply()
+    }
     
     private fun startTimer() {
         if (isGameRunning) return
@@ -190,7 +201,9 @@ class GameAct : BaseActivity() {
     private fun mountBoard() {
         val ivOriginal = findViewById<ImageView>(R.id.ivOriginal)
         val boardView = findViewById<GameBoard>(R.id.boardView)
-        
+
+        showNumbers = loadShowNumbers()
+        boardView.showNumbers = showNumbers
         initGameLogic(boardView)
 
         viewModel.boardSize.observe(
@@ -358,10 +371,23 @@ class GameAct : BaseActivity() {
         findViewById<android.view.View>(R.id.layoutBottom).visibility = View.VISIBLE
     }
 
+    override fun onCreateOptionsMenu(menu: android.view.Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_game, menu)
+        menu.findItem(R.id.action_show_numbers)?.isChecked = showNumbers
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 onBackPressedDispatcher.onBackPressed()
+                return true
+            }
+            R.id.action_show_numbers -> {
+                showNumbers = !showNumbers
+                item.isChecked = showNumbers
+                saveShowNumbers(showNumbers)
+                findViewById<GameBoard>(R.id.boardView)?.showNumbers = showNumbers
                 return true
             }
         }

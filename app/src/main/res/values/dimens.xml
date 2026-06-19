@@ -1,38 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Material Design 3 Spacing System -->
-
-    <!-- Base spacing unit -->
-    <dimen name="spacing_unit">4dp</dimen>
-
-    <!-- Standard spacings (multiple of 4dp) -->
-    <dimen name="spacing_xs">4dp</dimen>    <!-- 1x -->
-    <dimen name="spacing_sm">8dp</dimen>    <!-- 2x -->
-    <dimen name="spacing_md">12dp</dimen>   <!-- 3x -->
-    <dimen name="spacing_lg">16dp</dimen>   <!-- 4x -->
-    <dimen name="spacing_xl">20dp</dimen>   <!-- 5x -->
-    <dimen name="spacing_xxl">24dp</dimen>  <!-- 6x -->
-    <dimen name="spacing_xxxl">32dp</dimen> <!-- 8x -->
-
     <!-- Component specific -->
     <dimen name="card_corner_radius">16dp</dimen>
     <dimen name="button_corner_radius">12dp</dimen>
-    <dimen name="small_corner_radius">8dp</dimen>
 
     <!-- Elevation -->
     <dimen name="elevation_card">6dp</dimen>
     <dimen name="elevation_button">4dp</dimen>
-    <dimen name="elevation_dialog">8dp</dimen>
 
     <!-- Minimum touch target -->
     <dimen name="min_touch_target">48dp</dimen>
-
-    <!-- Toolbar -->
-    <dimen name="toolbar_height">56dp</dimen>
 
     <!-- Game specific -->
     <dimen name="game_button_width">120dp</dimen>
     <dimen name="game_button_height">48dp</dimen>
     <dimen name="image_preview_size">120dp</dimen>
-    <dimen name="card_image_height">100dp</dimen>
 </resources>

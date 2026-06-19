@@ -14,7 +14,9 @@ Cap nhat audit: 2026-06-18. Trang thai hien tai: `./gradlew lintDebug` PASS, `./
 
 ## 1. Unused Resources (Tài nguyên không sử dụng)
 
-*Có khoảng 70 tài nguyên không được sử dụng, gây tăng dung lượng APK. Có thể xóa an toàn:*
+> [DONE 2026-06-19] Đã verify reference và xóa: 21 file anim, 4 drawable (`btn_red_blue_selector/shape`, `shape_board`, `drawable/ic_launcher_background`), 9 color + 12 dimen thừa. Giữ lại `ic_launcher_foreground` + `@color/ic_launcher_background` (cần cho adaptive icon) và các `md_theme_*`/style dùng qua theme. `lintDebug` PASS.
+
+*Danh sách gốc (tham khảo):*
 
 ### Animation & Transitions
 
@@ -84,7 +86,7 @@ Các task cần làm trong `MyApplication.kt`:
 4. **Dark Mode Support**: [Already Supported by Theme] Tối ưu giao diện cho chế độ tối.
 5. [DONE] **Timer & Move Counter Visibility**: Hiển thị đồng hồ và số bước đi rõ ràng hơn trên màn hình chơi.
 6. [DONE] **High Score System**: Lưu lại kỷ lục (thời gian/số bước).
-7. **Show Tile Numbers**: [Pending Setting] Thêm tùy chọn hiển thị số thứ tự.
+7. [DONE] **Show Tile Numbers**: Toggle hiển thị/ẩn số thứ tự qua menu game, lưu `show_numbers` trong SharedPreferences.
 8. [DONE] **Congratulation Dialog**: Hiển thị popup chúc mừng đẹp mắt.
 9. [DONE] **Share Achievement**: Nút chia sẻ kết quả.
 10. [DONE] **Board Preview**: Nút giữ để xem nhanh hình gốc.
