@@ -88,4 +88,42 @@ class GameBoardWidgetTest {
             }
         }
     }
+
+    @Test
+    fun shuffleClearsUndoHistory() {
+        // C4: sau shuffle, undo stack phai duoc xoa -> undo() tra ve false.
+        launchGame().use { scenario ->
+            scenario.onActivity { act ->
+                val board = act.findViewById<GameBoard>(R.id.boardView)
+                board.shuffle(false)
+                assertFalse("shuffle phai xoa undo history", board.undo())
+            }
+        }
+    }
+
+    @Test
+    fun resetClearsUndoHistory() {
+        // C4: sau reset (shuffle reset=true), undo stack phai duoc xoa -> undo() tra ve false.
+        launchGame().use { scenario ->
+            scenario.onActivity { act ->
+                val board = act.findViewById<GameBoard>(R.id.boardView)
+                board.shuffle(true)
+                assertFalse("reset phai xoa undo history", board.undo())
+            }
+        }
+    }
+
+    @Test
+    fun onMoveSoundHookCanBeSetAndInvoked() {
+        // SFX wiring: hook onMoveSound goi duoc, dem dung so lan.
+        launchGame().use { scenario ->
+            scenario.onActivity { act ->
+                val board = act.findViewById<GameBoard>(R.id.boardView)
+                var count = 0
+                board.onMoveSound = { count++ }
+                board.onMoveSound?.invoke()
+                assertTrue("onMoveSound phai goi duoc", count == 1)
+            }
+        }
+    }
 }

@@ -45,6 +45,8 @@ class GameBoard(
     private lateinit var activeSlide: Point
     private val moveStack = java.util.Stack<Point>()
     var onMoveListener: ((Int, Boolean) -> Unit)? = null // count, isSolved
+    /** Fire dung 1 lan khi truot 1 manh hop le (khong fire khi undo/reset/shuffle). Dung cho SFX. */
+    var onMoveSound: (() -> Unit)? = null
     private var moveCount = 0
 
     // Tuy chon hien thi so thu tu tren tung manh ghep.
@@ -221,7 +223,8 @@ class GameBoard(
                         moveStack.push(newCoordinates)
                         moveCount++
                         performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
-                        
+                        onMoveSound?.invoke()
+
                         val solved = grid.isSolved()
                         onMoveListener?.invoke(moveCount, solved)
                         

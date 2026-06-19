@@ -132,5 +132,43 @@ class BoardOptionsFrm : Fragment() {
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_app)))
         }
+
+        view.findViewById<View>(R.id.btnAbout)?.setOnClickListener {
+            showAboutDialog()
+        }
+    }
+
+    /** Dialog About: ten app + version + developer + license OSS; nut GitHub mo repo. */
+    private fun showAboutDialog() {
+        val ctx = context ?: return
+        val appName = getString(R.string.app_name)
+        val message = buildString {
+            append(appName)
+            append("\nVersion ")
+            append(com.helpmepls.slidepuzzle.BuildConfig.VERSION_NAME)
+            append("\n\n")
+            append(getString(R.string.about_developer))
+            append("\n\n")
+            append(getString(R.string.about_licenses))
+        }
+        com.helpmepls.slidepuzzle.DialogUtils.showGameDialog(
+            context = ctx,
+            title = getString(R.string.about_title, appName),
+            message = message,
+            yesText = getString(R.string.about_github),
+            noText = getString(R.string.about_close),
+            onYes = {
+                try {
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            android.net.Uri.parse(getString(R.string.about_github_url))
+                        )
+                    )
+                } catch (_: Exception) {
+                    // Khong co trinh duyet -> bo qua, khong crash.
+                }
+            }
+        )
     }
 }

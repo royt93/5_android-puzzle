@@ -21,14 +21,14 @@ Cap nhat: 2026-06-18. Xem them audit tong hop tai `doc/audit.md`.
 
 ## Warning/performance/UX
 
-- [OPEN] `frm_board_options.xml`: lint van bao overdraw o root background `@drawable/bkg`.
-- [OPEN] `act_game.xml`: nested weights co the tang chi phi measure.
+- [DONE Task 07] `frm_board_options.xml`: root da `@android:color/transparent` (het overdraw kep); them go FrameLayout wrapper thua + tools:ignore dat sai. Lint sach.
+- [DONE Task 09] `act_game.xml`: phang 3 cap wrapper -> 1 root LinearLayout; bo nested weights (glass panel timer/moves wrap + center); them `baselineAligned=false`. Lint NestedWeights = 0.
 - [DONE] `GameBoard.kt`: touch listener chi move tren `ACTION_UP`, co `performClick()` va guard bounds.
 - [DONE] `AndroidManifest.xml`: Activity noi bo `BoardOptionsAct` va `GameAct` da doi `exported=false`.
-- [OPEN] `AndroidManifest.xml`: portrait lock bi canh bao voi Android 16+. Neu game bat buoc portrait, can chap nhan/suppress co chu dich va test large screen.
+- [DONE Task 09] `AndroidManifest.xml`: portrait lock = quyet dinh CO CHU DICH (board vuong + UI doc); suppress `DiscouragedApi` + `LockedOrientationActivity` kem comment. Lint DiscouragedApi = 0. Xem `doc/audit.md` P3.
 
 ## Dependency/config
 
-- [OPEN] Gradle wrapper `8.13` co warning co ban moi `8.14.5`.
-- [OPEN] Kotlin stdlib `2.1.20`, Material `1.13.0`, Glide `5.0.5` co warning version moi.
+- [DONE] Gradle wrapper da nang `8.14.5` (xem tasks.md).
+- [DEFERRED Task 09 P4] Kotlin stdlib `2.1.20`, Material `1.13.0`, Glide `5.0.5`: deu kha moi; nang version = rui ro breaking, hoan sang pass rieng co retest device.
 - [OPEN] Kotlin daemon co loi incremental cache va fallback compile thanh cong. Neu lap lai, chay `./gradlew --stop` va clean cache build cuc bo.

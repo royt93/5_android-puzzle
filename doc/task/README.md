@@ -25,8 +25,13 @@ doc/task/
 | 04 | Neon images (vector + bridge Vector→Bitmap) | ✅ Done | `done/04-neon-images.md` |
 | 05 | Motion + polish + QA (pulse, win-feedback, WCAG) | ✅ Done | `done/05-motion-polish-qa.md` |
 | 06 | Audit fixes (recycle, overdraw, dọn rác, a11y...) A1–A12 | ✅ Done | `done/06-audit-fixes.md` |
+| 07 | Code cleanup + Sound Effects (SFX, best-time, test undo) | ✅ Done | `done/07-cleanup-sfx.md` |
+| 08 | Engagement (Rate, More apps, About/License, GitHub) | ✅ Done | `done/08-engagement.md` |
+| 09 | Tech polish (120Hz, nested weights, portrait-lock, version) | ✅ Done | `done/09-tech-polish.md` |
 
-**Tiến độ:** 6/6 task done · verify: `lintDebug` + `testDebugUnitTest` + `connectedDebugAndroidTest` **19/19 PASS** (Pixel 7 Pro / Android 16), logcat sạch, không jank, WCAG AA pass.
+**Tiến độ:** Neon revamp 6/6 done · verify: `lintDebug` + `testDebugUnitTest` + `connectedDebugAndroidTest` **19/19 PASS** (Pixel 7 Pro / Android 16), logcat sạch, không jank, WCAG AA pass.
+
+**Wave 2 (07–09) — DONE:** 07 ✅ (SFX + best-time + dọn layout) · 08 ✅ (About/License/GitHub; Rate/More/Share đã có sẵn) · 09 ✅ (120Hz + phẳng nested weights + portrait-lock decision). Verify: **25/25 instrumented PASS** Pixel 7 Pro (anim=0), lint sạch (DiscouragedApi + NestedWeights = 0). P4 version-bump hoãn chủ ý sang pass riêng.
 
 ## Definition of Done (toàn cục)
 - [x] Mọi màn dùng token neon, nền tối, không còn `#FFFBFE`/`#F44336` chủ đạo.

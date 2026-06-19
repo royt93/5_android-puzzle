@@ -7,6 +7,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!--
+      P3 (Task 09): game khoa portrait CO CHU DICH (board vuong + UI doc).
+      Tren Android 16+ fixed-orientation co the bi bo qua tren man hinh lon, nhung ket
+      cuc tot nhat cho game puzzle nay van la portrait => suppress DiscouragedApi +
+      LockedOrientationActivity co chu dich (xem doc/audit.md P3).
+    -->
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -17,7 +23,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="LockedOrientationActivity">
+        tools:ignore="LockedOrientationActivity,DiscouragedApi">
         <activity
             android:name=".act.SplashActivity"
             android:configChanges="locale|keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

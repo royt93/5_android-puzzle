@@ -8,4 +8,10 @@
         android:title="@string/show_tile_numbers"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_sound"
+        android:checkable="true"
+        android:title="@string/sound_effects"
+        app:showAsAction="never" />
+
 </menu>

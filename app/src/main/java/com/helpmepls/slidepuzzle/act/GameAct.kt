@@ -61,6 +61,10 @@ class GameAct : BaseActivity() {
     private var isGameRunning = false
     private var undoCount = 3
     private var showNumbers = true
+    private var soundEnabled = true
+    private val soundManager: com.helpmepls.slidepuzzle.util.SoundManager by lazy {
+        com.helpmepls.slidepuzzle.util.SoundManager(this)
+    }
 
     private fun loadShowNumbers(): Boolean {
         return getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
@@ -70,6 +74,16 @@ class GameAct : BaseActivity() {
     private fun saveShowNumbers(value: Boolean) {
         getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
             .edit().putBoolean("show_numbers", value).apply()
+    }
+
+    private fun loadSoundEnabled(): Boolean {
+        return getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
+            .getBoolean("sound_enabled", true)
+    }
+
+    private fun saveSoundEnabled(value: Boolean) {
+        getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
+            .edit().putBoolean("sound_enabled", value).apply()
     }
     
     private fun startTimer() {
@@ -106,17 +120,31 @@ class GameAct : BaseActivity() {
         findViewById<android.widget.TextView>(R.id.tvTimer)?.text = String.format(Locale.US, "⏱ %02d:%02d", mins, secs)
     }
     
-    private fun saveHighScore(moves: Int) {
+    /** Luu best-moves va best-time (theo giay) cho board hien tai neu lap ky luc. */
+    private fun saveHighScore(moves: Int, seconds: Int) {
         val size = viewModel.boardSize.value ?: return
         val prefs = getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
-        val key = "best_${size.width}x${size.height}"
-        if (moves < prefs.getInt(key, com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)) {
-            prefs.edit().putInt(key, moves).apply()
+        val movesKey = "best_${size.width}x${size.height}"
+        val timeKey = "best_time_${size.width}x${size.height}"
+        val editor = prefs.edit()
+        if (com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBest(
+                moves, prefs.getInt(movesKey, com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)
+            )
+        ) {
+            editor.putInt(movesKey, moves)
         }
+        if (com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBestTime(
+                seconds, prefs.getInt(timeKey, com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME)
+            )
+        ) {
+            editor.putInt(timeKey, seconds)
+        }
+        editor.apply()
     }
 
     private fun showWinDialog(moves: Int) {
         stopTimer()
+        if (soundEnabled) soundManager.playWin()
 
         // New best dung ca o lan giai dau tien (chua co record => prevBest = MAX_VALUE).
         val size = viewModel.boardSize.value
@@ -124,14 +152,23 @@ class GameAct : BaseActivity() {
         val prevBest = size?.let {
             prefs.getInt("best_${it.width}x${it.height}", com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)
         } ?: com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST
+        val prevBestTime = size?.let {
+            prefs.getInt("best_time_${it.width}x${it.height}", com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME)
+        } ?: com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME
         val isNewBest = com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBest(moves, prevBest)
+        val isNewBestTime = com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBestTime(timerSeconds, prevBestTime)
 
-        // Save score
-        saveHighScore(moves)
+        // Save score (moves + time)
+        saveHighScore(moves, timerSeconds)
 
         val timerText = findViewById<android.widget.TextView>(R.id.tvTimer)?.text ?: "00:00"
-        val newBestText = if (isNewBest) "\n\n🏆 NEW HIGH SCORE! 🏆" else ""
-        
+        val newBestText = when {
+            isNewBest && isNewBestTime -> "\n\n🏆 NEW BEST MOVES & TIME! 🏆"
+            isNewBest -> "\n\n🏆 NEW HIGH SCORE! 🏆"
+            isNewBestTime -> "\n\n⏱ NEW BEST TIME! ⏱"
+            else -> ""
+        }
+
         DialogUtils.showGameDialog(
             context = this,
             title = "🎉 VICTORY! 🎉",
@@ -207,6 +244,11 @@ class GameAct : BaseActivity() {
 
         showNumbers = loadShowNumbers()
         boardView.showNumbers = showNumbers
+
+        soundEnabled = loadSoundEnabled()
+        soundManager.isEnabled = soundEnabled
+        boardView.onMoveSound = { soundManager.playMove() }
+
         initGameLogic(boardView)
 
         viewModel.boardSize.observe(
@@ -377,6 +419,7 @@ class GameAct : BaseActivity() {
     override fun onCreateOptionsMenu(menu: android.view.Menu): Boolean {
         menuInflater.inflate(R.menu.menu_game, menu)
         menu.findItem(R.id.action_show_numbers)?.isChecked = showNumbers
+        menu.findItem(R.id.action_sound)?.isChecked = soundEnabled
         return true
     }
 
@@ -393,6 +436,13 @@ class GameAct : BaseActivity() {
                 findViewById<GameBoard>(R.id.boardView)?.showNumbers = showNumbers
                 return true
             }
+            R.id.action_sound -> {
+                soundEnabled = !soundEnabled
+                item.isChecked = soundEnabled
+                saveSoundEnabled(soundEnabled)
+                soundManager.isEnabled = soundEnabled
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -407,6 +457,8 @@ class GameAct : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         stopTimer()
+        // soundManager luon duoc khoi tao trong mountBoard (onCreate) -> release an toan.
+        soundManager.release()
         // Giai phong bitmap raster lon (~vai MB) khi thoat han. Bitmap vector trong cache
         // duoc giu lai (dung chung qua cac phien) nen khong recycle.
         if (isFinishing) {

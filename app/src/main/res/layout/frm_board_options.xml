@@ -10,24 +10,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:orientation="vertical">
 
         <include layout="@layout/item_game_toolbar" />
 
-        <FrameLayout
+        <!-- Bo FrameLayout wrapper thua (UselessParent): ConstraintLayout lam con truc tiep. -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/vgBoardOptions"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!-- Removed static background to show Liquid Gradient -->
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/vgBoardOptions"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="2dp"
-                android:layout_marginEnd="2dp"
-                tools:context=".frm.BoardOptionsFrm">
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            tools:context=".frm.BoardOptionsFrm">
 
                 <in.srain.cube.views.GridViewWithHeaderAndFooter
                     android:id="@+id/gvImages"
@@ -124,9 +118,31 @@
                         android:background="?selectableItemBackgroundBorderless"
                         android:padding="8dp"/>
 
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="24dp"
+                        android:background="@color/glass_stroke"
+                        android:layout_gravity="center_vertical"/>
 
-        </FrameLayout>
+                    <TextView
+                        android:id="@+id/btnAbout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/about"
+                        android:textColor="@color/neon_text_secondary"
+                        android:textSize="11sp"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.05"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-condensed"
+                        app:drawableTopCompat="@drawable/ic_about"
+                        android:drawablePadding="2dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </FrameLayout>

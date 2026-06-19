@@ -1,174 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- P2 (Task 09): gop 2 FrameLayout + LinearLayout wrapper thua thanh 1 root LinearLayout. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".act.GameAct">
 
-    <FrameLayout
+    <include layout="@layout/item_game_toolbar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
+
+        <!-- Removed static background to show Liquid Gradient -->
 
         <LinearLayout
-            android:id="@+id/layoutRoot"
+            android:id="@+id/topInfoBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:orientation="vertical"
-            tools:ignore="UselessParent">
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <include layout="@layout/item_game_toolbar" />
+            <ImageView
+                android:id="@+id/ivOriginal"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@drawable/neon_ring"
+                android:contentDescription="@string/image_original_desc"
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                tools:src="@mipmap/ic_launcher" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <!-- Glass Panel for Stats. Bo weight long (NestedWeights): timer/moves wrap + can giua. -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/neon_glass_panel"
+                android:baselineAligned="false"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp">
 
-                <!-- Removed static background to show Liquid Gradient -->
-
-                <LinearLayout
-                    android:id="@+id/topInfoBar"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvTimer"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:fontFamily="sans-serif-medium"
+                    android:text="⏱ 00:00"
+                    android:textColor="@color/neon_cyan"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:id="@+id/ivOriginal"
-                        android:layout_width="72dp"
-                        android:layout_height="72dp"
-                        android:background="@drawable/neon_ring"
-                        android:contentDescription="@string/image_original_desc"
-                        android:padding="4dp"
-                        android:scaleType="centerCrop"
-                        tools:src="@mipmap/ic_launcher" />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="16dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:alpha="0.3"
+                    android:background="@color/glass_stroke" />
 
-                    <!-- Glass Panel for Stats -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/neon_glass_panel"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="12dp">
-
-                        <TextView
-                            android:id="@+id/tvTimer"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="⏱ 00:00"
-                            android:textColor="@color/neon_cyan"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="16dp"
-                            android:layout_marginHorizontal="12dp"
-                            android:alpha="0.3"
-                            android:background="@color/glass_stroke" />
-
-                        <TextView
-                            android:id="@+id/tvMoves"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="📊 0"
-                            android:textColor="@color/neon_lime"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/vgBoardContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toTopOf="@+id/layoutBottom"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/topInfoBar">
-
-
-                    <com.helpmepls.slidepuzzle.game.GameBoard
-                        android:id="@+id/boardView"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="0dp"
-                        android:background="@android:color/transparent"
-                        android:elevation="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="H,1:1"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!-- Bottom Glass Dock -->
-                <LinearLayout
-                    android:id="@+id/layoutBottom"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvMoves"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:background="@drawable/neon_glass_panel"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btShuffle"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/neon_btn_primary"
-                        android:text="@string/shuffle"
-                        android:textAllCaps="true"
-                        android:textColor="@color/neon_text_primary"
-                        android:textStyle="bold" />
-
-                    <ImageButton
-                        android:id="@+id/btUndo"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/neon_btn_primary"
-                        android:contentDescription="@string/undo_action"
-                        android:padding="12dp"
-                        android:scaleType="centerInside"
-                        android:src="@android:drawable/ic_menu_revert"
-                        app:tint="@color/neon_cyan" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btReset"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/neon_btn_danger"
-                        android:text="@string/reset"
-                        android:textAllCaps="true"
-                        android:textColor="@color/neon_text_primary"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:fontFamily="sans-serif-medium"
+                    android:text="📊 0"
+                    android:textColor="@color/neon_lime"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
-    </FrameLayout>
-</FrameLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/vgBoardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/layoutBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topInfoBar">
+
+
+            <com.helpmepls.slidepuzzle.game.GameBoard
+                android:id="@+id/boardView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/transparent"
+                android:elevation="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="H,1:1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Bottom Glass Dock -->
+        <LinearLayout
+            android:id="@+id/layoutBottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/neon_glass_panel"
+            android:baselineAligned="false"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btShuffle"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/neon_btn_primary"
+                android:text="@string/shuffle"
+                android:textAllCaps="true"
+                android:textColor="@color/neon_text_primary"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btUndo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/neon_btn_primary"
+                android:contentDescription="@string/undo_action"
+                android:padding="12dp"
+                android:scaleType="centerInside"
+                android:src="@android:drawable/ic_menu_revert"
+                app:tint="@color/neon_cyan" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btReset"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/neon_btn_danger"
+                android:text="@string/reset"
+                android:textAllCaps="true"
+                android:textColor="@color/neon_text_primary"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

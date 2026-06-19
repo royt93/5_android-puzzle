@@ -8,7 +8,16 @@ Cap nhat: 2026-06-19
 
 ## Todo
 
-- [todo] (Tuy chon) Nang Material/Glide len ban moi hon va test ky tren thiet bi.
+- [todo] (Tuy chon - P4 hoan tu wave 2) Nang Material/Glide/Kotlin len ban moi va test ky tren thiet bi (pass rieng co retest).
+- [todo] (Monetization) AdMob + AppLovin integration (can real Ad IDs ngoai source; release guard dang chan placeholder).
+
+Wave 2 (kanban tai `doc/task/`, chay song song) - DONE:
+
+- [done] **07 Code cleanup + SFX** — SoundManager (SoundPool) move/win + toggle `sound_enabled`; saveHighScore luu them best-time; go FrameLayout wrapper + tools:ignore thua; test undo->shuffle/reset. Verify: lint + unit + **24/24 instrumented PASS** (Pixel 7 Pro, anim=0). Chi tiet: `doc/task/done/07-cleanup-sfx.md`.
+- [done] **08 Engagement** — About dialog (version + developer + license OSS + nut GitHub mo repo) them vao footer; go //TODO github/license. Rate/More/Share da co san. Verify: **25/25 instrumented PASS**. Chi tiet: `doc/task/done/08-engagement.md`.
+- [done] **09 Tech polish** — 120Hz (BaseActivity preferredDisplayModeId, verify @120Hz Pixel 7 Pro); phang act_game.xml (3 wrapper -> 1 root LinearLayout, bo nested weights, baselineAligned=false); portrait-lock suppress co chu dich (DiscouragedApi=0); P4 version-bump hoan. Verify: **25/25 instrumented PASS**, lint sach. Chi tiet: `doc/task/done/09-tech-polish.md`.
+
+> AdMob/AppLovin (monetization) chua dua vao wave nay theo lua chon cua roy; release guard van chan placeholder.
 
 ## Done
 

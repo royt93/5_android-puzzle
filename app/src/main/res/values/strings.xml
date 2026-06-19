@@ -8,6 +8,14 @@
     <string name="more_apps">More</string>
     <string name="share_app">Share</string>
     <string name="show_tile_numbers">Show tile numbers</string>
+    <string name="sound_effects">Sound effects</string>
+    <string name="about">About</string>
+    <string name="about_title">About %1$s</string>
+    <string name="about_github">GitHub</string>
+    <string name="about_close">Close</string>
+    <string name="about_developer">Developer: SAIGON PHANTOM LABS</string>
+    <string name="about_github_url">https://github.com/tplloi/android-puzzle</string>
+    <string name="about_licenses">Open-source libraries used:\n• AndroidX AppCompat / ConstraintLayout / CardView\n• Google Material Components\n• Glide (image loading)\n• grid-view-with-header-footer\n• LeakCanary (debug)\n\nEach is distributed under its own open-source license.</string>
     <string name="undo_action">Undo</string>
     <string name="image_original_desc">Original puzzle image</string>
     <string name="puzzle_image_desc">Puzzle image option</string>

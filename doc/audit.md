@@ -21,8 +21,8 @@
 
 - Deprecated status bar/transition usage trong code chinh da duoc don. `SplashActivity` dung `overrideActivityTransition` tren API moi va fallback co suppress cho API cu.
 - `AndroidManifest.xml`: `screenOrientation="portrait"` bi canh bao voi Android 16+.
-  - Ghi chu: Neu game bat buoc portrait thi can chap nhan/cau hinh suppress co chu dich; neu khong, nen test adaptive layout.
-- `frm_board_options.xml`: overdraw do root co `android:background="@drawable/bkg"` trong khi theme cung ve background.
+  - **[P3 - DONE Task 09] Quyet dinh:** game khoa portrait CO CHU DICH (board vuong 1:1 + UI doc, khong hop landscape cho the loai puzzle nay). Da suppress `DiscouragedApi` + `LockedOrientationActivity` o `<application>` kem comment. Lint `DiscouragedApi` = 0. Muon ho tro large-screen sau nay = thiet ke lai layout adaptive (out-of-scope wave 2).
+- `frm_board_options.xml`: overdraw o root. **[DONE Task 07]** root da `@android:color/transparent`, het overdraw kep; go them FrameLayout wrapper thua.
 - Nhieu `UnusedResources`: animation, drawable, color, dimen, style. Can xoa theo dot nho sau khi build/lint xac nhan khong dung qua reflection/code dong.
 
 ## Findings uu tien cao

@@ -26,4 +26,24 @@ class ScoreUtilsTest {
     fun equalToRecordIsNotNewBest() {
         assertFalse(ScoreUtils.isNewBest(moves = 20, previousBest = 20))
     }
+
+    @Test
+    fun firstSolveIsAlwaysNewBestTime() {
+        assertTrue(ScoreUtils.isNewBestTime(seconds = 90, previousBestTime = ScoreUtils.NO_BEST_TIME))
+    }
+
+    @Test
+    fun fasterThanRecordIsNewBestTime() {
+        assertTrue(ScoreUtils.isNewBestTime(seconds = 70, previousBestTime = 85))
+    }
+
+    @Test
+    fun slowerThanRecordIsNotNewBestTime() {
+        assertFalse(ScoreUtils.isNewBestTime(seconds = 120, previousBestTime = 85))
+    }
+
+    @Test
+    fun equalTimeIsNotNewBestTime() {
+        assertFalse(ScoreUtils.isNewBestTime(seconds = 85, previousBestTime = 85))
+    }
 }

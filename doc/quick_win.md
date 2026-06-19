@@ -60,28 +60,28 @@ Cap nhat audit: 2026-06-18. Trang thai hien tai: `./gradlew lintDebug` PASS, `./
 
 ## 2. Code Cleanup
 
-- **Namespaces**: Xóa khai báo `xmlns:tools` thừa trong `frm_board_options.xml`.
-- **Release config**: Thay AdMob placeholder `"~"` bang gia tri tu secret/local config hoac fail fast khi build release.
-- **High score**: `saveHighScore(moves, time)` dang khong dung `time`; can luu score theo moves/time hoac bo tham so.
-- **Undo**: them test cho move -> undo -> shuffle/reset de khoa logic toa do.
+- **Namespaces**: `xmlns:tools` van con dung (tools:context) nen GIU; da go `tools:ignore="UselessParent"` dat sai cho + FrameLayout wrapper thua trong `frm_board_options.xml`. [DONE Task 07]
+- **Release config**: Thay AdMob placeholder `"~"` bang gia tri tu secret/local config hoac fail fast khi build release. (Release guard da chan placeholder; tich hop AdMob that = monetization, chua lam.)
+- **High score**: [DONE Task 07] `saveHighScore(moves, seconds)` luu them `best_time_<w>x<h>`; win dialog bao new-best moves/time rieng. Logic thuan o `ScoreUtils.isNewBestTime`.
+- **Undo**: [DONE Task 07] them instrumented test `shuffleClearsUndoHistory` + `resetClearsUndoHistory` khoa logic xoa undo stack.
 
 ## 3. TODOs (Các task tồn đọng)
 
 Các task cần làm trong `MyApplication.kt`:
 
-- [ ] Admob integration
-- [ ] Ad Applovin integration
-- [ ] Review in app feature
-- [ ] Font scale handling
-- [ ] 120hz support
-- [ ] Rate, more app, share app features
-- [ ] Github integration
-- [ ] License info
+- [ ] Admob integration (monetization, can real Ad IDs — chua lam)
+- [ ] Ad Applovin integration (monetization — chua lam)
+- [~] Review in app feature (optional: deep-link Rate da co; Play In-App Review API chua them) [Task 08]
+- [x] Font scale handling (BaseActivity ep `fontScale=1.0f`)
+- [ ] 120hz support (Task 09 — dang lam)
+- [x] Rate, more app, share app features (footer BoardOptionsFrm)
+- [x] Github integration (nut GitHub trong About dialog) [Task 08]
+- [x] License info (license OSS trong About dialog) [Task 08]
 
 ## 4. Proposed Quick Win Features (Top 10)
 
 1. [DONE] **Undo Functionality**: Cho phép người chơi hoàn tác nước đi sai (giới hạn 3 lần/game).
-2. **Sound Effects (SFX)**: [Pending System] Thêm âm thanh khi di chuyển mảnh ghép và khi chiến thắng.
+2. [DONE] **Sound Effects (SFX)**: `SoundManager` (SoundPool) phát click khi move hợp lệ + arpeggio khi win; toggle bật/tắt qua menu (`sound_enabled`). Asset `.wav` procedural trong `res/raw`. (Task 07)
 3. [DONE] **Haptic Feedback**: Rung nhẹ khi di chuyển mảnh ghép thành công.
 4. **Dark Mode Support**: [Already Supported by Theme] Tối ưu giao diện cho chế độ tối.
 5. [DONE] **Timer & Move Counter Visibility**: Hiển thị đồng hồ và số bước đi rõ ràng hơn trên màn hình chơi.
