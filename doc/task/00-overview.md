@@ -31,6 +31,35 @@ Không hard-code hex trong layout; chỉ tham chiếu token. Bản sao Kotlin ch
 ## Glow primitives tái dùng (`res/drawable/`)
 `neon_bg_ambient`, `neon_glass_panel`, `neon_glass_card`, `neon_btn_primary`, `neon_btn_danger`, `neon_btn_success`, `neon_ring` + biến thể `TextAppearance.App.*.Glow`.
 
+## Phase 2 — Advanced visual revamp (Wave 10–13)
+> Nền móng Phase 1 (tokens, dark theme, primitive, canvas glow, motion, audit) đã xong. Phase 2 nâng visual lên mức cao cấp. Định hướng: **phô diễn tối đa**, kèm **toggle tắt** cho máy yếu.
+
+### Kỹ thuật mới bổ sung
+| Hiệu ứng | Kỹ thuật | API note |
+|---|---|---|
+| Frosted-glass / blur nền dialog | `RenderEffect.createBlurEffect` (+ColorFilter) trên View | API 31+; < 31 fallback scrim (`neon_bg_scrim`) |
+| Viền gradient động | `SweepGradient` + `Matrix.postRotate` qua `ValueAnimator`, hardware layer | mọi API; tắt → viền tĩnh khi `fx_quality=low` |
+| Bloom tile/win | layered-stroke (đã có) + overlay `RenderEffect` blur khi API31+ | fallback giữ 4-lớp stroke |
+| Particle / confetti win | Canvas hạt + `ValueAnimator`, pool cố định, no-alloc onDraw | mọi API; tắt khi `fx_reduce_motion` |
+| Animated counter | `ValueAnimator` đếm số moves/time | mọi API |
+
+### Tokens / prefs mới (`puzzle_prefs`)
+| Key | Kiểu | Default | Dùng ở |
+|---|---|---|---|
+| `accent_theme` | String/int | `cyan` | Wave 12 — palette chủ đạo |
+| `fx_quality` | high/low | `high` | Wave 10/11 — bật blur/border/bloom/particle |
+| `fx_blur` | bool | `true` (API31+) | Wave 10 — blur frosted-glass |
+| `fx_reduce_motion` | bool | `false` | Wave 11 — tắt particle/sequence |
+| `haptic_enabled` | bool | `true` | Wave 13 — rung khi move |
+
+Palette accent (Wave 12), nền + glass giữ nguyên: Cyan (default) · Magenta · Lime · Violet · (tuỳ chọn Aurora). Mỗi bộ = {primary, secondary, glow, on_accent}, định nghĩa ở `colors.xml` (`theme_<name>_*`) + `NeonPalette.kt`. **Bắt buộc kiểm WCAG AA cho chữ chính mỗi palette.**
+
+### Nguyên tắc hiệu năng Phase 2
+- Mọi hiệu ứng nặng (blur, particle, border anim, bloom) **phải đọc toggle** và degrade sạch về baseline Phase 1 khi `low`/reduce-motion.
+- Tôn trọng `ANIMATOR_DURATION_SCALE == 0` (test/anim=0) → skip animation.
+- Profile `gfxinfo` + `overdraw` trên device thật mỗi wave; ghi `doc/device_test.md`.
+- Cache Paint/Shader/Matrix; `cancel()` animator ở `onDetachedFromWindow`; clear `RenderEffect` đúng vòng đời.
+
 ## Risk register
 | Rủi ro | Mức | Giảm thiểu |
 |---|---|---|

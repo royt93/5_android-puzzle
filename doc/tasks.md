@@ -8,6 +8,15 @@ Cap nhat: 2026-06-19
 
 ## Todo
 
+### Phase 2 — Advanced visual revamp (Wave 10-13, kanban tai `doc/task/todo/`)
+> Chot voi roy 2026-06-19: lam ca 4 huong, uu tien pho dien toi da (kem toggle tat cho may yeu), task day du. Thu tu: 13 -> 10 -> 11 -> 12.
+
+- [todo] **10 Advanced glow & blur** — RenderEffect frosted-glass (API31+ fallback scrim), vien gradient dong (SweepGradient + rotate), bloom that tile/win. Chi tiet: `doc/task/todo/10-advanced-glow-blur.md`.
+- [todo] **11 Win celebration & motion** — particle/confetti neon, animated counter moves/time, redesign win dialog (sao + best badge + share), solved reveal sequence. Chi tiet: `doc/task/todo/11-win-celebration.md`.
+- [todo] **12 Theming da sac** — palette switcher (cyan/magenta/lime/violet), persist `accent_theme`, apply runtime + canvas, WCAG AA moi palette. Chi tiet: `doc/task/todo/12-multi-theme.md`.
+- [todo] **13 Settings screen rieng** — gom show_numbers/sound + them haptic/fx_quality/fx_blur/fx_reduce_motion/accent_theme; SettingsActivity neon; entry o footer + toolbar. Chi tiet: `doc/task/todo/13-settings-screen.md`.
+
+### Ton dong khac
 - [todo] (Tuy chon - P4 hoan tu wave 2) Nang Material/Glide/Kotlin len ban moi va test ky tren thiet bi (pass rieng co retest).
 - [todo] (Monetization) AdMob + AppLovin integration (can real Ad IDs ngoai source; release guard dang chan placeholder).
 

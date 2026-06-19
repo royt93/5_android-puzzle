@@ -28,8 +28,17 @@ doc/task/
 | 07 | Code cleanup + Sound Effects (SFX, best-time, test undo) | ✅ Done | `done/07-cleanup-sfx.md` |
 | 08 | Engagement (Rate, More apps, About/License, GitHub) | ✅ Done | `done/08-engagement.md` |
 | 09 | Tech polish (120Hz, nested weights, portrait-lock, version) | ✅ Done | `done/09-tech-polish.md` |
+| 10 | Advanced glow & blur (RenderEffect frosted-glass, bloom, viền gradient động) | ⬜ Todo | `todo/10-advanced-glow-blur.md` |
+| 11 | Win celebration & motion (particle/confetti, animated counter, redesign win dialog) | ⬜ Todo | `todo/11-win-celebration.md` |
+| 12 | Theming đa sắc (palette switcher cyan/magenta/lime/violet, persist, runtime) | ⬜ Todo | `todo/12-multi-theme.md` |
+| 13 | Settings screen riêng (gom toggle + FX/theme/haptic/reduce-motion) | ⬜ Todo | `todo/13-settings-screen.md` |
 
-**Tiến độ:** Neon revamp 6/6 done · verify: `lintDebug` + `testDebugUnitTest` + `connectedDebugAndroidTest` **19/19 PASS** (Pixel 7 Pro / Android 16), logcat sạch, không jank, WCAG AA pass.
+### Phase 2 — Advanced visual revamp (Wave 10–13)
+Định hướng đã chốt với roy (2026-06-19): làm **cả 4 hướng**, ưu tiên **phô diễn tối đa** (chấp nhận hiệu ứng nặng nhưng MỌI hiệu ứng nặng phải có toggle tắt cho máy yếu), task **đầy đủ** như wave cũ.
+
+**Thứ tự đề xuất:** `13` (Settings — host cho toggle FX + theme picker) → `10` (Advanced glow/blur) → `11` (Win celebration) → `12` (Theming đa sắc). Wave 10/11 có thể chạy song song nếu hardcode key default `high` rồi nối UI sau khi 13 xong.
+
+**Tiến độ:** Phase 1 (Neon revamp) 9/9 done · Phase 2 (10–13) 0/4 todo · verify: `lintDebug` + `testDebugUnitTest` + `connectedDebugAndroidTest` **19/19 PASS** (Pixel 7 Pro / Android 16), logcat sạch, không jank, WCAG AA pass.
 
 **Wave 2 (07–09) — DONE:** 07 ✅ (SFX + best-time + dọn layout) · 08 ✅ (About/License/GitHub; Rate/More/Share đã có sẵn) · 09 ✅ (120Hz + phẳng nested weights + portrait-lock decision). Verify: **25/25 instrumented PASS** Pixel 7 Pro (anim=0), lint sạch (DiscouragedApi + NestedWeights = 0). P4 version-bump hoãn chủ ý sang pass riêng.
 
