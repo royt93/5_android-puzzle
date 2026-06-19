@@ -12,6 +12,7 @@ Cap nhat: 2026-06-19
 
 ## Done
 
+- [done] **Neon/Glow UI revamp** (candy-neon tren nen toi) - 6 wave kanban tai `doc/task/`: foundation tokens + dark theme, revamp moi man, GameBoard canvas glow, bo anh neon vector, audit fixes (A1-A12), motion/polish/QA. Verify: lint + unit + **19/19 instrumented PASS** (Pixel 7 Pro), WCAG AA pass, logcat sach.
 - [done] Don unused resources: xoa 21 file anim + 4 drawable thua; bo color/dimen khong dung trong colors.xml/dimens.xml. `lintDebug` + `testDebugUnitTest` PASS.
 - [done] BitmapTile: xoa han class, render bang `src Rect` tu anh nguon trong `GameBoard` (`PuzzleDescriptor` chi con `index`). Het cap phat bitmap con.
 - [done] Them PuzzleGridInstrumentedTest + TileNumbersToggleTest; 6/6 instrumented PASS tren OPPO CPH2577 + Pixel 7 Pro (animation scale = 0). Luu y: AppFlowIntegrationTest treo tren Redmi do Espresso cho idle voi animation bat - khong phai bug app.

@@ -14,11 +14,8 @@
     <!-- Game specific -->
     <dimen name="game_button_width">120dp</dimen>
     <dimen name="game_button_height">48dp</dimen>
-    <dimen name="image_preview_size">120dp</dimen>
 
-    <!-- Neon / glow (Wave 1) -->
-    <dimen name="glow_radius_sm">8dp</dimen>
-    <dimen name="glow_radius_md">14dp</dimen>
+    <!-- Neon / glow -->
     <dimen name="glow_stroke">1.5dp</dimen>
     <dimen name="neon_corner">20dp</dimen>
 </resources>

@@ -1,4 +1,6 @@
-# Wave 1 — Foundation (tokens + dark base + glow primitives)
+# 01 — Foundation (tokens + dark base + glow primitives)
+
+> **Status:** ✅ Done · **Depends:** — · **Verify:** lint + unit + 12/12 instrumented PASS (Pixel 7 Pro). Spec: [`../00-overview.md`](../00-overview.md)
 
 > Chặn mọi wave sau. Phải xong + build pass trước khi đụng màn.
 

@@ -20,9 +20,9 @@ class SplashActivity : BaseActivity() {
         setContentView(R.layout.activity_splash)
         // Removed UIUtils.setupEdgeToEdge2 - using theme's status bar color instead
 
-        // Add logo animation
+        // Logo: pulse glow dju (breathing) cho cam giac neon.
         val logo = findViewById<ImageView>(R.id.logo)
-        val logoAnimation = AnimationUtils.loadAnimation(this, R.anim.elegant_splash_logo)
+        val logoAnimation = AnimationUtils.loadAnimation(this, R.anim.neon_pulse)
         logo.startAnimation(logoAnimation)
 
         goToMain()

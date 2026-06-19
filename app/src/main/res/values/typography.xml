@@ -119,18 +119,4 @@
         <item name="android:shadowDy">0</item>
     </style>
 
-    <style name="TextAppearance.App.HeadlineLarge.Glow">
-        <item name="android:textColor">@color/neon_text_primary</item>
-        <item name="android:shadowColor">@color/neon_cyan_glow</item>
-        <item name="android:shadowRadius">16</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">0</item>
-    </style>
-
-    <style name="TextAppearance.App.GameTitle.Glow">
-        <item name="android:shadowColor">@color/neon_cyan_glow</item>
-        <item name="android:shadowRadius">12</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">0</item>
-    </style>
 </resources>

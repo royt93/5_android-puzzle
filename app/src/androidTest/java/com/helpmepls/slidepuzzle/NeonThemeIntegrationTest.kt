@@ -55,4 +55,7 @@ class NeonThemeIntegrationTest {
             onView(withId(R.id.boardView)).check(matches(isDisplayed()))
         }
     }
+
+    // Ghi chu: recycle bitmap khi onDestroy (A1, isFinishing) duoc phu boi chinh
+    // viec close scenario o moi integration test tren — neu recycle loi se crash teardown.
 }

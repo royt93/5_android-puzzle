@@ -27,9 +27,14 @@ class GameBoard(
     private val glowPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val tmpRectF = RectF()
     private val boardRectF = RectF()
-    // Glow gia bang nhieu lop stroke (ngoai mo -> trong sang); chay tren hardware layer, khong can software.
-    private val glowLayerScale = floatArrayOf(3.0f, 2.0f, 1.0f)
-    private val glowLayerAlpha = intArrayOf(0x22, 0x55, 0xCC)
+    // 4 lop stroke alpha tang dan -> glow mem hon; van chay hardware layer (khong can software/BlurMaskFilter).
+    private val glowLayerScale = floatArrayOf(4.0f, 3.0f, 2.0f, 1.0f)
+    private val glowLayerAlpha = intArrayOf(0x14, 0x30, 0x66, 0xE0)
+    // Cache nhan so tile (1..n^2) de khong cap phat String trong onDraw.
+    private var tileLabels: Array<String> = emptyArray()
+    // Hieu ung loe sang lime khi giai xong (Wave 05 M2).
+    private var winGlow = 0.0f
+    private var winAnimator: ValueAnimator? = null
     private var animator: ValueAnimator? = null
     private val tileSpacing = 3
     private var tileSize = Rect(0, 0, 0, 0)
@@ -84,6 +89,13 @@ class GameBoard(
         return true
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        // Dung moi animation dang chay de khong giu listener -> view khi roi man.
+        animator?.cancel()
+        winAnimator?.cancel()
+    }
+
     private fun getSlideCoordinates(p: PointF): Point {
         return Point(
             /* x = */ (p.x / width * grid.size.width).toInt(),
@@ -93,33 +105,15 @@ class GameBoard(
 
     fun undo(): Boolean {
         if (moveStack.isEmpty() || animator != null) return false
-        val originalTilePos = moveStack.pop()
-        
-        // Stack stores the ORIGINAL position of the tile that was moved.
-        // To undo, move the tile from its current position back to originalTilePos.
-        // However, moveSlide() moves a tile INTO the empty space.
-        // So to reverse, we need to move the tile that is now where empty WAS.
-        // In short: the empty is now at originalTilePos (where tile came from),
-        // and the tile is at some adjacent position. We call moveSlide on the tile's NEW position
-        // to move it back into the empty (which is at originalTilePos).
-        // But actually since we stored original pos and empty moved there,
-        // calling moveSlide(originalTilePos) won't work because that's where empty is now.
-        // We need to find where the tile ended up (adjacent to originalTilePos) and call moveSlide on it.
-        
-        // Simpler fix: Store the position where tile ENDED UP (newCoordinates), then to undo,
-        // call moveSlide on that position again to swap it back.
-        // Actually current code already does this but comment was confusing. Let's verify:
-        // Push: moveStack.push(newCoordinates) - stores where tile moved TO
-        // Pop: lastMovePos = newCoordinates = where tile is NOW
-        // moveSlide(lastMovePos) tries to move tile at lastMovePos into empty
-        // This works IF empty is adjacent to lastMovePos - which it should be!
-        
-        grid.moveSlide(originalTilePos)?.let {
-             moveCount--
-             invalidate()
-             val solved = grid.isSolved()
-             onMoveListener?.invoke(moveCount, solved) 
-             return true
+
+        // moveStack luu vi tri tile SAU khi truot (ke ben o trong). Goi moveSlide
+        // tai chinh vi tri do se day tile nguoc lai vao o trong -> hoan tac nuoc di.
+        val lastTilePos = moveStack.pop()
+        grid.moveSlide(lastTilePos)?.let {
+            moveCount--
+            invalidate()
+            onMoveListener?.invoke(moveCount, grid.isSolved())
+            return true
         }
         return false
     }
@@ -143,6 +137,19 @@ class GameBoard(
         moveCount = 0
         onMoveListener?.invoke(0, false)
         invalidate()
+    }
+
+    /** Loe halo lime quanh board khi thang (goi truoc khi hien dialog). */
+    fun playWinFeedback() {
+        winAnimator?.cancel()
+        winAnimator = ValueAnimator.ofFloat(0.0f, 1.0f, 0.0f).apply {
+            duration = 700
+            addUpdateListener {
+                winGlow = it.animatedValue as Float
+                invalidate()
+            }
+            start()
+        }
     }
 
     fun shuffleWithAnimation() {
@@ -288,9 +295,23 @@ class GameBoard(
         val srcTileW = image.width / grid.size.width
         val srcTileH = image.height / grid.size.height
 
+        // Dam bao cache nhan so khop so o hien tai.
+        val total = grid.size.width * grid.size.height
+        if (tileLabels.size != total) {
+            tileLabels = Array(total) { (it + 1).toString() }
+        }
+
         // Halo cyan quanh khung board (ve 1 lan/frame, ngoai vong lap tile).
         boardRectF.set(3.0f, 3.0f, width - 3.0f, height - 3.0f)
         drawGlowRoundRect(canvas, boardRectF, 16.0f, highlightColor, 2.0f)
+
+        // Loe sang lime khi thang (M2).
+        if (winGlow > 0.0f) {
+            glowPaint.style = Paint.Style.STROKE
+            glowPaint.strokeWidth = 8.0f + 14.0f * winGlow
+            glowPaint.color = (NeonPalette.LIME and 0x00FFFFFF) or ((0xCC * winGlow).toInt() shl 24)
+            canvas.drawRoundRect(boardRectF, 16.0f, 16.0f, glowPaint)
+        }
 
         for (j in 0 until grid.size.height) {
             for (i in 0 until grid.size.width) {
@@ -329,11 +350,11 @@ class GameBoard(
                     )
 
                     // fill
-                    if (showNumbers) {
+                    if (showNumbers && puzzle.index < tileLabels.size) {
                         drawSlideTitle(
                             canvas = canvas,
                             offset = renderOffset,
-                            text = (puzzle.index + 1).toString()
+                            text = tileLabels[puzzle.index]
                         )
                     }
 

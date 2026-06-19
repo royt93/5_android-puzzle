@@ -9,7 +9,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/neon_bg_ambient"
+        android:background="@android:color/transparent"
         android:fitsSystemWindows="true">
 
         <LinearLayout
@@ -44,7 +44,7 @@
                         android:layout_width="72dp"
                         android:layout_height="72dp"
                         android:background="@drawable/neon_ring"
-                        android:contentDescription="@string/app_name"
+                        android:contentDescription="@string/image_original_desc"
                         android:padding="4dp"
                         android:scaleType="centerCrop"
                         tools:src="@mipmap/ic_launcher" />
@@ -149,7 +149,7 @@
                         android:layout_height="48dp"
                         android:layout_marginStart="8dp"
                         android:background="@drawable/neon_btn_primary"
-                        android:contentDescription="Undo"
+                        android:contentDescription="@string/undo_action"
                         android:padding="12dp"
                         android:scaleType="centerInside"
                         android:src="@android:drawable/ic_menu_revert"

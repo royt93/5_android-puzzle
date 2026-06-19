@@ -1,10 +1,12 @@
 package com.helpmepls.slidepuzzle
 
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.util.Size
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.helpmepls.slidepuzzle.game.state.PuzzleGrid
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -60,5 +62,24 @@ class PuzzleGridInstrumentedTest {
         }
         // 9 o, 1 o trong => con dung 8 manh 0..7, khong trung lap.
         assertEquals((0 until 8).toList(), indices.sorted())
+    }
+
+    @Test
+    fun moveSlideIsReversible_underpinsUndo() {
+        // Day la co che undo (A11): di chuyen 1 tile roi moveSlide chinh vi tri moi
+        // se day tile ve cho cu -> ve trang thai solved.
+        val grid = PuzzleGrid(sourceImage = bitmap(80, 80), size = Size(4, 4))
+        grid.regenerate(newSize = Size(4, 4), shuffle = false)
+        assertTrue(grid.isSolved())
+
+        // O trong o goc duoi-phai (3,3); tile (2,3) co the truot sang phai.
+        val newPos = grid.moveSlide(Point(2, 3))
+        assertNotNull("nuoc di hop le phai tra ve vi tri moi", newPos)
+        assertTrue("sau khi di chuyen, khong con solved", !grid.isSolved())
+
+        // Undo: moveSlide tai vi tri tile vua toi -> hoan tac.
+        val back = grid.moveSlide(newPos!!)
+        assertNotNull(back)
+        assertTrue("sau undo phai tro lai solved", grid.isSolved())
     }
 }

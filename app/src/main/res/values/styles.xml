@@ -99,6 +99,7 @@
 
     <!-- Toolbar Style (neon) -->
     <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/TextAppearance.App.TitleLarge.Glow</item>
         <item name="titleTextColor">@color/neon_text_primary</item>
         <item name="subtitleTextColor">@color/neon_text_secondary</item>
         <item name="android:textColorPrimary">@color/neon_text_primary</item>

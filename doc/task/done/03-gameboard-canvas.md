@@ -1,4 +1,6 @@
-# Wave 3 — GameBoard canvas neon (`game/GameBoard.kt`)
+# 03 — GameBoard canvas neon (`game/GameBoard.kt`)
+
+> **Status:** ✅ Done · **Depends:** 01 · **Verify:** không jank khi slide (layered-stroke glow, hardware layer). Spec: [`../00-overview.md`](../00-overview.md)
 
 > Phần "đắt" nhất về hiệu năng. Glow CÓ CHỌN LỌC, không glow toàn bộ tile mỗi frame.
 

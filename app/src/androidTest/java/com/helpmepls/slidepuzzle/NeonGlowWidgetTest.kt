@@ -42,6 +42,21 @@ class NeonGlowWidgetTest {
     }
 
     @Test
+    fun bloomTokensResolveToExpectedArgb() {
+        // A10: hex bloom trong neon_bg_ambient da token hoa.
+        assertEquals(0x3338F9E4, ContextCompat.getColor(ctx, R.color.neon_cyan_bloom))
+        assertEquals(0x0038F9E4, ContextCompat.getColor(ctx, R.color.neon_cyan_bloom_out))
+    }
+
+    @Test
+    fun neonPulseAnimationInflates() {
+        // M1: anim pulse glow load duoc.
+        assertNotNull(
+            android.view.animation.AnimationUtils.loadAnimation(ctx, R.anim.neon_pulse)
+        )
+    }
+
+    @Test
     fun neonPrimitiveDrawablesInflate() {
         val ids = intArrayOf(
             R.drawable.neon_bg_ambient,

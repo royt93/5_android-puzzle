@@ -1,4 +1,6 @@
-# Wave 4 — Bộ ảnh ghép tông neon (tự tạo XML/canvas)
+# 04 — Bộ ảnh ghép tông neon (vector + bridge Vector→Bitmap)
+
+> **Status:** ✅ Done · **Depends:** 01 · **Verify:** chơi ảnh neon trên Pixel cắt tile đúng, không OOM. Spec: [`../00-overview.md`](../00-overview.md)
 
 > Không dùng raster bản quyền. Tạo ảnh neon bằng vector drawable hoặc canvas, đặt **cạnh** bộ pastel (i*/a*/b*) trong `PREDEFINED_IMAGES`.
 

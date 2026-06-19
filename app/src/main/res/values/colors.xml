@@ -1,60 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Material Design 3 Color Scheme - Modern Red Theme -->
-
-    <!-- Primary Colors - Red Theme -->
-    <color name="md_theme_primary">#F44336</color>
-    <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#FFCDD2</color>
-    <color name="md_theme_onPrimaryContainer">#8B0000</color>
-
-    <!-- Secondary Colors -->
-    <color name="md_theme_secondary">#757575</color>
-    <color name="md_theme_onSecondary">#FFFFFF</color>
-    <color name="md_theme_secondaryContainer">#E0E0E0</color>
-    <color name="md_theme_onSecondaryContainer">#212121</color>
-
-    <!-- Tertiary Colors -->
-    <color name="md_theme_tertiary">#FF5722</color>
-    <color name="md_theme_onTertiary">#FFFFFF</color>
-    <color name="md_theme_tertiaryContainer">#FFE0DB</color>
-    <color name="md_theme_onTertiaryContainer">#BF360C</color>
-
-    <!-- Surface Colors -->
-    <color name="md_theme_surface">#FFFBFE</color>
-    <color name="md_theme_onSurface">#1C1B1F</color>
-    <color name="md_theme_surfaceVariant">#F4EFF4</color>
-    <color name="md_theme_onSurfaceVariant">#49454F</color>
-
-    <!-- Background -->
-    <color name="md_theme_background">#FFFBFE</color>
-    <color name="md_theme_onBackground">#1C1B1F</color>
-
-    <!-- Outline & Other -->
-    <color name="md_theme_outline">#79747E</color>
-    <color name="md_theme_outlineVariant">#CAC4D0</color>
-
-    <!-- Legacy color mappings for backward compatibility -->
-    <color name="colorPrimary">@color/md_theme_primary</color>
-    <color name="colorIcons">@color/md_theme_onPrimary</color>
-
-    <!-- Game-specific colors with modern touch -->
-    <color name="board_active">#4CAF50</color>
-    <color name="board_active_trans">#804CAF50</color>
-
-    <!-- Basic colors -->
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-
     <!-- ============================================================ -->
-    <!-- NEON / GLOW DESIGN TOKENS (Wave 1 - candy-neon tren nen toi)  -->
-    <!-- Xem doc/task/README.md §2. Moi man dung token nay, khong hard-code hex. -->
+    <!-- NEON / GLOW DESIGN TOKENS (candy-neon tren nen toi)          -->
+    <!-- Spec: doc/task/00-overview.md. Khong hard-code hex; chi token. -->
 
     <!-- Nen (dark base) -->
     <color name="neon_bg_deep">#0E1230</color>
     <color name="neon_bg_surface">#161B3D</color>
     <color name="neon_bg_elevated">#232A63</color>
-    <color name="neon_bg_scrim">#CC0A0E24</color>
 
     <!-- Glow accent -->
     <color name="neon_cyan">#38F9E4</color>
@@ -67,6 +20,10 @@
     <color name="neon_magenta_glow">#66FF5DCB</color>
     <color name="neon_lime_glow">#66C6FF4E</color>
     <color name="glass_stroke">#33FFFFFF</color>
+
+    <!-- Bloom nen (radial gradient cyan trong neon_bg_ambient) -->
+    <color name="neon_cyan_bloom">#3338F9E4</color>
+    <color name="neon_cyan_bloom_out">#0038F9E4</color>
 
     <!-- Text -->
     <color name="neon_text_primary">#EAF2FF</color>

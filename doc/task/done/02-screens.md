@@ -1,4 +1,6 @@
-# Wave 2 — Revamp các màn hình (dùng primitive Wave 1)
+# 02 — Screens (Splash, BoardOptions, Game, Dialog)
+
+> **Status:** ✅ Done · **Depends:** 01 · **Verify:** smoke mọi màn trên Pixel, logcat sạch. Spec: [`../00-overview.md`](../00-overview.md)
 
 > Phụ thuộc Wave 1. Mỗi màn: đổi background → ambient bloom, panel → neon glass, nút → neon btn, text → token + glow.
 

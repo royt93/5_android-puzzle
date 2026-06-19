@@ -25,6 +25,11 @@ class GameAct : BaseActivity() {
         const val EXTRA_IMAGE_RES_ID = "com.helpmepls.slidepuzzle.EXTRA_IMAGE_RES_ID"
         const val EXTRA_BOARD_WIDTH = "com.helpmepls.slidepuzzle.EXTRA_BOARD_WIDTH"
         const val EXTRA_BOARD_HEIGHT = "com.helpmepls.slidepuzzle.EXTRA_BOARD_HEIGHT"
+
+        // Cache bitmap render tu VectorDrawable (anh neon) theo resId. Vector immutable nen
+        // cache an toan + KHONG recycle (chi recycle anh raster lon). Toi da ~6 anh x 512^2.
+        private const val VECTOR_RENDER_SIZE = 512
+        private val vectorCache = HashMap<Int, android.graphics.Bitmap>()
     }
 
     private fun View.addSpringClickAnimation() {
@@ -54,7 +59,6 @@ class GameAct : BaseActivity() {
     private var timerHandler = android.os.Handler(android.os.Looper.getMainLooper())
     private var timerRunnable: Runnable? = null
     private var isGameRunning = false
-    private var bestScore = 0
     private var undoCount = 3
     private var showNumbers = true
 
@@ -102,31 +106,28 @@ class GameAct : BaseActivity() {
         findViewById<android.widget.TextView>(R.id.tvTimer)?.text = String.format(Locale.US, "⏱ %02d:%02d", mins, secs)
     }
     
-    private fun saveHighScore(moves: Int, time: Int) {
+    private fun saveHighScore(moves: Int) {
         val size = viewModel.boardSize.value ?: return
         val prefs = getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
         val key = "best_${size.width}x${size.height}"
-        val currentBest = prefs.getInt(key, Int.MAX_VALUE)
-        if (moves < currentBest) {
-             prefs.edit().putInt(key, moves).apply()
-             bestScore = moves
+        if (moves < prefs.getInt(key, com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)) {
+            prefs.edit().putInt(key, moves).apply()
         }
-    }
-    
-    private fun loadHighScore() {
-        val size = viewModel.boardSize.value ?: return
-        val prefs = getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
-        val key = "best_${size.width}x${size.height}"
-        bestScore = prefs.getInt(key, 0)
-        if (bestScore == Int.MAX_VALUE) bestScore = 0
     }
 
     private fun showWinDialog(moves: Int) {
         stopTimer()
-        val isNewBest = bestScore > 0 && moves <= bestScore
-        
+
+        // New best dung ca o lan giai dau tien (chua co record => prevBest = MAX_VALUE).
+        val size = viewModel.boardSize.value
+        val prefs = getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
+        val prevBest = size?.let {
+            prefs.getInt("best_${it.width}x${it.height}", com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)
+        } ?: com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST
+        val isNewBest = com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBest(moves, prevBest)
+
         // Save score
-        saveHighScore(moves, timerSeconds)
+        saveHighScore(moves)
 
         val timerText = findViewById<android.widget.TextView>(R.id.tvTimer)?.text ?: "00:00"
         val newBestText = if (isNewBest) "\n\n🏆 NEW HIGH SCORE! 🏆" else ""
@@ -191,11 +192,13 @@ class GameAct : BaseActivity() {
              
              if (solved) {
                  stopTimer()
-                 showWinDialog(moves)
+                 boardView.playWinFeedback()
+                 // Hoan dialog mot nhip de thay hieu ung loe sang truoc (M2).
+                 boardView.postDelayed({
+                     if (!isFinishing && !isDestroyed) showWinDialog(moves)
+                 }, 500)
              }
         }
-        
-        loadHighScore()
     }
 
     private fun mountBoard() {
@@ -404,6 +407,14 @@ class GameAct : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         stopTimer()
+        // Giai phong bitmap raster lon (~vai MB) khi thoat han. Bitmap vector trong cache
+        // duoc giu lai (dung chung qua cac phien) nen khong recycle.
+        if (isFinishing) {
+            val img = viewModel.boardImage.value
+            if (img != null && !img.isRecycled && !vectorCache.containsValue(img)) {
+                img.recycle()
+            }
+        }
     }
 
     private fun decodeBoardBitmap(imageResId: Int): android.graphics.Bitmap {
@@ -413,9 +424,9 @@ class GameAct : BaseActivity() {
         }
         BitmapFactory.decodeResource(resources, imageResId, options)
 
-        // outWidth <= 0 => khong phai raster (vd VectorDrawable neon) -> render ra bitmap vuong.
+        // outWidth <= 0 => khong phai raster (vd VectorDrawable neon) -> render + cache.
         if (options.outWidth <= 0) {
-            return renderDrawableToSquareBitmap(imageResId, maxTextureSize.coerceAtMost(1080))
+            return renderVectorCached(imageResId)
         }
 
         options.inSampleSize = calculateInSampleSize(
@@ -426,7 +437,15 @@ class GameAct : BaseActivity() {
         )
         options.inJustDecodeBounds = false
         return BitmapFactory.decodeResource(resources, imageResId, options)
-            ?: renderDrawableToSquareBitmap(imageResId, maxTextureSize.coerceAtMost(1080))
+            ?: renderVectorCached(imageResId)
+    }
+
+    /** Lay bitmap vector tu cache theo resId, render moi neu chua co. Khong recycle (cache dung chung). */
+    private fun renderVectorCached(resId: Int): android.graphics.Bitmap {
+        vectorCache[resId]?.takeIf { !it.isRecycled }?.let { return it }
+        val bitmap = renderDrawableToSquareBitmap(resId, VECTOR_RENDER_SIZE)
+        vectorCache[resId] = bitmap
+        return bitmap
     }
 
     /** Render 1 drawable (vd VectorDrawable) thanh bitmap vuong size x size de lam anh ghep. */
