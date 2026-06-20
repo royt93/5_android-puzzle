@@ -38,7 +38,7 @@ doc/task/
 
 **Thứ tự đề xuất:** `13` (Settings — host cho toggle FX + theme picker) → `10` (Advanced glow/blur) → `11` (Win celebration) → `12` (Theming đa sắc). Wave 10/11 có thể chạy song song nếu hardcode key default `high` rồi nối UI sau khi 13 xong.
 
-**Tiến độ:** Phase 1 (Neon revamp) 9/9 done · **Phase 2 (10–13) 4/4 done ✅** · Verify: lint 0 errors + 20 unit PASS · verify: `lintDebug` + `testDebugUnitTest` + `connectedDebugAndroidTest` **19/19 PASS** (Pixel 7 Pro / Android 16), logcat sạch, không jank, WCAG AA pass.
+**Tiến độ:** Phase 1 (Neon revamp) 9/9 done · **Phase 2 (10–13) 4/4 done ✅** · Glow completeness pass done · Verify: lint 0 + 20 unit + **25/25 instrumented PASS** (Pixel 7 Pro, anim=0) · logcat sạch · GPU jank 0.23% · WCAG AA pass.
 
 **Wave 2 (07–09) — DONE:** 07 ✅ (SFX + best-time + dọn layout) · 08 ✅ (About/License/GitHub; Rate/More/Share đã có sẵn) · 09 ✅ (120Hz + phẳng nested weights + portrait-lock decision). Verify: **25/25 instrumented PASS** Pixel 7 Pro (anim=0), lint sạch (DiscouragedApi + NestedWeights = 0). P4 version-bump hoãn chủ ý sang pass riêng.
 
