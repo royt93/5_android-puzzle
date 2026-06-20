@@ -247,6 +247,9 @@ class BoardOptionsFrm : Fragment() {
             isTimeAttackMode = checkedId == R.id.btnModeTimeAttack
             isMoveChallengeMode = checkedId == R.id.btnModeChallenge
             chipGroupDiff?.visibility = if (isTimeAttackMode) android.view.View.VISIBLE else android.view.View.GONE
+            // GridViewWithHeaderAndFooter không tự recalculate header height khi child thay đổi visibility.
+            // notifyDataSetChanged() buộc nó đo lại header → items không bị overlap với difficulty chips.
+            imageAdapter?.notifyDataSetChanged()
         }
         chipGroupDiff?.setOnCheckedStateChangeListener { _, checkedIds ->
             timeLimitSeconds = when {
