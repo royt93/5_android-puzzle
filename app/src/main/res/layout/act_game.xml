@@ -118,6 +118,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Task 32: banner "Almost there!" — GONE by default, hiện khi ≥80% tile đúng. -->
+            <TextView
+                android:id="@+id/tvAlmostThere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/neon_glass_card"
+                android:elevation="10dp"
+                android:importantForAccessibility="no"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:shadowColor="@color/neon_cyan_glow"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="12"
+                android:text="Almost there! ✨"
+                android:textColor="@color/neon_cyan"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp" />
+
             <com.helpmepls.slidepuzzle.game.GameBoard
                 android:id="@+id/boardView"
                 android:layout_width="0dp"
@@ -184,6 +208,18 @@
                 android:padding="12dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_undo_neon" />
+
+            <!-- Task 25: nút Hint — flash tile sai vị trí, cooldown 3s. -->
+            <ImageButton
+                android:id="@+id/btnHint"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/neon_btn_primary"
+                android:contentDescription="Hint"
+                android:padding="12dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_hint_neon" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btReset"

@@ -12,9 +12,10 @@ Cap nhat: 2026-06-20
 > Chot voi roy 2026-06-20: 10 tinh nang moi chon tu 4 huong. Thu tu trien khai: 32 -> 25 -> 27 -> 30 -> 26 -> 23 -> 24 -> 29 -> 31 -> 28.
 
 **P0 — Lam ngay:**
-- [todo] **25 Hint system** — flash tile sai vi tri, cooldown 3s, +10 moves penalty. Chi tiet: `doc/task/todo/25-hint-system.md`.
-- [todo] **27 Share result as image** — Canvas vẽ share card (puzzle + stats + neon frame), FileProvider, Intent share. Chi tiet: `doc/task/todo/27-share-result-image.md`.
-- [todo] **32 Progress bar khi sap win** — >= 80% tile dung: banner "Almost there!" + board glow tang. Chi tiet: `doc/task/todo/32-progress-bar-almost-win.md`.
+- [done] **25 Hint system** — flash tile sai vi tri, cooldown 3s, +10 moves penalty. Verify: lint 0 + 6 unit + **68/68 instrumented PASS** (Pixel 7 Pro). Chi tiet: `doc/task/done/25-hint-system.md`.
+- [done] **27 Share result as image** — Canvas share card (puzzle + stats + neon frame), FileProvider, Intent share. Verify: 68/68 instrumented PASS. Chi tiet: `doc/task/done/27-share-result-image.md`.
+- [done] **30 Animated tile preview** — shimmer scan line tren thumbnail khi select card; cancel khi recycle. Verify: 68/68 instrumented PASS. Chi tiet: `doc/task/done/30-animated-tile-preview.md`.
+- [done] **32 Progress bar khi sap win** — >= 80% tile dung: banner "Almost there!" + haloMultiplier x2. Verify: 68/68 instrumented PASS. Chi tiet: `doc/task/done/32-progress-bar-almost-win.md`.
 
 **P1 — Wave ke tiep:**
 - [todo] **23 Time Attack mode** — countdown Easy/Med/Hard, Time's Up dialog, bonus badge. Chi tiet: `doc/task/todo/23-time-attack-mode.md`.

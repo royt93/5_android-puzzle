@@ -17,6 +17,7 @@ import java.util.Locale
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.DialogUtils
 import com.helpmepls.slidepuzzle.game.GameBoard
+import com.helpmepls.slidepuzzle.util.ShareUtils
 import com.helpmepls.slidepuzzle.model.BoardTitledSize
 import com.helpmepls.slidepuzzle.util.NeonBlur
 import com.helpmepls.slidepuzzle.util.NeonGlow
@@ -77,6 +78,11 @@ class GameAct : BaseActivity() {
     private var isGameRunning = false
     private var undoCount = 3
     private var showNumbers = true
+    // Task 25: penalty moves khi dùng hint; reset khi shuffle/reset/new game.
+    private var hintPenaltyMoves = 0
+    private var hintCooldownActive = false
+    // Task 27: lưu moves lúc thắng để dùng khi share.
+    private var lastWinMoves = 0
     private var soundEnabled = true
     private val soundManager: com.helpmepls.slidepuzzle.util.SoundManager by lazy {
         com.helpmepls.slidepuzzle.util.SoundManager(this)
@@ -142,7 +148,21 @@ class GameAct : BaseActivity() {
         editor.apply()
     }
 
+    // Task 32: hiển thị/ẩn banner "Almost there!" và điều chỉnh glow intensity.
+    private fun updateAlmostThereBanner(percent: Float, solved: Boolean) {
+        val banner = findViewById<android.widget.TextView>(R.id.tvAlmostThere) ?: return
+        val boardView = findViewById<GameBoard>(R.id.boardView)
+        if (solved || percent < 0.8f) {
+            if (banner.visibility != View.GONE) banner.visibility = View.GONE
+            boardView?.setGlowIntensity(1.0f)
+        } else {
+            if (banner.visibility != View.VISIBLE) banner.visibility = View.VISIBLE
+            boardView?.setGlowIntensity(2.0f)
+        }
+    }
+
     private fun showWinDialog(moves: Int) {
+        lastWinMoves = moves
         stopTimer()
         if (soundEnabled) soundManager.playWin()
 
@@ -191,9 +211,10 @@ class GameAct : BaseActivity() {
         // Animated counters
         val tvMoves = dialogView.findViewById<android.widget.TextView>(R.id.tvWinMoves)
         val tvTime = dialogView.findViewById<android.widget.TextView>(R.id.tvWinTime)
+        val penaltySuffix = if (hintPenaltyMoves > 0) " (+${hintPenaltyMoves}💡)" else ""
         ValueAnimator.ofInt(0, moves).apply {
             duration = 600L; interpolator = DecelerateInterpolator()
-            addUpdateListener { tvMoves?.text = "📊 ${it.animatedValue}" }
+            addUpdateListener { tvMoves?.text = "📊 ${it.animatedValue}$penaltySuffix" }
             start()
         }
         ValueAnimator.ofInt(0, timerSeconds).apply {
@@ -215,13 +236,32 @@ class GameAct : BaseActivity() {
     }
 
     private fun shareSuccess() {
-        // Implement simplified share intent
-        val shareIntent = android.content.Intent().apply {
-            action = android.content.Intent.ACTION_SEND
-            putExtra(android.content.Intent.EXTRA_TEXT, "I just solved the Slide Puzzle in $timerSeconds seconds! Can you beat me?")
-            type = "text/plain"
+        val boardView = findViewById<GameBoard>(R.id.boardView)
+        if (boardView == null || boardView.width == 0) {
+            // Fallback text-only nếu board chưa layout.
+            val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                putExtra(android.content.Intent.EXTRA_TEXT,
+                    "I solved a Neon Puzzle in $lastWinMoves moves (${ShareUtils.formatTime(timerSeconds)})! 🧩✨")
+                type = "text/plain"
+            }
+            startActivity(android.content.Intent.createChooser(intent, "Share Achievement"))
+            return
         }
-        startActivity(android.content.Intent.createChooser(shareIntent, "Share Achievement"))
+        try {
+            val puzzleBmp = boardView.getCompletedBitmap()
+            val shareBmp = ShareUtils.createShareBitmap(this, puzzleBmp, lastWinMoves, timerSeconds)
+            ShareUtils.shareImage(this, shareBmp, lastWinMoves, timerSeconds)
+            puzzleBmp.recycle()
+            shareBmp.recycle()
+        } catch (_: Exception) {
+            // FileProvider không khả dụng (test environment) — fallback text.
+            val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                putExtra(android.content.Intent.EXTRA_TEXT,
+                    "I solved a Neon Puzzle in $lastWinMoves moves! 🧩✨")
+                type = "text/plain"
+            }
+            startActivity(android.content.Intent.createChooser(intent, "Share Achievement"))
+        }
     }
 
 
@@ -260,8 +300,13 @@ class GameAct : BaseActivity() {
             }
             findViewById<android.widget.TextView>(R.id.tvMoves)?.text = "📊 $moves"
 
+            // Task 32: cập nhật banner "Almost there!" sau mỗi move.
+            val percent = boardView.correctTilePercent()
+            updateAlmostThereBanner(percent, solved)
+
             if (solved) {
                 stopTimer()
+                updateAlmostThereBanner(1.0f, true)  // Ẩn banner khi win.
                 boardView.playWinFeedback()
                 // Wave 11: bung confetti ngay khi solved (trước dialog 500ms → full-screen effect rõ hơn).
                 if (!Prefs.get(this).getBoolean(Prefs.FX_REDUCE_MOTION, false)) {
@@ -316,9 +361,33 @@ class GameAct : BaseActivity() {
         val resetButton = findViewById<Button>(R.id.btReset)
         val undoButton = findViewById<android.widget.ImageButton>(R.id.btUndo)
 
+        val hintButton = findViewById<android.widget.ImageButton>(R.id.btnHint)
         shuffleButton.addSpringClickAnimation()
         resetButton.addSpringClickAnimation()
         undoButton.addSpringClickAnimation()
+        hintButton?.addSpringClickAnimation()
+
+        hintButton?.setOnClickListener {
+            if (hintCooldownActive) {
+                android.widget.Toast.makeText(this, "Hint cooling down...", android.widget.Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val bv = findViewById<GameBoard>(R.id.boardView) ?: return@setOnClickListener
+            val wrongTiles = bv.getWrongPositionTiles()
+            if (wrongTiles.isEmpty()) {
+                android.widget.Toast.makeText(this, "All tiles are correct!", android.widget.Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val (gx, gy) = wrongTiles.first()
+            bv.flashHintTile(gx, gy)
+            hintPenaltyMoves += 10
+            hintCooldownActive = true
+            hintButton.alpha = 0.4f
+            hintButton.postDelayed({
+                hintCooldownActive = false
+                hintButton.alpha = 1.0f
+            }, 3000)
+        }
         
         undoButton.setOnClickListener {
             if (undoCount > 0) {
@@ -377,7 +446,11 @@ class GameAct : BaseActivity() {
             message = "Do you want to shuffle\nthe puzzle pieces?",
             yesText = "YES",
             noText = "NO",
-            onYes = { unblurBg(); performShuffleWithAnimation(boardView); resetTimer(); undoCount = 3 },
+            onYes = {
+                unblurBg(); performShuffleWithAnimation(boardView); resetTimer()
+                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false
+                updateAlmostThereBanner(0f, false)
+            },
             onNo = { unblurBg() }
         )
     }
@@ -390,7 +463,11 @@ class GameAct : BaseActivity() {
             message = "Do you want to reset\nto original state?",
             yesText = "RESET",
             noText = "CANCEL",
-            onYes = { unblurBg(); performResetWithAnimation(boardView); resetTimer(); undoCount = 3 },
+            onYes = {
+                unblurBg(); performResetWithAnimation(boardView); resetTimer()
+                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false
+                updateAlmostThereBanner(0f, false)
+            },
             onNo = { unblurBg() }
         )
     }

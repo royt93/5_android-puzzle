@@ -1,5 +1,7 @@
 package com.helpmepls.slidepuzzle.adt
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.LayoutInflater
@@ -23,6 +25,15 @@ class ImageCardsAdt(
     private var boardH: Int = 4,
 ) : BaseAdapter() {
 
+    // Task 30: vị trí card đang được chọn để hiển thị shimmer.
+    private var selectedPosition: Int = -1
+
+    /** Đặt card được chọn (hiện shimmer) và redraw. */
+    fun setSelectedPosition(pos: Int) {
+        selectedPosition = pos
+        notifyDataSetChanged()
+    }
+
     /** Cập nhật board size + prefs rồi redraw — KHÔNG gọi setAdapter() → tránh crash GridViewWithHeaderAndFooter. */
     fun refreshScores(newPrefs: SharedPreferences, newBoardW: Int, newBoardH: Int) {
         prefs = newPrefs
@@ -45,12 +56,19 @@ class ImageCardsAdt(
                 titleView = view.findViewById(R.id.title),
                 imageView = view.findViewById(R.id.image),
                 bestScore = view.findViewById(R.id.tvBestScore),
+                shimmerView = view.findViewById(R.id.shimmerLine),
             )
             view.tag = holder
         } else {
             view = convertView
             holder = view.tag as ViewHolder
+            // Cancel shimmer từ binding trước khi recycle view này.
+            holder.shimmerAnimator?.cancel()
+            holder.shimmerAnimator = null
         }
+
+        // Mặc định ẩn shimmer; sẽ bật lại nếu position == selectedPosition.
+        holder.shimmerView.visibility = View.GONE
 
         val card = cards[position]
 
@@ -58,6 +76,17 @@ class ImageCardsAdt(
             bindGallerySlot(holder)
         } else {
             bindImageCard(holder, card, parent)
+            // Task 30: shimmer scan line khi card được chọn.
+            if (position == selectedPosition) {
+                holder.shimmerView.visibility = View.VISIBLE
+                val anim = ObjectAnimator.ofFloat(holder.shimmerView, "translationY", -300f, 300f).apply {
+                    duration = 900
+                    repeatCount = ValueAnimator.INFINITE
+                    repeatMode = ValueAnimator.RESTART
+                    start()
+                }
+                holder.shimmerAnimator = anim
+            }
         }
 
         view.setTag(R.id.tag_card_data, card)
@@ -94,9 +123,11 @@ class ImageCardsAdt(
         androidx.core.view.ViewCompat.setTransitionName(holder.imageView, "hero_image_gallery")
     }
 
-    private data class ViewHolder(
+    private class ViewHolder(
         val titleView: TextView,
         val imageView: ImageView,
         val bestScore: TextView,
+        val shimmerView: View,
+        var shimmerAnimator: ObjectAnimator? = null,
     )
 }

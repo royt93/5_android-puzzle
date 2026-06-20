@@ -43,6 +43,16 @@ class GameBoard(
     private var winGlow = 0.0f
     private var winAnimator: ValueAnimator? = null
     private var animator: ValueAnimator? = null
+
+    // Task 32: multiplier khuếch đại halo khi sắp thắng (≥80% tile đúng).
+    private var haloMultiplier: Float = 1.0f
+
+    // Task 25: vị trí tile đang flash hint; -1 = không có.
+    private var hintGridX: Int = -1
+    private var hintGridY: Int = -1
+    private val hintPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
+    private val hintHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private var hintRunnable: Runnable? = null
     // 4dp → pixel; NONE vì chỉ đọc trên main thread (onDraw/onMeasure).
     private val tileSpacingPx: Int by lazy(LazyThreadSafetyMode.NONE) {
         (4f * resources.displayMetrics.density + 0.5f).toInt()
@@ -106,6 +116,67 @@ class GameBoard(
         // Dung moi animation dang chay de khong giu listener -> view khi roi man.
         animator?.cancel()
         winAnimator?.cancel()
+        hintRunnable?.let { hintHandler.removeCallbacks(it) }
+    }
+
+    // Task 32: trả về tỉ lệ tile đúng vị trí (0.0–1.0), bỏ qua blank tile.
+    fun correctTilePercent(): Float {
+        if (!grid.isConfigured()) return 0f
+        val total = grid.size.width * grid.size.height - 1
+        if (total <= 0) return 0f
+        var correct = 0
+        for (j in 0 until grid.size.height) {
+            for (i in 0 until grid.size.width) {
+                val puzzle = grid.puzzles[j][i] ?: continue
+                if (puzzle.index == j * grid.size.width + i) correct++
+            }
+        }
+        return correct.toFloat() / total
+    }
+
+    // Task 32: đặt multiplier khuếch đại halo (1.0 = bình thường, 2.0 = HIGH khi sắp win).
+    fun setGlowIntensity(multiplier: Float) {
+        if (haloMultiplier != multiplier) {
+            haloMultiplier = multiplier
+            invalidate()
+        }
+    }
+
+    // Task 25: trả về danh sách (gridX, gridY) của tile sai vị trí.
+    fun getWrongPositionTiles(): List<Pair<Int, Int>> {
+        if (!grid.isConfigured()) return emptyList()
+        val result = mutableListOf<Pair<Int, Int>>()
+        for (j in 0 until grid.size.height) {
+            for (i in 0 until grid.size.width) {
+                val puzzle = grid.puzzles[j][i] ?: continue
+                if (puzzle.index != j * grid.size.width + i) result.add(Pair(i, j))
+            }
+        }
+        return result
+    }
+
+    // Task 25: flash overlay lên tile tại (gridX, gridY) trong durationMs ms.
+    fun flashHintTile(gridX: Int, gridY: Int, durationMs: Long = 800L) {
+        hintRunnable?.let { hintHandler.removeCallbacks(it) }
+        hintGridX = gridX
+        hintGridY = gridY
+        invalidate()
+        hintRunnable = Runnable {
+            hintGridX = -1
+            hintGridY = -1
+            hintRunnable = null
+            invalidate()
+        }
+        hintHandler.postDelayed(hintRunnable!!, durationMs)
+    }
+
+    // Task 27: snapshot board hiện tại thành Bitmap để share.
+    fun getCompletedBitmap(): android.graphics.Bitmap {
+        val bmp = android.graphics.Bitmap.createBitmap(
+            width.coerceAtLeast(1), height.coerceAtLeast(1), android.graphics.Bitmap.Config.ARGB_8888
+        )
+        draw(android.graphics.Canvas(bmp))
+        return bmp
     }
 
     private fun getSlideCoordinates(p: PointF): Point {
@@ -139,6 +210,9 @@ class GameBoard(
         grid.regenerate(newSize = size, newImage = image, shuffle = shuffle)
         moveStack.clear()
         moveCount = 0
+        hintGridX = -1; hintGridY = -1
+        hintRunnable?.let { hintHandler.removeCallbacks(it) }
+        haloMultiplier = 1.0f
         onMoveListener?.invoke(0, false)
         requestLayout()
     }
@@ -147,6 +221,9 @@ class GameBoard(
         grid.shuffle(reset)
         moveStack.clear()
         moveCount = 0
+        hintGridX = -1; hintGridY = -1
+        hintRunnable?.let { hintHandler.removeCallbacks(it) }
+        haloMultiplier = 1.0f
         onMoveListener?.invoke(0, false)
         invalidate()
     }
@@ -322,7 +399,7 @@ class GameBoard(
         paint.color = 0xFF0E1230.toInt()
         canvas.drawRoundRect(boardRectF, 16.0f, 16.0f, paint)
 
-        drawGlowRoundRect(canvas, boardRectF, 16.0f, highlightColor, 3.0f)
+        drawGlowRoundRect(canvas, boardRectF, 16.0f, highlightColor, 3.0f * haloMultiplier)
 
         // Loe sang lime khi thang (M2).
         if (winGlow > 0.0f) {
@@ -383,6 +460,12 @@ class GameBoard(
                     // Vien glow thuong truc tren moi tile (alpha thap, tao chieu sau).
                     tmpRectF.set(renderOffset)
                     canvas.drawRoundRect(tmpRectF, 8.0f, 8.0f, restingGlowPaint)
+
+                    // Task 25: hint overlay — cyan bán trong suốt trên tile được highlight.
+                    if (hintGridX == i && hintGridY == j) {
+                        hintPaint.color = (accentColor and 0x00FFFFFF) or 0x80000000.toInt()
+                        canvas.drawRoundRect(tmpRectF, 8.0f, 8.0f, hintPaint)
+                    }
 
                     // Vien glow cyan sang hon quanh tile dang truot.
                     if (active) {

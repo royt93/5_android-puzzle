@@ -75,13 +75,16 @@ class BoardOptionsFrm : Fragment() {
             // boardSize observe bị bỏ vì setAdapter() 2 lần trên GridViewWithHeaderAndFooter gây crash.
             // Thay bằng refreshScores() trong onResume() — không tạo adapter mới.
 
-            board.setOnItemClickListener { _, itemView, _, _ ->
+            board.setOnItemClickListener { _, itemView, position, _ ->
                 val cardInfo = itemView.getTag(R.id.tag_card_data) as? TitledCardInfo ?: return@setOnItemClickListener
 
                 if (cardInfo.isGallerySlot || cardInfo.imageResId == BoardOptionsVm.GALLERY_SLOT_RES_ID) {
                     openGalleryPicker()
                     return@setOnItemClickListener
                 }
+
+                // Task 30: bật shimmer trên card được chọn — visible trong suốt transition animation.
+                imageAdapter?.setSelectedPosition(position)
 
                 val vm = viewModel ?: return@setOnItemClickListener
                 val boardSize = vm.boardSize.value ?: BoardOptionsVm.PREDEFINED_BOARD_SIZE[1]

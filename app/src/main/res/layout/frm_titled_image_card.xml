@@ -53,6 +53,15 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <!-- Task 30: shimmer scan line — GONE by default, VISIBLE khi card được chọn. -->
+    <View
+        android:id="@+id/shimmerLine"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/neon_shimmer_line"
+        android:importantForAccessibility="no"
+        android:visibility="gone" />
+
     <!-- Best score badge — hiện ở góc dưới phải khi đã có kỷ lục. -->
     <TextView
         android:id="@+id/tvBestScore"

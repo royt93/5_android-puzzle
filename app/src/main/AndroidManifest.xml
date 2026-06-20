@@ -50,6 +50,17 @@
             android:name=".act.SettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
+        <!-- Task 27: FileProvider để share ảnh kết quả qua Intent. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
     </application>
 
 </manifest>
