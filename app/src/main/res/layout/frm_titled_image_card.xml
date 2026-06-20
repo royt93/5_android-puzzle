@@ -52,4 +52,26 @@
                 tools:visibility="visible" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <!-- Best score badge — hiện ở góc dưới phải khi đã có kỷ lục. -->
+    <TextView
+        android:id="@+id/tvBestScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/neon_glass_card"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="2dp"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="@color/neon_lime"
+        android:shadowColor="@color/neon_lime_glow"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="6"
+        android:visibility="gone"
+        tools:text="⭐ 24"
+        tools:visibility="visible" />
 </FrameLayout>

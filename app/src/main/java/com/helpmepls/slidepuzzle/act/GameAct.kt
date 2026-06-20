@@ -37,6 +37,7 @@ class GameAct : BaseActivity() {
         const val EXTRA_IMAGE_RES_ID = "com.helpmepls.slidepuzzle.EXTRA_IMAGE_RES_ID"
         const val EXTRA_BOARD_WIDTH = "com.helpmepls.slidepuzzle.EXTRA_BOARD_WIDTH"
         const val EXTRA_BOARD_HEIGHT = "com.helpmepls.slidepuzzle.EXTRA_BOARD_HEIGHT"
+        const val EXTRA_CUSTOM_IMAGE_PATH = "com.helpmepls.slidepuzzle.EXTRA_CUSTOM_IMAGE_PATH"
 
         // Cache bitmap render tu VectorDrawable (anh neon) theo resId. Vector immutable nen
         // cache an toan + KHONG recycle (chi recycle anh raster lon). Toi da ~6 anh x 512^2.
@@ -66,6 +67,9 @@ class GameAct : BaseActivity() {
             true
         }
     }
+
+    // imageResId hiện tại — dùng làm phần key per-puzzle score. 0 khi ảnh từ gallery.
+    private var currentImageResId: Int = 0
 
     private var timerSeconds = 0
     private var timerHandler = android.os.Handler(android.os.Looper.getMainLooper())
@@ -124,25 +128,17 @@ class GameAct : BaseActivity() {
         findViewById<android.widget.TextView>(R.id.tvTimer)?.text = String.format(Locale.US, "⏱ %02d:%02d", mins, secs)
     }
     
-    /** Luu best-moves va best-time (theo giay) cho board hien tai neu lap ky luc. */
+    /** Luu best-moves va best-time per-puzzle (imageResId × size) neu lap ky luc. */
     private fun saveHighScore(moves: Int, seconds: Int) {
         val size = viewModel.boardSize.value ?: return
-        val prefs = getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
-        val movesKey = "best_${size.width}x${size.height}"
-        val timeKey = "best_time_${size.width}x${size.height}"
+        val prefs = getSharedPreferences(com.helpmepls.slidepuzzle.util.ScoreUtils.PREFS_NAME, android.content.Context.MODE_PRIVATE)
+        val mKey = com.helpmepls.slidepuzzle.util.ScoreUtils.movesKey(currentImageResId, size.width, size.height)
+        val tKey = com.helpmepls.slidepuzzle.util.ScoreUtils.timeKey(currentImageResId, size.width, size.height)
         val editor = prefs.edit()
-        if (com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBest(
-                moves, prefs.getInt(movesKey, com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)
-            )
-        ) {
-            editor.putInt(movesKey, moves)
-        }
-        if (com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBestTime(
-                seconds, prefs.getInt(timeKey, com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME)
-            )
-        ) {
-            editor.putInt(timeKey, seconds)
-        }
+        if (com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBest(moves, prefs.getInt(mKey, com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)))
+            editor.putInt(mKey, moves)
+        if (com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBestTime(seconds, prefs.getInt(tKey, com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME)))
+            editor.putInt(tKey, seconds)
         editor.apply()
     }
 
@@ -151,24 +147,19 @@ class GameAct : BaseActivity() {
         if (soundEnabled) soundManager.playWin()
 
         val size = viewModel.boardSize.value
-        val p = Prefs.get(this)
+        val p = getSharedPreferences(com.helpmepls.slidepuzzle.util.ScoreUtils.PREFS_NAME, android.content.Context.MODE_PRIVATE)
         val prevBest = size?.let {
-            p.getInt("best_${it.width}x${it.height}", com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)
+            p.getInt(com.helpmepls.slidepuzzle.util.ScoreUtils.movesKey(currentImageResId, it.width, it.height), com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)
         } ?: com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST
         val prevBestTime = size?.let {
-            p.getInt("best_time_${it.width}x${it.height}", com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME)
+            p.getInt(com.helpmepls.slidepuzzle.util.ScoreUtils.timeKey(currentImageResId, it.width, it.height), com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME)
         } ?: com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME
         val isNewBest = com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBest(moves, prevBest)
         val isNewBestTime = com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBestTime(timerSeconds, prevBestTime)
         saveHighScore(moves, timerSeconds)
 
-        // Stars: 3★ ≤ boardSize*3 moves, 2★ ≤ boardSize*6, else 1★
-        val boardSize = size?.let { it.width * it.height } ?: 9
-        val stars = when {
-            moves <= boardSize * 3 -> 3
-            moves <= boardSize * 6 -> 2
-            else -> 1
-        }
+        val boardArea = size?.let { it.width * it.height } ?: 9
+        val stars = com.helpmepls.slidepuzzle.util.ScoreUtils.starsFor(moves, boardArea)
 
         val activity = this
         blurBg()
@@ -411,15 +402,12 @@ class GameAct : BaseActivity() {
         window.exitTransition = android.transition.Fade()
         super.onCreate(savedInstanceState)
 
-        val imageResId = intent.getIntExtra(
-            EXTRA_IMAGE_RES_ID,
-            BoardOptionsVm.PREDEFINED_IMAGES.first().first
-        )
+        currentImageResId = intent.getIntExtra(EXTRA_IMAGE_RES_ID, BoardOptionsVm.PREDEFINED_IMAGES.first().first)
         val boardWidth = intent.getIntExtra(EXTRA_BOARD_WIDTH, BoardOptionsVm.PREDEFINED_BOARD_SIZE[1].width)
         val boardHeight = intent.getIntExtra(EXTRA_BOARD_HEIGHT, BoardOptionsVm.PREDEFINED_BOARD_SIZE[1].height)
         viewModel.apply {
             boardSize.value = BoardTitledSize(width = boardWidth, height = boardHeight)
-            boardImage.value = decodeBoardBitmap(imageResId)
+            boardImage.value = decodeBoardBitmap(currentImageResId)
         }
         
         // Postpone enter transition until image is loaded (though we have bitmap in memory)
@@ -538,10 +526,19 @@ class GameAct : BaseActivity() {
     }
 
     private fun decodeBoardBitmap(imageResId: Int): android.graphics.Bitmap {
-        val maxTextureSize = resources.displayMetrics.widthPixels.coerceAtLeast(1)
-        val options = BitmapFactory.Options().apply {
-            inJustDecodeBounds = true
+        // Ảnh từ gallery — load từ cache file đã lưu.
+        val customPath = intent.getStringExtra(EXTRA_CUSTOM_IMAGE_PATH)
+        if (customPath != null) {
+            val bmp = BitmapFactory.decodeFile(customPath)
+            if (bmp != null) return bmp
+            // File lỗi/mất — dùng ảnh xám thay vì crash (imageResId có thể là 0).
+            return android.graphics.Bitmap.createBitmap(512, 512, android.graphics.Bitmap.Config.ARGB_8888).also {
+                android.graphics.Canvas(it).drawColor(0xFF1A1A2E.toInt())
+            }
         }
+
+        val maxTextureSize = resources.displayMetrics.widthPixels.coerceAtLeast(1)
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeResource(resources, imageResId, options)
 
         // outWidth <= 0 => khong phai raster (vd VectorDrawable neon) -> render + cache.

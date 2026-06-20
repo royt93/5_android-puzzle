@@ -21,8 +21,14 @@ class NeonImagesTest {
     }
 
     @Test
-    fun totalImageCountIsPastelPlusNeon() {
-        // 27 pastel (i/a/b 1..9) + 6 neon
-        assertEquals(33, BoardOptionsVm.PREDEFINED_IMAGES.size)
+    fun totalImageCountIsPastelPlusNeonPlusGallerySlot() {
+        // 27 pastel (i/a/b 1..9) + 6 neon + 1 gallery slot
+        assertEquals(34, BoardOptionsVm.PREDEFINED_IMAGES.size)
+    }
+
+    @Test
+    fun lastEntryIsGallerySlot() {
+        val last = BoardOptionsVm.PREDEFINED_IMAGES.last()
+        assertEquals("Gallery slot phải là phần tử cuối", BoardOptionsVm.GALLERY_SLOT_RES_ID, last.first)
     }
 }

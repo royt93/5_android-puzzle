@@ -1,6 +1,7 @@
 package com.helpmepls.slidepuzzle.adt
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +12,25 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.model.TitledCardInfo
+import com.helpmepls.slidepuzzle.util.ScoreUtils
+import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
 class ImageCardsAdt(
     private val parentContext: Context,
     private val cards: Array<TitledCardInfo>,
+    private var prefs: SharedPreferences,
+    private var boardW: Int = 4,
+    private var boardH: Int = 4,
 ) : BaseAdapter() {
+
+    /** Cập nhật board size + prefs rồi redraw — KHÔNG gọi setAdapter() → tránh crash GridViewWithHeaderAndFooter. */
+    fun refreshScores(newPrefs: SharedPreferences, newBoardW: Int, newBoardH: Int) {
+        prefs = newPrefs
+        boardW = newBoardW
+        boardH = newBoardH
+        notifyDataSetChanged()
+    }
+
     override fun getCount(): Int = cards.size
     override fun getItemId(position: Int): Long = position.toLong()
     override fun getItem(position: Int): Any = cards[position]
@@ -25,11 +40,11 @@ class ImageCardsAdt(
         val holder: ViewHolder
 
         if (convertView == null) {
-            val vi = LayoutInflater.from(parentContext)
-            view = vi.inflate(R.layout.frm_titled_image_card, parent, false)
+            view = LayoutInflater.from(parentContext).inflate(R.layout.frm_titled_image_card, parent, false)
             holder = ViewHolder(
                 titleView = view.findViewById(R.id.title),
-                imageView = view.findViewById(R.id.image)
+                imageView = view.findViewById(R.id.image),
+                bestScore = view.findViewById(R.id.tvBestScore),
             )
             view.tag = holder
         } else {
@@ -38,27 +53,50 @@ class ImageCardsAdt(
         }
 
         val card = cards[position]
+
+        if (card.isGallerySlot || card.imageResId == BoardOptionsVm.GALLERY_SLOT_RES_ID) {
+            bindGallerySlot(holder)
+        } else {
+            bindImageCard(holder, card, parent)
+        }
+
+        view.setTag(R.id.tag_card_data, card)
+        return view
+    }
+
+    private fun bindImageCard(holder: ViewHolder, card: TitledCardInfo, parent: ViewGroup) {
         holder.titleView.text = card.title
         holder.titleView.visibility = if (card.title.isNullOrBlank()) View.GONE else View.VISIBLE
-//        holder.imageView.setImageBitmap(card.image)
+
         Glide.with(holder.imageView.context)
             .load(card.imageResId)
             .override(parent.width.coerceAtLeast(360) / 2, parent.width.coerceAtLeast(360) / 2)
             .format(DecodeFormat.PREFER_ARGB_8888)
             .into(holder.imageView)
-        
-        // Hero Animation: Set unique transition name
+
         androidx.core.view.ViewCompat.setTransitionName(holder.imageView, "hero_image_${card.imageResId}")
 
-        // Lưu dữ liệu card vào view để sử dụng trong click listener
-        view.setTag(R.id.tag_card_data, card)
-
-        return view
+        // Best score badge
+        val best = prefs.getInt(ScoreUtils.movesKey(card.imageResId, boardW, boardH), ScoreUtils.NO_BEST)
+        if (best != ScoreUtils.NO_BEST) {
+            holder.bestScore.text = "⭐ $best"
+            holder.bestScore.visibility = View.VISIBLE
+        } else {
+            holder.bestScore.visibility = View.GONE
+        }
     }
 
-    // Sử dụng data class cho ViewHolder
+    private fun bindGallerySlot(holder: ViewHolder) {
+        holder.imageView.setImageResource(R.drawable.ic_add_photo_neon)
+        holder.titleView.text = parentContext.getString(R.string.gallery_slot_label)
+        holder.titleView.visibility = View.VISIBLE
+        holder.bestScore.visibility = View.GONE
+        androidx.core.view.ViewCompat.setTransitionName(holder.imageView, "hero_image_gallery")
+    }
+
     private data class ViewHolder(
         val titleView: TextView,
         val imageView: ImageView,
+        val bestScore: TextView,
     )
 }

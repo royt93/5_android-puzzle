@@ -40,4 +40,6 @@
     <string name="swatch_magenta_desc">Magenta accent</string>
     <string name="swatch_lime_desc">Lime accent</string>
     <string name="swatch_violet_desc">Violet accent</string>
+    <string name="gallery_slot_label">YOUR PHOTO</string>
+    <string name="gallery_permission_rationale">Cần quyền truy cập ảnh để chọn ảnh ghép.</string>
 </resources>

@@ -9,6 +9,9 @@ import com.helpmepls.slidepuzzle.model.TitledResourcePair
 
 class BoardOptionsVm : ViewModel() {
     companion object Companion {
+        // Marker resId cho slot "YOUR PHOTO" (không phải resource thật).
+        const val GALLERY_SLOT_RES_ID = 0
+
         val PREDEFINED_BOARD_SIZE = arrayOf(
             BoardTitledSize(width = 3, height = 3),
             BoardTitledSize(width = 4, height = 4),
@@ -57,6 +60,8 @@ class BoardOptionsVm : ViewModel() {
             TitledResourcePair(first = R.drawable.neon_img_5, second = "Neon"),
             TitledResourcePair(first = R.drawable.neon_img_6, second = "Neon"),
 
+            // Slot chọn ảnh từ thư viện — resId=0 là marker, không phải drawable thật.
+            TitledResourcePair(first = GALLERY_SLOT_RES_ID, second = "YOUR PHOTO"),
         )
     }
 

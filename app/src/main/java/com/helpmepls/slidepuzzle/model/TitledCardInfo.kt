@@ -7,4 +7,5 @@ import androidx.annotation.Keep
 data class TitledCardInfo(
     @DrawableRes val imageResId: Int,
     val title: String,
+    val isGallerySlot: Boolean = false,
 )
