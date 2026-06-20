@@ -43,8 +43,10 @@ class GameBoard(
     private var winGlow = 0.0f
     private var winAnimator: ValueAnimator? = null
     private var animator: ValueAnimator? = null
-    // 4dp → pixel (lazy, tinh 1 lan sau khi view attach vao window).
-    private val tileSpacingPx: Int by lazy { (4f * resources.displayMetrics.density + 0.5f).toInt() }
+    // 4dp → pixel; NONE vì chỉ đọc trên main thread (onDraw/onMeasure).
+    private val tileSpacingPx: Int by lazy(LazyThreadSafetyMode.NONE) {
+        (4f * resources.displayMetrics.density + 0.5f).toInt()
+    }
     private var tileSize = Rect(0, 0, 0, 0)
     private var renderOffset = Rect(0, 0, 0, 0)
     private val srcRect = Rect(0, 0, 0, 0)
@@ -330,6 +332,10 @@ class GameBoard(
             canvas.drawRoundRect(boardRectF, 16.0f, 16.0f, glowPaint)
         }
 
+        // Màu glow nghỉ tính 1 lần ngoài loop (không recompute N² lần/frame).
+        restingGlowPaint.color = (accentColor and 0x00FFFFFF) or 0x55000000
+        val sp = tileSpacingPx
+
         for (j in 0 until grid.size.height) {
             for (i in 0 until grid.size.width) {
                 val puzzle = grid.puzzles[j][i]
@@ -339,8 +345,6 @@ class GameBoard(
 
                     val x = i * tileSize.width()
                     val y = j * tileSize.height()
-
-                    val sp = tileSpacingPx
                     renderOffset.set(
                         /* left = */ x + sp / 2,
                         /* top = */ y + sp / 2,
@@ -378,7 +382,6 @@ class GameBoard(
 
                     // Vien glow thuong truc tren moi tile (alpha thap, tao chieu sau).
                     tmpRectF.set(renderOffset)
-                    restingGlowPaint.color = (accentColor and 0x00FFFFFF) or 0x55000000
                     canvas.drawRoundRect(tmpRectF, 8.0f, 8.0f, restingGlowPaint)
 
                     // Vien glow cyan sang hon quanh tile dang truot.
