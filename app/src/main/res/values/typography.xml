@@ -110,11 +110,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <!-- ===== Neon glow variants (Wave 1 F4): halo cyan dung shadowLayer ===== -->
+    <!-- ===== Neon glow variant cho toolbar title — shadowColor theo theme accent ===== -->
     <style name="TextAppearance.App.TitleLarge.Glow">
         <item name="android:textColor">@color/neon_text_primary</item>
-        <item name="android:shadowColor">@color/neon_cyan_glow</item>
-        <item name="android:shadowRadius">12</item>
+        <item name="android:shadowColor">?attr/colorPrimary</item>
+        <item name="android:shadowRadius">14</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">0</item>
     </style>

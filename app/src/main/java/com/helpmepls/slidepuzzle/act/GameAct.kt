@@ -19,6 +19,7 @@ import com.helpmepls.slidepuzzle.DialogUtils
 import com.helpmepls.slidepuzzle.game.GameBoard
 import com.helpmepls.slidepuzzle.model.BoardTitledSize
 import com.helpmepls.slidepuzzle.util.NeonBlur
+import com.helpmepls.slidepuzzle.util.NeonGlow
 import com.helpmepls.slidepuzzle.util.Prefs
 import com.helpmepls.slidepuzzle.v.NeonBorderView
 import com.helpmepls.slidepuzzle.v.NeonParticleView
@@ -300,6 +301,12 @@ class GameAct : BaseActivity() {
         // Wave 10: khởi tạo viền gradient động theo fx_quality.
         findViewById<NeonBorderView>(R.id.neonBorderView)?.showBorder = isFxHigh
 
+        // Glow completeness: elevation shadow tint trên board + stats panel + bottom dock (API 28+).
+        val accent = Prefs.resolveAccentColor(this)
+        NeonGlow.apply(boardView, accent)
+        NeonGlow.apply(findViewById(R.id.statsPanel), accent)
+        NeonGlow.apply(findViewById(R.id.layoutBottom), accent)
+
         viewModel.boardSize.observe(
             /* owner = */ this,
             /* observer = */ Observer {
@@ -507,6 +514,11 @@ class GameAct : BaseActivity() {
         soundManager.isEnabled = soundEnabled
         findViewById<GameBoard>(R.id.boardView)?.showNumbers = showNumbers
         findViewById<NeonBorderView>(R.id.neonBorderView)?.showBorder = isFxHigh
+        // Refresh NeonGlow shadow tint nếu accent thay đổi mà không recreate.
+        val accent = Prefs.resolveAccentColor(this)
+        NeonGlow.apply(findViewById(R.id.boardView), accent)
+        NeonGlow.apply(findViewById(R.id.statsPanel), accent)
+        NeonGlow.apply(findViewById(R.id.layoutBottom), accent)
         invalidateOptionsMenu()
     }
     
