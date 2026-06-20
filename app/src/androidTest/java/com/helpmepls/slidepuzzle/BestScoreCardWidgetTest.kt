@@ -76,14 +76,14 @@ class BestScoreCardWidgetTest {
     }
 
     @Test
-    fun gallerySlotRendersTitleVisible() {
+    fun gallerySlotRendersTitleGone() {
+        // Title ngoài GONE — "YOUR PHOTO" text được vẽ bên trong bitmap để card cùng height với thumbnails
         val card = TitledCardInfo(BoardOptionsVm.GALLERY_SLOT_RES_ID, "YOUR PHOTO", isGallerySlot = true)
         val adapter = buildAdapter(arrayOf(card))
         val view = getViewOnMainThread(adapter, 0)
         val title = view.findViewById<TextView>(R.id.title)
 
-        assertEquals("Gallery slot title phải VISIBLE", View.VISIBLE, title.visibility)
-        assertTrue("Title phải chứa 'PHOTO'", title.text.contains("PHOTO", ignoreCase = true))
+        assertEquals("Gallery slot title phải GONE (text vẽ trong bitmap)", View.GONE, title.visibility)
     }
 
     @Test

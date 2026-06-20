@@ -239,18 +239,20 @@ class BoardOptionsFrm : Fragment() {
     }
 
     private fun setupModeChips(header: View) {
-        val chipGroupMode = header.findViewById<com.google.android.material.chip.ChipGroup>(R.id.chipGroupMode) ?: return
+        val modeToggle = header.findViewById<com.google.android.material.button.MaterialButtonToggleGroup>(R.id.gameModeToggle) ?: return
         val chipGroupDiff = header.findViewById<com.google.android.material.chip.ChipGroup>(R.id.chipGroupDifficulty)
-        chipGroupMode.setOnCheckedStateChangeListener { _, checkedIds ->
-            isMoveChallengeMode = checkedIds.contains(R.id.chipMoveChallenge)
-            isTimeAttackMode = checkedIds.contains(R.id.chipTimeAttack)
+        modeToggle.check(R.id.btnModeClassic)
+        modeToggle.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked) return@addOnButtonCheckedListener
+            isTimeAttackMode = checkedId == R.id.btnModeTimeAttack
+            isMoveChallengeMode = checkedId == R.id.btnModeChallenge
             chipGroupDiff?.visibility = if (isTimeAttackMode) android.view.View.VISIBLE else android.view.View.GONE
         }
         chipGroupDiff?.setOnCheckedStateChangeListener { _, checkedIds ->
             timeLimitSeconds = when {
-                checkedIds.contains(R.id.chipEasy)   -> 300
-                checkedIds.contains(R.id.chipHard)   -> 90
-                else                                  -> 180
+                checkedIds.contains(R.id.chipEasy) -> 300
+                checkedIds.contains(R.id.chipHard) -> 90
+                else                               -> 180
             }
         }
     }

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="8dp"
         android:letterSpacing="0.08"
         android:shadowColor="?attr/colorPrimary"
         android:shadowDx="0"
@@ -25,8 +25,9 @@
         android:textSize="13sp"
         android:textStyle="bold" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupMode"
+    <!-- Segmented button selector — 3 mode trong 1 dòng -->
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/gameModeToggle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
@@ -34,29 +35,38 @@
         app:singleSelection="true"
         app:selectionRequired="true">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipClassic"
-            style="@style/Widget.Material3.Chip.Filter"
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnModeClassic"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:checked="true"
-            android:text="Classic" />
+            android:text="Classic"
+            android:textAllCaps="false"
+            android:textSize="13sp" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipTimeAttack"
-            style="@style/Widget.Material3.Chip.Filter"
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnModeTimeAttack"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="⏱ Time Attack" />
+            android:layout_weight="1"
+            android:text="⏱ Time"
+            android:textAllCaps="false"
+            android:textSize="13sp" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipMoveChallenge"
-            style="@style/Widget.Material3.Chip.Filter"
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnModeChallenge"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="🎯 Move Challenge" />
+            android:layout_weight="1"
+            android:text="🎯 Move"
+            android:textAllCaps="false"
+            android:textSize="13sp" />
 
-    </com.google.android.material.chip.ChipGroup>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <!-- Difficulty row: chỉ hiện khi Time Attack được chọn -->
     <com.google.android.material.chip.ChipGroup

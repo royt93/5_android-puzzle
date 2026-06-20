@@ -533,25 +533,22 @@ class GameAct : BaseActivity() {
             }
         }
 
-        ivOriginal.setOnClickListener {
-             // Toggle Preview? Or just existing behavior.
-             // Currently ivOriginal is small preview. 
-             // Request was "Hold to preview".
-             // We can implement TouchListener on a "Eye" button, OR just make ivOriginal expand on Hold.
-        }
-        
-        // Board Preview Feature: Long press ivOriginal to show full size dialog or expand?
-        // Let's implement simple "Hold to preview" on a new button or existing UI.
-        // Actually user said "Board Preview: Nút giữ để xem". 
-        // I'll make the ivOriginal clickable/holdable.
+        // Hold-to-preview: giữ ngón tay → phóng to ảnh gốc; nhả → thu lại.
+        // clipChildren=false trên topInfoBar + ConstraintLayout cha cho phép scale overflow.
         ivOriginal.setOnTouchListener { v, event ->
             when (event.action) {
                 android.view.MotionEvent.ACTION_DOWN -> {
-                    v.animate().scaleX(3f).scaleY(3f).translationY(300f).setDuration(200).start()
-                    v.elevation = 100f
+                    v.animate()
+                        .scaleX(3.5f).scaleY(3.5f)
+                        .translationX(120f).translationY(160f)
+                        .setDuration(180).start()
+                    v.elevation = 120f
                 }
                 android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
-                    v.animate().scaleX(1f).scaleY(1f).translationY(0f).setDuration(200).start()
+                    v.animate()
+                        .scaleX(1f).scaleY(1f)
+                        .translationX(0f).translationY(0f)
+                        .setDuration(180).start()
                     v.elevation = 0f
                 }
             }

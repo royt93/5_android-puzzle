@@ -27,6 +27,8 @@ class ImageCardsAdt(
 
     // Task 30: vị trí card đang được chọn để hiển thị shimmer.
     private var selectedPosition: Int = -1
+    // Cache bitmap placeholder của gallery slot — vẽ 1 lần, tái dùng.
+    private var galleryBitmap: android.graphics.Bitmap? = null
 
     /** Đặt card được chọn (hiện shimmer) và redraw. */
     fun setSelectedPosition(pos: Int) {
@@ -73,7 +75,7 @@ class ImageCardsAdt(
         val card = cards[position]
 
         if (card.isGallerySlot || card.imageResId == BoardOptionsVm.GALLERY_SLOT_RES_ID) {
-            bindGallerySlot(holder)
+            bindGallerySlot(holder, parent)
         } else {
             bindImageCard(holder, card, parent)
             // Task 30: shimmer scan line khi card được chọn.
@@ -96,6 +98,7 @@ class ImageCardsAdt(
     private fun bindImageCard(holder: ViewHolder, card: TitledCardInfo, parent: ViewGroup) {
         holder.imageView.scaleType = android.widget.ImageView.ScaleType.FIT_XY
         holder.imageView.setPadding(0, 0, 0, 0)
+        holder.imageView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
         holder.titleView.text = card.title
         holder.titleView.visibility = if (card.title.isNullOrBlank()) View.GONE else View.VISIBLE
 
@@ -117,15 +120,64 @@ class ImageCardsAdt(
         }
     }
 
-    private fun bindGallerySlot(holder: ViewHolder) {
-        holder.imageView.scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
-        val pad = (36 * parentContext.resources.displayMetrics.density).toInt()
-        holder.imageView.setPadding(pad, pad, pad, pad)
-        holder.imageView.setImageResource(R.drawable.ic_add_photo_neon)
-        holder.titleView.text = parentContext.getString(R.string.gallery_slot_label)
-        holder.titleView.visibility = View.VISIBLE
+    private fun bindGallerySlot(holder: ViewHolder, parent: ViewGroup) {
+        val sizePx = (parent.width.coerceAtLeast(400) / 2)
+        if (galleryBitmap == null || galleryBitmap!!.width != sizePx) {
+            galleryBitmap?.recycle()
+            galleryBitmap = buildGalleryBitmap(sizePx)
+        }
+        holder.imageView.scaleType = android.widget.ImageView.ScaleType.FIT_XY
+        holder.imageView.setPadding(0, 0, 0, 0)
+        holder.imageView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+        holder.imageView.setImageBitmap(galleryBitmap)
+        // Title ẩn — text "YOUR PHOTO" đã được vẽ bên trong bitmap để card cùng height với thumbnails
+        holder.titleView.visibility = View.GONE
         holder.bestScore.visibility = View.GONE
         androidx.core.view.ViewCompat.setTransitionName(holder.imageView, "hero_image_gallery")
+    }
+
+    /** Vẽ full-bleed bitmap: background fill + camera icon ở center.
+     *  FIT_XY trên SquareImageView → fill 100% card area, giống thumbnail. */
+    private fun buildGalleryBitmap(sizePx: Int): android.graphics.Bitmap {
+        val bmp = android.graphics.Bitmap.createBitmap(sizePx, sizePx, android.graphics.Bitmap.Config.ARGB_8888)
+        val canvas = android.graphics.Canvas(bmp)
+
+        // Fill nền elevated navy
+        canvas.drawColor(androidx.core.content.ContextCompat.getColor(parentContext, R.color.neon_bg_elevated))
+
+        // Subtle radial glow ở center (accent cyan 10% alpha)
+        val glowPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
+        glowPaint.shader = android.graphics.RadialGradient(
+            sizePx / 2f, sizePx / 2f, sizePx * 0.55f,
+            0x1A38F9E4.toInt(), 0x0038F9E4.toInt(),
+            android.graphics.Shader.TileMode.CLAMP
+        )
+        canvas.drawRect(0f, 0f, sizePx.toFloat(), sizePx.toFloat(), glowPaint)
+
+        // Layout: icon + text căn giữa theo chiều dọc như 1 cụm
+        val textPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
+            color = androidx.core.content.ContextCompat.getColor(parentContext, R.color.neon_text_primary)
+            textSize = sizePx * 0.08f
+            textAlign = android.graphics.Paint.Align.CENTER
+            typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.BOLD)
+            letterSpacing = 0.05f
+        }
+        val textHeight = textPaint.descent() - textPaint.ascent()
+        val gap = sizePx * 0.04f
+        val iconPx = (sizePx * 0.42f).toInt()
+        val groupHeight = iconPx + gap + textHeight
+        val groupTop = (sizePx - groupHeight) / 2f
+
+        val drawable = androidx.core.content.ContextCompat.getDrawable(parentContext, R.drawable.ic_add_photo_neon)!!
+        val iconLeft = (sizePx - iconPx) / 2
+        val iconTop = groupTop.toInt()
+        drawable.setBounds(iconLeft, iconTop, iconLeft + iconPx, iconTop + iconPx)
+        drawable.draw(canvas)
+
+        val textY = groupTop + iconPx + gap - textPaint.ascent()
+        canvas.drawText("YOUR PHOTO", sizePx / 2f, textY, textPaint)
+
+        return bmp
     }
 
     private class ViewHolder(
