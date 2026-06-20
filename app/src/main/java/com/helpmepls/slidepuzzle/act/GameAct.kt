@@ -39,6 +39,8 @@ class GameAct : BaseActivity() {
         const val EXTRA_BOARD_WIDTH = "com.helpmepls.slidepuzzle.EXTRA_BOARD_WIDTH"
         const val EXTRA_BOARD_HEIGHT = "com.helpmepls.slidepuzzle.EXTRA_BOARD_HEIGHT"
         const val EXTRA_CUSTOM_IMAGE_PATH = "com.helpmepls.slidepuzzle.EXTRA_CUSTOM_IMAGE_PATH"
+        // Task 26: -1 = Classic (no budget), >0 = Move Challenge budget.
+        const val EXTRA_MOVE_BUDGET = "com.helpmepls.slidepuzzle.EXTRA_MOVE_BUDGET"
 
         // Cache bitmap render tu VectorDrawable (anh neon) theo resId. Vector immutable nen
         // cache an toan + KHONG recycle (chi recycle anh raster lon). Toi da ~6 anh x 512^2.
@@ -83,6 +85,9 @@ class GameAct : BaseActivity() {
     private var hintCooldownActive = false
     // Task 27: lưu moves lúc thắng để dùng khi share.
     private var lastWinMoves = 0
+    // Task 26: -1 = Classic, >0 = Move Challenge budget; reset cùng shuffle/reset.
+    private var moveBudget = -1
+    private var budgetExceededShown = false
     private var soundEnabled = true
     private val soundManager: com.helpmepls.slidepuzzle.util.SoundManager by lazy {
         com.helpmepls.slidepuzzle.util.SoundManager(this)
@@ -148,6 +153,47 @@ class GameAct : BaseActivity() {
         editor.apply()
     }
 
+    private fun updateMoveBudgetUI(moves: Int) {
+        val tv = findViewById<android.widget.TextView>(R.id.tvMoveBudget) ?: return
+        val divider = findViewById<View>(R.id.dividerBudget)
+        if (moveBudget <= 0) {
+            tv.visibility = View.GONE
+            divider?.visibility = View.GONE
+            return
+        }
+        tv.visibility = View.VISIBLE
+        divider?.visibility = View.VISIBLE
+        val remaining = moveBudget - moves
+        tv.text = "🎯 $remaining"
+        val color = if (remaining <= 5)
+            ContextCompat.getColor(this, R.color.neon_magenta)
+        else
+            ContextCompat.getColor(this, R.color.neon_lime)
+        tv.setTextColor(color)
+        val glowColor = if (remaining <= 5) R.color.neon_magenta_glow else R.color.neon_lime_glow
+        tv.setShadowLayer(10f, 0f, 0f, ContextCompat.getColor(this, glowColor))
+    }
+
+    private fun showBudgetExceededDialog(boardView: GameBoard) {
+        blurBg()
+        DialogUtils.showGameDialog(
+            context = this,
+            title = "OVER BUDGET!",
+            message = "You've exceeded the move\nchallenge limit.\nContinue anyway?",
+            yesText = "CONTINUE",
+            noText = "TRY AGAIN",
+            onYes = { unblurBg() },
+            onNo = {
+                unblurBg()
+                performResetWithAnimation(boardView)
+                resetTimer()
+                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false; budgetExceededShown = false
+                updateAlmostThereBanner(0f, false)
+                updateMoveBudgetUI(0)
+            }
+        )
+    }
+
     // Task 32: hiển thị/ẩn banner "Almost there!" và điều chỉnh glow intensity.
     private fun updateAlmostThereBanner(percent: Float, solved: Boolean) {
         val banner = findViewById<android.widget.TextView>(R.id.tvAlmostThere) ?: return
@@ -197,15 +243,27 @@ class GameAct : BaseActivity() {
             dialogView.findViewById<android.widget.TextView>(id)?.setTextColor(if (i < stars) litColor else dimColor)
         }
 
-        // Best badge
+        // Best badge + budget badge (Task 26)
+        val badge = dialogView.findViewById<android.widget.TextView>(R.id.tvBestBadge)
         if (isNewBest || isNewBestTime) {
-            val badge = dialogView.findViewById<android.widget.TextView>(R.id.tvBestBadge)
             badge?.text = when {
                 isNewBest && isNewBestTime -> "🏆 NEW BEST MOVES & TIME!"
                 isNewBest -> "🏆 NEW HIGH SCORE!"
                 else -> "⏱ NEW BEST TIME!"
             }
             badge?.visibility = View.VISIBLE
+        }
+        if (moveBudget > 0) {
+            val remaining = moveBudget - moves
+            if (remaining >= 0) {
+                val budgetText = if (remaining == 0) "🎯 Perfect!" else "✅ Under budget!"
+                if (badge?.visibility == View.VISIBLE) {
+                    badge.text = "${badge.text}\n$budgetText"
+                } else {
+                    badge?.text = budgetText
+                    badge?.visibility = View.VISIBLE
+                }
+            }
         }
 
         // Animated counters
@@ -300,6 +358,13 @@ class GameAct : BaseActivity() {
             }
             findViewById<android.widget.TextView>(R.id.tvMoves)?.text = "📊 $moves"
 
+            // Task 26: cập nhật budget countdown và check vượt budget.
+            updateMoveBudgetUI(moves)
+            if (moveBudget > 0 && !solved && moves > moveBudget + 10 && !budgetExceededShown) {
+                budgetExceededShown = true
+                showBudgetExceededDialog(boardView)
+            }
+
             // Task 32: cập nhật banner "Almost there!" sau mỗi move.
             val percent = boardView.correctTilePercent()
             updateAlmostThereBanner(percent, solved)
@@ -353,7 +418,9 @@ class GameAct : BaseActivity() {
                         image = viewModel.boardImage.value
                     )
                     resetTimer()
-                    undoCount = 3 // Reset undo limit
+                    undoCount = 3
+                    budgetExceededShown = false
+                    updateMoveBudgetUI(0)
                 }
             }
         )
@@ -448,8 +515,8 @@ class GameAct : BaseActivity() {
             noText = "NO",
             onYes = {
                 unblurBg(); performShuffleWithAnimation(boardView); resetTimer()
-                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false
-                updateAlmostThereBanner(0f, false)
+                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false; budgetExceededShown = false
+                updateAlmostThereBanner(0f, false); updateMoveBudgetUI(0)
             },
             onNo = { unblurBg() }
         )
@@ -465,8 +532,8 @@ class GameAct : BaseActivity() {
             noText = "CANCEL",
             onYes = {
                 unblurBg(); performResetWithAnimation(boardView); resetTimer()
-                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false
-                updateAlmostThereBanner(0f, false)
+                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false; budgetExceededShown = false
+                updateAlmostThereBanner(0f, false); updateMoveBudgetUI(0)
             },
             onNo = { unblurBg() }
         )
@@ -482,6 +549,7 @@ class GameAct : BaseActivity() {
         currentImageResId = intent.getIntExtra(EXTRA_IMAGE_RES_ID, BoardOptionsVm.PREDEFINED_IMAGES.first().first)
         val boardWidth = intent.getIntExtra(EXTRA_BOARD_WIDTH, BoardOptionsVm.PREDEFINED_BOARD_SIZE[1].width)
         val boardHeight = intent.getIntExtra(EXTRA_BOARD_HEIGHT, BoardOptionsVm.PREDEFINED_BOARD_SIZE[1].height)
+        moveBudget = intent.getIntExtra(EXTRA_MOVE_BUDGET, -1)
         viewModel.apply {
             boardSize.value = BoardTitledSize(width = boardWidth, height = boardHeight)
             boardImage.value = decodeBoardBitmap(currentImageResId)

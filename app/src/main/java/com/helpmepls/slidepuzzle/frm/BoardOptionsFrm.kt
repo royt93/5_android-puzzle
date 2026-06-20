@@ -37,6 +37,9 @@ class BoardOptionsFrm : Fragment() {
     // Giữ reference trực tiếp vì GridViewWithHeaderAndFooter.getAdapter() trả về
     // wrapper HeaderViewGridAdapter chứ không phải ImageCardsAdt.
     private var imageAdapter: ImageCardsAdt? = null
+    // Task 26: theo dõi mode đang chọn trong header.
+    private var isMoveChallengeMode = false
+    private var gridHeader: View? = null
 
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
 
@@ -67,9 +70,10 @@ class BoardOptionsFrm : Fragment() {
                 board.startAnimation(AnimationUtils.loadAnimation(context, R.anim.staggered_grid_item))
             }, 300)
 
-            board.addHeaderView(
-                LayoutInflater.from(context).inflate(R.layout.item_board_options_grid_header, null)
-            )
+            val header = LayoutInflater.from(context).inflate(R.layout.item_board_options_grid_header, null)
+            gridHeader = header
+            board.addHeaderView(header)
+            setupModeChips(header)
 
             buildAdapter()
             // boardSize observe bị bỏ vì setAdapter() 2 lần trên GridViewWithHeaderAndFooter gây crash.
@@ -94,6 +98,9 @@ class BoardOptionsFrm : Fragment() {
                     putExtra(GameAct.EXTRA_BOARD_WIDTH, boardSize.width)
                     putExtra(GameAct.EXTRA_BOARD_HEIGHT, boardSize.height)
                     putExtra("TRANSITION_NAME", transitionName)
+                    if (isMoveChallengeMode) {
+                        putExtra(GameAct.EXTRA_MOVE_BUDGET, calcMoveBudget(boardSize.width, boardSize.height))
+                    }
                 }
                 val options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
@@ -187,6 +194,9 @@ class BoardOptionsFrm : Fragment() {
             putExtra(GameAct.EXTRA_BOARD_WIDTH, boardSize.width)
             putExtra(GameAct.EXTRA_BOARD_HEIGHT, boardSize.height)
             putExtra(GameAct.EXTRA_CUSTOM_IMAGE_PATH, cacheFile.absolutePath)
+            if (isMoveChallengeMode) {
+                putExtra(GameAct.EXTRA_MOVE_BUDGET, calcMoveBudget(boardSize.width, boardSize.height))
+            }
         }
         startActivity(intent)
     }
@@ -219,6 +229,16 @@ class BoardOptionsFrm : Fragment() {
         while (srcW / (s * 2) >= target && srcH / (s * 2) >= target) s *= 2
         return s
     }
+
+    private fun setupModeChips(header: View) {
+        val chipGroup = header.findViewById<com.google.android.material.chip.ChipGroup>(R.id.chipGroupMode) ?: return
+        chipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            isMoveChallengeMode = checkedIds.contains(R.id.chipMoveChallenge)
+        }
+    }
+
+    private fun calcMoveBudget(boardW: Int, boardH: Int): Int =
+        (100 * 1.5).toInt().coerceAtLeast(boardW * boardH * 2)
 
     private fun showAboutDialog() {
         val ctx = context ?: return
