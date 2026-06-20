@@ -1,6 +1,6 @@
 # Task Tracker
 
-Cap nhat: 2026-06-19
+Cap nhat: 2026-06-20
 
 ## In progress
 
@@ -8,23 +8,49 @@ Cap nhat: 2026-06-19
 
 ## Todo
 
-### Phase 2 — Advanced visual revamp (Wave 10-13, kanban tai `doc/task/todo/`)
-> Chot voi roy 2026-06-19: lam ca 4 huong, uu tien pho dien toi da (kem toggle tat cho may yeu), task day du. Thu tu: 13 -> 10 -> 11 -> 12.
+### Wave 3 — Gameplay, Social, Visual (kanban tai `doc/task/todo/`)
+> Chot voi roy 2026-06-20: 10 tinh nang moi chon tu 4 huong. Thu tu trien khai: 32 -> 25 -> 27 -> 30 -> 26 -> 23 -> 24 -> 29 -> 31 -> 28.
 
-- [done] **10 Advanced glow & blur** — NeonBlur.kt (RenderEffect API31+, fallback no-op), NeonBorderView.kt (SweepGradient xoay ValueAnimator hardware layer), frosted-glass dialog blur (win/shuffle/reset), toggle fx_quality/fx_blur. Verify: lint 0 + 20 unit PASS. Chi tiet: `doc/task/done/10-advanced-glow-blur.md`.
-- [todo] **11 Win celebration & motion** — particle/confetti neon, animated counter moves/time, redesign win dialog (sao + best badge + share), solved reveal sequence. Chi tiet: `doc/task/todo/11-win-celebration.md`.
-- [todo] **12 Theming da sac** — palette switcher (cyan/magenta/lime/violet), persist `accent_theme`, apply runtime + canvas, WCAG AA moi palette. Chi tiet: `doc/task/todo/12-multi-theme.md`.
-- [done] **13 Settings screen rieng** — Prefs.kt (tap trung keys), SettingsActivity neon (MaterialSwitch, glass panel, section headers), entry footer BoardOptions + overflow menu GameAct, haptic toggle + fx_quality/fx_blur/fx_reduce_motion, onResume reload. Verify: lint 0 + 20 unit PASS. Chi tiet: `doc/task/done/13-settings-screen.md`.
+**P0 — Lam ngay:**
+- [todo] **25 Hint system** — flash tile sai vi tri, cooldown 3s, +10 moves penalty. Chi tiet: `doc/task/todo/25-hint-system.md`.
+- [todo] **27 Share result as image** — Canvas vẽ share card (puzzle + stats + neon frame), FileProvider, Intent share. Chi tiet: `doc/task/todo/27-share-result-image.md`.
+- [todo] **32 Progress bar khi sap win** — >= 80% tile dung: banner "Almost there!" + board glow tang. Chi tiet: `doc/task/todo/32-progress-bar-almost-win.md`.
+
+**P1 — Wave ke tiep:**
+- [todo] **23 Time Attack mode** — countdown Easy/Med/Hard, Time's Up dialog, bonus badge. Chi tiet: `doc/task/todo/23-time-attack-mode.md`.
+- [todo] **24 Daily Puzzle** — seed theo ngay, streak counter, lock neu da giai hom nay. Chi tiet: `doc/task/todo/24-daily-puzzle.md`.
+- [todo] **30 Animated tile preview** — shimmer scan line tren thumbnail khi select card. Chi tiet: `doc/task/todo/30-animated-tile-preview.md`.
+
+**P2 — Polish:**
+- [todo] **26 Move challenge** — move budget countdown, badge Perfect/Under budget. Chi tiet: `doc/task/todo/26-move-challenge.md`.
+- [todo] **29 Achievement badges** — 8 badge local (Speed Demon, Minimalist, Streak...), hien trong Settings. Chi tiet: `doc/task/todo/29-achievement-badges.md`.
+- [todo] **31 Custom tile shape** — Square/Rounded/Soft, persist pref, render clip path. Chi tiet: `doc/task/todo/31-custom-tile-shape.md`.
+
+**P3 — Can content truoc:**
+- [todo] **28 Unlock image packs** — giai N puzzle mo khoa pack moi, lock overlay card. Prerequisite: them anh b1-b9. Chi tiet: `doc/task/todo/28-unlock-image-packs.md`.
 
 ### Ton dong khac
 - [todo] (Tuy chon - P4 hoan tu wave 2) Nang Material/Glide/Kotlin len ban moi va test ky tren thiet bi (pass rieng co retest).
 - [todo] (Monetization) AdMob + AppLovin integration (can real Ad IDs ngoai source; release guard dang chan placeholder).
 
-Wave 2 (kanban tai `doc/task/`, chay song song) - DONE:
+Wave 2 + Phase 2 - DONE:
 
-- [done] **07 Code cleanup + SFX** — SoundManager (SoundPool) move/win + toggle `sound_enabled`; saveHighScore luu them best-time; go FrameLayout wrapper + tools:ignore thua; test undo->shuffle/reset. Verify: lint + unit + **24/24 instrumented PASS** (Pixel 7 Pro, anim=0). Chi tiet: `doc/task/done/07-cleanup-sfx.md`.
-- [done] **08 Engagement** — About dialog (version + developer + license OSS + nut GitHub mo repo) them vao footer; go //TODO github/license. Rate/More/Share da co san. Verify: **25/25 instrumented PASS**. Chi tiet: `doc/task/done/08-engagement.md`.
-- [done] **09 Tech polish** — 120Hz (BaseActivity preferredDisplayModeId, verify @120Hz Pixel 7 Pro); phang act_game.xml (3 wrapper -> 1 root LinearLayout, bo nested weights, baselineAligned=false); portrait-lock suppress co chu dich (DiscouragedApi=0); P4 version-bump hoan. Verify: **25/25 instrumented PASS**, lint sach. Chi tiet: `doc/task/done/09-tech-polish.md`.
+- [done] **07 Code cleanup + SFX** — Chi tiet: `doc/task/done/07-cleanup-sfx.md`.
+- [done] **08 Engagement** — Chi tiet: `doc/task/done/08-engagement.md`.
+- [done] **09 Tech polish** — 120Hz, flat layout, portrait-lock. Chi tiet: `doc/task/done/09-tech-polish.md`.
+- [done] **10 Advanced glow & blur** — NeonBlur (RenderEffect API31+), NeonBorderView (SweepGradient), frosted-glass dialog. Chi tiet: `doc/task/done/10-advanced-glow-blur.md`.
+- [done] **11 Win celebration & motion** — particle confetti, animated counter, win dialog redesign. Chi tiet: `doc/task/done/11-win-celebration.md`.
+- [done] **12 Theming da sac** — palette switcher cyan/magenta/lime/violet, WCAG AA. Chi tiet: `doc/task/done/12-multi-theme.md`.
+- [done] **13 Settings screen** — SettingsActivity neon, Prefs.kt. Chi tiet: `doc/task/done/13-settings-screen.md`.
+- [done] **14 Tile depth & resting glow** — Chi tiet: `doc/task/done/14-tile-depth-and-resting-glow.md`.
+- [done] **15 Card neon border + labels** — Chi tiet: `doc/task/done/15-card-neon-border-and-labels.md`.
+- [done] **16 Ambient board background** — Chi tiet: `doc/task/done/16-ambient-board-background.md`.
+- [done] **17 Splash neon upgrade** — Chi tiet: `doc/task/done/17-splash-neon-upgrade.md`.
+- [done] **18 Settings swatch active state** — Chi tiet: `doc/task/done/18-settings-swatch-active-state.md`.
+- [done] **19 Footer bar & button glow** — Chi tiet: `doc/task/done/19-footer-bar-and-button-glow.md`.
+- [done] **20 Win celebration v2** — Chi tiet: `doc/task/done/20-win-celebration.md`.
+- [done] **21 Gallery + more images** — gallery slot + custom image picker. Chi tiet: `doc/task/done/21-gallery-and-more-images.md`.
+- [done] **22 Best score per puzzle** — per-image×size leaderboard local. Chi tiet: `doc/task/done/22-best-score-leaderboard.md`.
 
 > AdMob/AppLovin (monetization) chua dua vao wave nay theo lua chon cua roy; release guard van chan placeholder.
 
