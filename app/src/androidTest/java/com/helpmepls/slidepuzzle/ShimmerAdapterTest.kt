@@ -31,9 +31,12 @@ class ShimmerAdapterTest {
     }
 
     private fun buildAdapter(): ImageCardsAdt {
-        val cards = BoardOptionsVm.PREDEFINED_IMAGES.take(3).map { (resId, title) ->
-            TitledCardInfo(imageResId = resId, title = title)
-        }.toTypedArray()
+        // Bỏ gallery slot (resId=0) — shimmer chỉ áp dụng cho image cards thật.
+        val cards = BoardOptionsVm.PREDEFINED_IMAGES
+            .filter { it.first != BoardOptionsVm.GALLERY_SLOT_RES_ID }
+            .take(3)
+            .map { (resId, title) -> TitledCardInfo(imageResId = resId, title = title) }
+            .toTypedArray()
         return ImageCardsAdt(ctx, cards, Prefs.get(ctx), boardW = 4, boardH = 4)
     }
 

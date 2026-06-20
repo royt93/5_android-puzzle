@@ -57,7 +57,7 @@ class GallerySlotIntegrationTest {
         val ctx: Context = ApplicationProvider.getApplicationContext()
 
         val intent = Intent(ctx, GameAct::class.java).apply {
-            putExtra(GameAct.EXTRA_IMAGE_RES_ID, BoardOptionsVm.PREDEFINED_IMAGES.first().first)
+            putExtra(GameAct.EXTRA_IMAGE_RES_ID, BoardOptionsVm.PREDEFINED_IMAGES.first { it.first != BoardOptionsVm.GALLERY_SLOT_RES_ID }.first)
             putExtra(GameAct.EXTRA_BOARD_WIDTH, 4)
             putExtra(GameAct.EXTRA_BOARD_HEIGHT, 4)
             // custom path trỏ đến file không tồn tại → fallback về imageResId.
@@ -81,8 +81,8 @@ class GallerySlotIntegrationTest {
     fun predefinedImagesContainsGallerySlot() {
         val images = BoardOptionsVm.PREDEFINED_IMAGES
         val hasGallerySlot = images.any { it.first == BoardOptionsVm.GALLERY_SLOT_RES_ID }
-        assertTrue("PREDEFINED_IMAGES phải có gallery slot ở cuối", hasGallerySlot)
-        // Gallery slot phải là phần tử cuối cùng.
-        assertEquals("Gallery slot phải ở cuối danh sách", BoardOptionsVm.GALLERY_SLOT_RES_ID, images.last().first)
+        assertTrue("PREDEFINED_IMAGES phải có gallery slot", hasGallerySlot)
+        // Gallery slot phải là phần tử ĐẦU TIÊN để user thấy ngay (moved top in BoardOptionsVm).
+        assertEquals("Gallery slot phải ở đầu danh sách", BoardOptionsVm.GALLERY_SLOT_RES_ID, images.first().first)
     }
 }

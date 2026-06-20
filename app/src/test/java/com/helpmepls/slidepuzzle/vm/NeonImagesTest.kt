@@ -27,8 +27,9 @@ class NeonImagesTest {
     }
 
     @Test
-    fun lastEntryIsGallerySlot() {
-        val last = BoardOptionsVm.PREDEFINED_IMAGES.last()
-        assertEquals("Gallery slot phải là phần tử cuối", BoardOptionsVm.GALLERY_SLOT_RES_ID, last.first)
+    fun firstEntryIsGallerySlot() {
+        // YOUR PHOTO đã được chuyển lên đầu danh sách để user thấy ngay.
+        val first = BoardOptionsVm.PREDEFINED_IMAGES.first()
+        assertEquals("Gallery slot phải là phần tử đầu tiên", BoardOptionsVm.GALLERY_SLOT_RES_ID, first.first)
     }
 }

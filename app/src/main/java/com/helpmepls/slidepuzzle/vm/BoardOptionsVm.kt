@@ -22,6 +22,9 @@ class BoardOptionsVm : ViewModel() {
         )
 
         val PREDEFINED_IMAGES: Array<TitledResourcePair> = arrayOf(
+            // Slot chọn ảnh từ thư viện — luôn ở đầu để user thấy ngay.
+            TitledResourcePair(first = GALLERY_SLOT_RES_ID, second = "YOUR PHOTO"),
+
             TitledResourcePair(first = R.drawable.i1, second = ""),
             TitledResourcePair(first = R.drawable.i2, second = ""),
             TitledResourcePair(first = R.drawable.i3, second = ""),
@@ -60,8 +63,6 @@ class BoardOptionsVm : ViewModel() {
             TitledResourcePair(first = R.drawable.neon_img_5, second = "Neon"),
             TitledResourcePair(first = R.drawable.neon_img_6, second = "Neon"),
 
-            // Slot chọn ảnh từ thư viện — resId=0 là marker, không phải drawable thật.
-            TitledResourcePair(first = GALLERY_SLOT_RES_ID, second = "YOUR PHOTO"),
         )
     }
 

@@ -37,8 +37,10 @@ class BoardOptionsFrm : Fragment() {
     // Giữ reference trực tiếp vì GridViewWithHeaderAndFooter.getAdapter() trả về
     // wrapper HeaderViewGridAdapter chứ không phải ImageCardsAdt.
     private var imageAdapter: ImageCardsAdt? = null
-    // Task 26: theo dõi mode đang chọn trong header.
+    // Game mode state (Task 26 + Task 23).
     private var isMoveChallengeMode = false
+    private var isTimeAttackMode = false
+    private var timeLimitSeconds = 180  // default: Medium 3min
     private var gridHeader: View? = null
 
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
@@ -100,6 +102,9 @@ class BoardOptionsFrm : Fragment() {
                     putExtra("TRANSITION_NAME", transitionName)
                     if (isMoveChallengeMode) {
                         putExtra(GameAct.EXTRA_MOVE_BUDGET, calcMoveBudget(boardSize.width, boardSize.height))
+                    }
+                    if (isTimeAttackMode) {
+                        putExtra(GameAct.EXTRA_TIME_LIMIT_SECONDS, timeLimitSeconds)
                     }
                 }
                 val options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -197,6 +202,9 @@ class BoardOptionsFrm : Fragment() {
             if (isMoveChallengeMode) {
                 putExtra(GameAct.EXTRA_MOVE_BUDGET, calcMoveBudget(boardSize.width, boardSize.height))
             }
+            if (isTimeAttackMode) {
+                putExtra(GameAct.EXTRA_TIME_LIMIT_SECONDS, timeLimitSeconds)
+            }
         }
         startActivity(intent)
     }
@@ -231,9 +239,19 @@ class BoardOptionsFrm : Fragment() {
     }
 
     private fun setupModeChips(header: View) {
-        val chipGroup = header.findViewById<com.google.android.material.chip.ChipGroup>(R.id.chipGroupMode) ?: return
-        chipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+        val chipGroupMode = header.findViewById<com.google.android.material.chip.ChipGroup>(R.id.chipGroupMode) ?: return
+        val chipGroupDiff = header.findViewById<com.google.android.material.chip.ChipGroup>(R.id.chipGroupDifficulty)
+        chipGroupMode.setOnCheckedStateChangeListener { _, checkedIds ->
             isMoveChallengeMode = checkedIds.contains(R.id.chipMoveChallenge)
+            isTimeAttackMode = checkedIds.contains(R.id.chipTimeAttack)
+            chipGroupDiff?.visibility = if (isTimeAttackMode) android.view.View.VISIBLE else android.view.View.GONE
+        }
+        chipGroupDiff?.setOnCheckedStateChangeListener { _, checkedIds ->
+            timeLimitSeconds = when {
+                checkedIds.contains(R.id.chipEasy)   -> 300
+                checkedIds.contains(R.id.chipHard)   -> 90
+                else                                  -> 180
+            }
         }
     }
 

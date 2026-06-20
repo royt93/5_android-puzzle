@@ -26,7 +26,7 @@ import org.junit.runner.RunWith
 class BestScoreCardWidgetTest {
 
     private lateinit var ctx: Context
-    private val testResId = BoardOptionsVm.PREDEFINED_IMAGES.first().first
+    private val testResId = BoardOptionsVm.PREDEFINED_IMAGES.first { it.first != BoardOptionsVm.GALLERY_SLOT_RES_ID }.first
     private val w = 4; private val h = 4
 
     @Before

@@ -25,7 +25,7 @@ class WinCelebrationIntegrationTest {
     private fun launchGame(): ActivityScenario<GameAct> {
         val ctx: Context = ApplicationProvider.getApplicationContext()
         val intent = Intent(ctx, GameAct::class.java).apply {
-            putExtra(GameAct.EXTRA_IMAGE_RES_ID, BoardOptionsVm.PREDEFINED_IMAGES.first().first)
+            putExtra(GameAct.EXTRA_IMAGE_RES_ID, BoardOptionsVm.PREDEFINED_IMAGES.first { it.first != BoardOptionsVm.GALLERY_SLOT_RES_ID }.first)
             putExtra(GameAct.EXTRA_BOARD_WIDTH, 4)
             putExtra(GameAct.EXTRA_BOARD_HEIGHT, 4)
         }

@@ -15,6 +15,8 @@ import com.helpmepls.slidepuzzle.model.BoardTitledSize
 import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
 
 class BoardSizeSpinnerFrm : Fragment() {
+    private var sizeSpinner: Spinner? = null
+
     private val viewModel: BoardOptionsVm? by lazy {
         activity?.let {
             ViewModelProvider(it)[BoardOptionsVm::class.java]
@@ -31,7 +33,7 @@ class BoardSizeSpinnerFrm : Fragment() {
             /* root = */ container,
             /* attachToRoot = */ false
         )
-        val sizeSpinner = view.findViewById<Spinner>(R.id.sBoardSize)
+        val sizeSpinner = view.findViewById<Spinner>(R.id.sBoardSize).also { sizeSpinner = it }
         val arrayAdapter = BoardSizeAdapter(
             /* context = */ activity as Context,
             /* resource = */ R.layout.item_game_toolbar_spinner,
@@ -62,5 +64,11 @@ class BoardSizeSpinnerFrm : Fragment() {
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        sizeSpinner?.onItemSelectedListener = null
+        sizeSpinner = null
+        super.onDestroyView()
     }
 }

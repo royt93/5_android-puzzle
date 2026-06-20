@@ -94,6 +94,8 @@ class ImageCardsAdt(
     }
 
     private fun bindImageCard(holder: ViewHolder, card: TitledCardInfo, parent: ViewGroup) {
+        holder.imageView.scaleType = android.widget.ImageView.ScaleType.FIT_XY
+        holder.imageView.setPadding(0, 0, 0, 0)
         holder.titleView.text = card.title
         holder.titleView.visibility = if (card.title.isNullOrBlank()) View.GONE else View.VISIBLE
 
@@ -116,6 +118,9 @@ class ImageCardsAdt(
     }
 
     private fun bindGallerySlot(holder: ViewHolder) {
+        holder.imageView.scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
+        val pad = (36 * parentContext.resources.displayMetrics.density).toInt()
+        holder.imageView.setPadding(pad, pad, pad, pad)
         holder.imageView.setImageResource(R.drawable.ic_add_photo_neon)
         holder.titleView.text = parentContext.getString(R.string.gallery_slot_label)
         holder.titleView.visibility = View.VISIBLE

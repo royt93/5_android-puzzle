@@ -41,6 +41,8 @@ class GameAct : BaseActivity() {
         const val EXTRA_CUSTOM_IMAGE_PATH = "com.helpmepls.slidepuzzle.EXTRA_CUSTOM_IMAGE_PATH"
         // Task 26: -1 = Classic (no budget), >0 = Move Challenge budget.
         const val EXTRA_MOVE_BUDGET = "com.helpmepls.slidepuzzle.EXTRA_MOVE_BUDGET"
+        // Task 23: -1 = Classic (count-up), >0 = Time Attack countdown limit in seconds.
+        const val EXTRA_TIME_LIMIT_SECONDS = "com.helpmepls.slidepuzzle.EXTRA_TIME_LIMIT_SECONDS"
 
         // Cache bitmap render tu VectorDrawable (anh neon) theo resId. Vector immutable nen
         // cache an toan + KHONG recycle (chi recycle anh raster lon). Toi da ~6 anh x 512^2.
@@ -88,6 +90,9 @@ class GameAct : BaseActivity() {
     // Task 26: -1 = Classic, >0 = Move Challenge budget; reset cùng shuffle/reset.
     private var moveBudget = -1
     private var budgetExceededShown = false
+    // Task 23: -1 = Classic (count-up), >0 = Time Attack countdown limit seconds.
+    private var timeAttackLimit = -1
+    private var timeUpShown = false
     private var soundEnabled = true
     private val soundManager: com.helpmepls.slidepuzzle.util.SoundManager by lazy {
         com.helpmepls.slidepuzzle.util.SoundManager(this)
@@ -134,9 +139,28 @@ class GameAct : BaseActivity() {
     }
 
     private fun updateTimerUI() {
-        val mins = timerSeconds / 60
-        val secs = timerSeconds % 60
-        findViewById<android.widget.TextView>(R.id.tvTimer)?.text = String.format(Locale.US, "⏱ %02d:%02d", mins, secs)
+        val tv = findViewById<android.widget.TextView>(R.id.tvTimer) ?: return
+        if (timeAttackLimit > 0) {
+            val remaining = (timeAttackLimit - timerSeconds).coerceAtLeast(0)
+            val mins = remaining / 60
+            val secs = remaining % 60
+            tv.text = String.format(Locale.US, "⏱ %02d:%02d", mins, secs)
+            val warnColor = ContextCompat.getColor(this, R.color.neon_magenta)
+            val normalColor = Prefs.resolveAccentColor(this)
+            tv.setTextColor(if (remaining <= 30) warnColor else normalColor)
+            tv.setShadowLayer(10f, 0f, 0f,
+                if (remaining <= 30) ContextCompat.getColor(this, R.color.neon_magenta_glow)
+                else normalColor and 0x66FFFFFF.toInt())
+            if (remaining <= 0 && isGameRunning && !timeUpShown) {
+                timeUpShown = true
+                stopTimer()
+                showTimeUpDialog()
+            }
+        } else {
+            val mins = timerSeconds / 60
+            val secs = timerSeconds % 60
+            tv.text = String.format(Locale.US, "⏱ %02d:%02d", mins, secs)
+        }
     }
     
     /** Luu best-moves va best-time per-puzzle (imageResId × size) neu lap ky luc. */
@@ -191,6 +215,28 @@ class GameAct : BaseActivity() {
                 updateAlmostThereBanner(0f, false)
                 updateMoveBudgetUI(0)
             }
+        )
+    }
+
+    private fun showTimeUpDialog() {
+        val boardView = findViewById<GameBoard>(R.id.boardView) ?: return
+        blurBg()
+        DialogUtils.showGameDialog(
+            context = this,
+            title = "TIME'S UP! ⏱",
+            message = "You ran out of time.\nTry again?",
+            yesText = "TRY AGAIN",
+            noText = "BACK",
+            onYes = {
+                unblurBg()
+                performResetWithAnimation(boardView)
+                resetTimer()
+                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false
+                budgetExceededShown = false; timeUpShown = false
+                updateAlmostThereBanner(0f, false); updateMoveBudgetUI(0)
+                if (timeAttackLimit > 0) startTimer()
+            },
+            onNo = { unblurBg(); onBackPressedDispatcher.onBackPressed() }
         )
     }
 
@@ -261,6 +307,23 @@ class GameAct : BaseActivity() {
                     badge.text = "${badge.text}\n$budgetText"
                 } else {
                     badge?.text = budgetText
+                    badge?.visibility = View.VISIBLE
+                }
+            }
+        }
+        if (timeAttackLimit > 0) {
+            val remaining = timeAttackLimit - timerSeconds
+            if (remaining > 0) {
+                val timeText = if (remaining >= 60) {
+                    val m = remaining / 60; val s = remaining % 60
+                    "⚡ ${m}m ${s}s remaining!"
+                } else {
+                    "⚡ ${remaining}s remaining!"
+                }
+                if (badge?.visibility == View.VISIBLE) {
+                    badge.text = "${badge.text}\n$timeText"
+                } else {
+                    badge?.text = timeText
                     badge?.visibility = View.VISIBLE
                 }
             }
@@ -419,8 +482,9 @@ class GameAct : BaseActivity() {
                     )
                     resetTimer()
                     undoCount = 3
-                    budgetExceededShown = false
+                    budgetExceededShown = false; timeUpShown = false
                     updateMoveBudgetUI(0)
+                    if (timeAttackLimit > 0) startTimer()
                 }
             }
         )
@@ -515,8 +579,10 @@ class GameAct : BaseActivity() {
             noText = "NO",
             onYes = {
                 unblurBg(); performShuffleWithAnimation(boardView); resetTimer()
-                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false; budgetExceededShown = false
+                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false
+                budgetExceededShown = false; timeUpShown = false
                 updateAlmostThereBanner(0f, false); updateMoveBudgetUI(0)
+                if (timeAttackLimit > 0) startTimer()
             },
             onNo = { unblurBg() }
         )
@@ -532,8 +598,10 @@ class GameAct : BaseActivity() {
             noText = "CANCEL",
             onYes = {
                 unblurBg(); performResetWithAnimation(boardView); resetTimer()
-                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false; budgetExceededShown = false
+                undoCount = 3; hintPenaltyMoves = 0; hintCooldownActive = false
+                budgetExceededShown = false; timeUpShown = false
                 updateAlmostThereBanner(0f, false); updateMoveBudgetUI(0)
+                if (timeAttackLimit > 0) startTimer()
             },
             onNo = { unblurBg() }
         )
@@ -550,6 +618,7 @@ class GameAct : BaseActivity() {
         val boardWidth = intent.getIntExtra(EXTRA_BOARD_WIDTH, BoardOptionsVm.PREDEFINED_BOARD_SIZE[1].width)
         val boardHeight = intent.getIntExtra(EXTRA_BOARD_HEIGHT, BoardOptionsVm.PREDEFINED_BOARD_SIZE[1].height)
         moveBudget = intent.getIntExtra(EXTRA_MOVE_BUDGET, -1)
+        timeAttackLimit = intent.getIntExtra(EXTRA_TIME_LIMIT_SECONDS, -1)
         viewModel.apply {
             boardSize.value = BoardTitledSize(width = boardWidth, height = boardHeight)
             boardImage.value = decodeBoardBitmap(currentImageResId)

@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="4dp"
         app:singleSelection="true"
         app:selectionRequired="true">
 
@@ -43,11 +43,53 @@
             android:text="Classic" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chipTimeAttack"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⏱ Time Attack" />
+
+        <com.google.android.material.chip.Chip
             android:id="@+id/chipMoveChallenge"
             style="@style/Widget.Material3.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="🎯 Move Challenge" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- Difficulty row: chỉ hiện khi Time Attack được chọn -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupDifficulty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:singleSelection="true"
+        app:selectionRequired="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipEasy"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Easy 5min" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipMedium"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Medium 3min" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipHard"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hard 90s" />
 
     </com.google.android.material.chip.ChipGroup>
 
