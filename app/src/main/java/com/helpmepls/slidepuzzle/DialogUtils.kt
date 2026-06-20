@@ -18,7 +18,8 @@ object DialogUtils {
         yesText: String = "YES",
         noText: String = "NO",
         onYes: () -> Unit,
-        onNo: (() -> Unit)? = null
+        onNo: (() -> Unit)? = null,
+        onDismiss: (() -> Unit)? = null
     ) {
         // Tranh crash khi callback async show dialog luc Activity da finishing/destroyed.
         val activity = context as? Activity
@@ -54,6 +55,10 @@ object DialogUtils {
             onNo?.invoke()
         }
         
+        if (onDismiss != null) {
+            dialog.setOnDismissListener { onDismiss() }
+        }
+
         // Show dialog
         dialog.show()
     }

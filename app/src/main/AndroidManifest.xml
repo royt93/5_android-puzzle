@@ -46,6 +46,10 @@
             android:name=".act.GameAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".act.SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

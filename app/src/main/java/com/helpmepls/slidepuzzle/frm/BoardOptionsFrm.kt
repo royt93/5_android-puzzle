@@ -136,6 +136,9 @@ class BoardOptionsFrm : Fragment() {
         view.findViewById<View>(R.id.btnAbout)?.setOnClickListener {
             showAboutDialog()
         }
+        view.findViewById<View>(R.id.btnSettings)?.setOnClickListener {
+            startActivity(Intent(requireActivity(), com.helpmepls.slidepuzzle.act.SettingsActivity::class.java))
+        }
     }
 
     /** Dialog About: ten app + version + developer + license OSS; nut GitHub mo repo. */

@@ -14,6 +14,7 @@ import android.view.animation.OvershootInterpolator
 import com.helpmepls.slidepuzzle.game.state.PuzzleGrid
 import com.helpmepls.slidepuzzle.game.state.Direction
 import com.helpmepls.slidepuzzle.util.NeonPalette
+import com.helpmepls.slidepuzzle.util.Prefs
 import kotlin.math.ceil
 
 @SuppressLint("ClickableViewAccessibility")
@@ -21,8 +22,10 @@ class GameBoard(
     context: Context,
     attrs: AttributeSet,
 ) : View(context, attrs) {
-    // Neon: tile-active va halo board phat sang cyan (Wave 3).
-    private val highlightColor = NeonPalette.CYAN
+    // Wave 12: accent màu theo prefs; lazy → đọc 1 lần khi view draw lần đầu; recreate() khi đổi theme.
+    private val accentColor: Int by lazy { Prefs.resolveAccentColor(context) }
+    private val accentGlowColor: Int by lazy { Prefs.resolveAccentGlowColor(context) }
+    private val highlightColor get() = accentColor
     private val paint = Paint()
     private val glowPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val tmpRectF = RectF()
@@ -262,7 +265,7 @@ class GameBoard(
         paint.style = Paint.Style.FILL
         paint.textSize = (offset.height() * 0.2f).coerceIn(16.0f, 56.0f)
         paint.color = NeonPalette.TEXT_PRIMARY
-        paint.setShadowLayer(8.0f, 0.0f, 0.0f, NeonPalette.CYAN_GLOW)
+        paint.setShadowLayer(8.0f, 0.0f, 0.0f, accentGlowColor)
         canvas.drawText(
             /* text = */ text,
             /* x = */ offset.left + 8.0f,

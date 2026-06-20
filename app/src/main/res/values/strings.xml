@@ -19,4 +19,25 @@
     <string name="undo_action">Undo</string>
     <string name="image_original_desc">Original puzzle image</string>
     <string name="puzzle_image_desc">Puzzle image option</string>
+    <string name="settings">Settings</string>
+    <string name="settings_section_display">Display</string>
+    <string name="settings_section_audio">Audio</string>
+    <string name="settings_section_visual">Visual Effects</string>
+    <string name="settings_section_theme">Theme Color</string>
+    <string name="settings_show_numbers_subtitle">Display number on each puzzle tile</string>
+    <string name="settings_sound_subtitle">Play sound on move and win</string>
+    <string name="settings_haptic">Haptic feedback</string>
+    <string name="settings_haptic_subtitle">Vibrate on tile move</string>
+    <string name="settings_fx_quality">High visual quality</string>
+    <string name="settings_fx_quality_subtitle">Animated border, bloom and glow effects</string>
+    <string name="settings_fx_blur">Blur effects</string>
+    <string name="settings_fx_blur_subtitle">Frosted-glass backdrop (Android 12+)</string>
+    <string name="settings_reduce_motion">Reduce motion</string>
+    <string name="settings_reduce_motion_subtitle">Disable particle and transition effects</string>
+    <string name="settings_theme_coming_soon">Theme color picker — coming in next update</string>
+    <string name="settings_theme_accent_label">Accent color</string>
+    <string name="swatch_cyan_desc">Cyan accent</string>
+    <string name="swatch_magenta_desc">Magenta accent</string>
+    <string name="swatch_lime_desc">Lime accent</string>
+    <string name="swatch_violet_desc">Violet accent</string>
 </resources>

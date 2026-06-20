@@ -18,7 +18,18 @@ import com.helpmepls.slidepuzzle.R
 import com.helpmepls.slidepuzzle.DialogUtils
 import com.helpmepls.slidepuzzle.game.GameBoard
 import com.helpmepls.slidepuzzle.model.BoardTitledSize
+import com.helpmepls.slidepuzzle.util.NeonBlur
+import com.helpmepls.slidepuzzle.util.Prefs
+import com.helpmepls.slidepuzzle.v.NeonBorderView
+import com.helpmepls.slidepuzzle.v.NeonParticleView
 import com.helpmepls.slidepuzzle.vm.BoardOptionsVm
+import android.animation.ValueAnimator
+import android.view.animation.DecelerateInterpolator
+import android.view.LayoutInflater
+import android.graphics.Color
+import android.content.res.ColorStateList
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 
 class GameAct : BaseActivity() {
     companion object Companion {
@@ -66,25 +77,17 @@ class GameAct : BaseActivity() {
         com.helpmepls.slidepuzzle.util.SoundManager(this)
     }
 
-    private fun loadShowNumbers(): Boolean {
-        return getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
-            .getBoolean("show_numbers", true)
-    }
+    private fun loadShowNumbers() = Prefs.get(this).getBoolean(Prefs.SHOW_NUMBERS, true)
+    private fun saveShowNumbers(v: Boolean) = Prefs.get(this).edit().putBoolean(Prefs.SHOW_NUMBERS, v).apply()
+    private fun loadSoundEnabled() = Prefs.get(this).getBoolean(Prefs.SOUND_ENABLED, true)
+    private fun saveSoundEnabled(v: Boolean) = Prefs.get(this).edit().putBoolean(Prefs.SOUND_ENABLED, v).apply()
 
-    private fun saveShowNumbers(value: Boolean) {
-        getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
-            .edit().putBoolean("show_numbers", value).apply()
-    }
+    private val isFxHigh get() = Prefs.get(this).getString(Prefs.FX_QUALITY, Prefs.FX_QUALITY_HIGH) == Prefs.FX_QUALITY_HIGH
+    private val isBlurEnabled get() = isFxHigh && Prefs.get(this).getBoolean(Prefs.FX_BLUR, true)
+    private val isHapticEnabled get() = Prefs.get(this).getBoolean(Prefs.HAPTIC_ENABLED, true)
 
-    private fun loadSoundEnabled(): Boolean {
-        return getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
-            .getBoolean("sound_enabled", true)
-    }
-
-    private fun saveSoundEnabled(value: Boolean) {
-        getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
-            .edit().putBoolean("sound_enabled", value).apply()
-    }
+    private fun blurBg() { if (isBlurEnabled) NeonBlur.applyBlur(findViewById(R.id.layoutRoot), 16f) }
+    private fun unblurBg() { NeonBlur.clearBlur(findViewById(R.id.layoutRoot)) }
     
     private fun startTimer() {
         if (isGameRunning) return
@@ -146,42 +149,77 @@ class GameAct : BaseActivity() {
         stopTimer()
         if (soundEnabled) soundManager.playWin()
 
-        // New best dung ca o lan giai dau tien (chua co record => prevBest = MAX_VALUE).
         val size = viewModel.boardSize.value
-        val prefs = getSharedPreferences("puzzle_prefs", android.content.Context.MODE_PRIVATE)
+        val p = Prefs.get(this)
         val prevBest = size?.let {
-            prefs.getInt("best_${it.width}x${it.height}", com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)
+            p.getInt("best_${it.width}x${it.height}", com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST)
         } ?: com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST
         val prevBestTime = size?.let {
-            prefs.getInt("best_time_${it.width}x${it.height}", com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME)
+            p.getInt("best_time_${it.width}x${it.height}", com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME)
         } ?: com.helpmepls.slidepuzzle.util.ScoreUtils.NO_BEST_TIME
         val isNewBest = com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBest(moves, prevBest)
         val isNewBestTime = com.helpmepls.slidepuzzle.util.ScoreUtils.isNewBestTime(timerSeconds, prevBestTime)
-
-        // Save score (moves + time)
         saveHighScore(moves, timerSeconds)
 
-        val timerText = findViewById<android.widget.TextView>(R.id.tvTimer)?.text ?: "00:00"
-        val newBestText = when {
-            isNewBest && isNewBestTime -> "\n\n🏆 NEW BEST MOVES & TIME! 🏆"
-            isNewBest -> "\n\n🏆 NEW HIGH SCORE! 🏆"
-            isNewBestTime -> "\n\n⏱ NEW BEST TIME! ⏱"
-            else -> ""
+        // Stars: 3★ ≤ boardSize*3 moves, 2★ ≤ boardSize*6, else 1★
+        val boardSize = size?.let { it.width * it.height } ?: 9
+        val stars = when {
+            moves <= boardSize * 3 -> 3
+            moves <= boardSize * 6 -> 2
+            else -> 1
         }
 
-        DialogUtils.showGameDialog(
-            context = this,
-            title = "🎉 VICTORY! 🎉",
-            message = "You solved it in $moves moves and $timerText!$newBestText",
-            yesText = "SHARE",
-            noText = "CLOSE",
-            onYes = {
-                shareSuccess()
-            },
-            onNo = {
-                // Just close
+        val activity = this
+        blurBg()
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_win, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+        dialog.window?.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(Color.TRANSPARENT))
+
+        // Stars
+        val litColor = ContextCompat.getColor(this, R.color.neon_lime)
+        val dimColor = ContextCompat.getColor(this, R.color.neon_text_secondary)
+        listOf(R.id.tvStar1, R.id.tvStar2, R.id.tvStar3).forEachIndexed { i, id ->
+            dialogView.findViewById<android.widget.TextView>(id)?.setTextColor(if (i < stars) litColor else dimColor)
+        }
+
+        // Best badge
+        if (isNewBest || isNewBestTime) {
+            val badge = dialogView.findViewById<android.widget.TextView>(R.id.tvBestBadge)
+            badge?.text = when {
+                isNewBest && isNewBestTime -> "🏆 NEW BEST MOVES & TIME!"
+                isNewBest -> "🏆 NEW HIGH SCORE!"
+                else -> "⏱ NEW BEST TIME!"
             }
-        )
+            badge?.visibility = View.VISIBLE
+        }
+
+        // Animated counters
+        val tvMoves = dialogView.findViewById<android.widget.TextView>(R.id.tvWinMoves)
+        val tvTime = dialogView.findViewById<android.widget.TextView>(R.id.tvWinTime)
+        ValueAnimator.ofInt(0, moves).apply {
+            duration = 600L; interpolator = DecelerateInterpolator()
+            addUpdateListener { tvMoves?.text = "📊 ${it.animatedValue}" }
+            start()
+        }
+        ValueAnimator.ofInt(0, timerSeconds).apply {
+            duration = 600L; interpolator = DecelerateInterpolator()
+            addUpdateListener {
+                val v = it.animatedValue as Int
+                tvTime?.text = String.format(Locale.US, "⏱ %02d:%02d", v / 60, v % 60)
+            }
+            start()
+        }
+
+        dialogView.findViewById<android.widget.Button>(R.id.btnWinShare)?.setOnClickListener {
+            dialog.dismiss(); unblurBg(); activity.shareSuccess()
+        }
+        dialogView.findViewById<android.widget.Button>(R.id.btnWinClose)?.setOnClickListener {
+            dialog.dismiss(); unblurBg()
+        }
+        dialog.show()
     }
 
     private fun shareSuccess() {
@@ -222,19 +260,27 @@ class GameAct : BaseActivity() {
 
     private fun initGameLogic(boardView: GameBoard) {
         boardView.onMoveListener = { moves, solved ->
-             if (!isGameRunning && moves > 0 && !solved) {
-                 startTimer()
-             }
-             findViewById<android.widget.TextView>(R.id.tvMoves)?.text = "📊 $moves"
-             
-             if (solved) {
-                 stopTimer()
-                 boardView.playWinFeedback()
-                 // Hoan dialog mot nhip de thay hieu ung loe sang truoc (M2).
-                 boardView.postDelayed({
-                     if (!isFinishing && !isDestroyed) showWinDialog(moves)
-                 }, 500)
-             }
+            if (!isGameRunning && moves > 0 && !solved) {
+                startTimer()
+            }
+            if (!solved && isHapticEnabled) {
+                boardView.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+            }
+            findViewById<android.widget.TextView>(R.id.tvMoves)?.text = "📊 $moves"
+
+            if (solved) {
+                stopTimer()
+                boardView.playWinFeedback()
+                // Wave 11: bung confetti ngay khi solved (trước dialog 500ms → full-screen effect rõ hơn).
+                if (!Prefs.get(this).getBoolean(Prefs.FX_REDUCE_MOTION, false)) {
+                    val cx = boardView.x + boardView.width / 2f
+                    val cy = boardView.y + boardView.height / 2f
+                    findViewById<NeonParticleView>(R.id.particleView)?.burst(cx, cy)
+                }
+                boardView.postDelayed({
+                    if (!isFinishing && !isDestroyed) showWinDialog(moves)
+                }, 500)
+            }
         }
     }
 
@@ -250,6 +296,9 @@ class GameAct : BaseActivity() {
         boardView.onMoveSound = { soundManager.playMove() }
 
         initGameLogic(boardView)
+
+        // Wave 10: khởi tạo viền gradient động theo fx_quality.
+        findViewById<NeonBorderView>(R.id.neonBorderView)?.showBorder = isFxHigh
 
         viewModel.boardSize.observe(
             /* owner = */ this,
@@ -323,32 +372,28 @@ class GameAct : BaseActivity() {
     // Unified Dialog Function removed, use DialogUtils instead.
     
     private fun showShuffleDialog(boardView: GameBoard) {
+        blurBg()
         DialogUtils.showGameDialog(
             context = this,
             title = "SHUFFLE PUZZLE",
             message = "Do you want to shuffle\nthe puzzle pieces?",
             yesText = "YES",
             noText = "NO",
-            onYes = {
-                 performShuffleWithAnimation(boardView)
-                 resetTimer()
-                 undoCount = 3
-            }
+            onYes = { unblurBg(); performShuffleWithAnimation(boardView); resetTimer(); undoCount = 3 },
+            onNo = { unblurBg() }
         )
     }
 
     private fun showResetDialog(boardView: GameBoard) {
+        blurBg()
         DialogUtils.showGameDialog(
             context = this,
             title = "RESET PUZZLE",
             message = "Do you want to reset\nto original state?",
             yesText = "RESET",
             noText = "CANCEL",
-            onYes = {
-                performResetWithAnimation(boardView)
-                resetTimer()
-                undoCount = 3
-            }
+            onYes = { unblurBg(); performResetWithAnimation(boardView); resetTimer(); undoCount = 3 },
+            onNo = { unblurBg() }
         )
     }
 
@@ -443,15 +488,26 @@ class GameAct : BaseActivity() {
                 soundManager.isEnabled = soundEnabled
                 return true
             }
+            R.id.action_settings -> {
+                startActivity(android.content.Intent(this, SettingsActivity::class.java))
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
-    
+
     override fun onResume() {
         super.onResume()
         androidx.core.view.WindowCompat.getInsetsController(window, window.decorView)?.apply {
             isAppearanceLightStatusBars = false
         }
+        // Reload settings khi quay lai tu SettingsActivity.
+        showNumbers = loadShowNumbers()
+        soundEnabled = loadSoundEnabled()
+        soundManager.isEnabled = soundEnabled
+        findViewById<GameBoard>(R.id.boardView)?.showNumbers = showNumbers
+        findViewById<NeonBorderView>(R.id.neonBorderView)?.showBorder = isFxHigh
+        invalidateOptionsMenu()
     }
     
     override fun onDestroy() {

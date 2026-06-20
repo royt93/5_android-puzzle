@@ -14,6 +14,8 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {
+    override val useAccentTheme: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Removed UIUtils.setupEdgeToEdge1 - causes transparent status bar

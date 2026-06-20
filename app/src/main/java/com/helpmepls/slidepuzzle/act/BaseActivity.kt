@@ -5,15 +5,40 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.helpmepls.slidepuzzle.R
+import com.helpmepls.slidepuzzle.util.Prefs
 
 abstract class BaseActivity : AppCompatActivity() {
+
+    /** Override false ở SplashActivity để không ghi đè SplashTheme. */
+    open val useAccentTheme: Boolean = true
+
+    private var appliedAccent: String = Prefs.DEFAULT_ACCENT
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(newBase.withFixedFontScale())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (useAccentTheme) {
+            appliedAccent = Prefs.get(this).getString(Prefs.ACCENT_THEME, Prefs.DEFAULT_ACCENT) ?: Prefs.DEFAULT_ACCENT
+            when (appliedAccent) {
+                Prefs.ACCENT_MAGENTA -> setTheme(R.style.AppTheme_Magenta)
+                Prefs.ACCENT_LIME -> setTheme(R.style.AppTheme_Lime)
+                Prefs.ACCENT_VIOLET -> setTheme(R.style.AppTheme_Violet)
+                else -> { /* AppTheme (cyan) đã là default trong manifest */ }
+            }
+        }
         super.onCreate(savedInstanceState)
         applyHighestRefreshRate()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (useAccentTheme) {
+            val current = Prefs.get(this).getString(Prefs.ACCENT_THEME, Prefs.DEFAULT_ACCENT) ?: Prefs.DEFAULT_ACCENT
+            if (current != appliedAccent) recreate()
+        }
     }
 
     private fun Context.withFixedFontScale(): Context {
@@ -22,11 +47,6 @@ abstract class BaseActivity : AppCompatActivity() {
         return createConfigurationContext(configuration)
     }
 
-    /**
-     * Yeu cau he thong dung che do hien thi co refresh rate cao nhat (90/120Hz...) cung
-     * do phan giai hien tai => slide muot hon. Fallback no-op tren thiet bi chi co 60Hz
-     * hoac API < 23. `preferredDisplayModeId` co tu API 23 (minSdk 23).
-     */
     private fun applyHighestRefreshRate() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
         @Suppress("DEPRECATION")

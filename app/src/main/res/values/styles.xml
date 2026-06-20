@@ -61,7 +61,7 @@
         <item name="android:textColorPrimary">@color/neon_text_primary</item>
         <item name="android:textColorSecondary">@color/neon_text_secondary</item>
         <item name="colorOnSurface">@color/neon_text_primary</item>
-        <item name="colorControlNormal">@color/neon_cyan</item>
+        <item name="colorControlNormal">?attr/colorPrimary</item>
         <item name="titleTextColor">@color/neon_text_primary</item>
         <item name="subtitleTextColor">@color/neon_text_secondary</item>
     </style>
@@ -104,6 +104,20 @@
         <item name="subtitleTextColor">@color/neon_text_secondary</item>
         <item name="android:textColorPrimary">@color/neon_text_primary</item>
         <item name="android:textColorSecondary">@color/neon_text_secondary</item>
+    </style>
+
+    <!-- Wave 12: Accent theme variants — chỉ override colorPrimary, kế thừa toàn bộ AppTheme. -->
+    <style name="AppTheme.Magenta" parent="AppTheme">
+        <item name="colorPrimary">@color/neon_magenta</item>
+        <item name="colorOnPrimary">@color/neon_text_on_accent</item>
+    </style>
+    <style name="AppTheme.Lime" parent="AppTheme">
+        <item name="colorPrimary">@color/neon_lime</item>
+        <item name="colorOnPrimary">@color/neon_text_on_accent</item>
+    </style>
+    <style name="AppTheme.Violet" parent="AppTheme">
+        <item name="colorPrimary">@color/neon_violet</item>
+        <item name="colorOnPrimary">@color/neon_text_on_accent</item>
     </style>
 
     <!-- Game specific styles -->

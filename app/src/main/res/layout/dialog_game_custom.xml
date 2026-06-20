@@ -13,11 +13,11 @@
         android:layout_height="wrap_content"
         android:text="Title"
         android:textSize="26sp"
-        android:textColor="@color/neon_cyan"
+        android:textColor="?attr/colorPrimary"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_marginBottom="12dp"
-        android:shadowColor="@color/neon_cyan_glow"
+        android:shadowColor="?attr/colorPrimary"
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="12" />
