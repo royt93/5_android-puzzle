@@ -28,18 +28,23 @@ class GameBoard(
     private val highlightColor get() = accentColor
     private val paint = Paint()
     private val glowPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val restingGlowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 2.5f
+    }
     private val tmpRectF = RectF()
     private val boardRectF = RectF()
     // 4 lop stroke alpha tang dan -> glow mem hon; van chay hardware layer (khong can software/BlurMaskFilter).
     private val glowLayerScale = floatArrayOf(4.0f, 3.0f, 2.0f, 1.0f)
-    private val glowLayerAlpha = intArrayOf(0x14, 0x30, 0x66, 0xE0)
+    private val glowLayerAlpha = intArrayOf(0x18, 0x40, 0x80, 0xFF)
     // Cache nhan so tile (1..n^2) de khong cap phat String trong onDraw.
     private var tileLabels: Array<String> = emptyArray()
     // Hieu ung loe sang lime khi giai xong (Wave 05 M2).
     private var winGlow = 0.0f
     private var winAnimator: ValueAnimator? = null
     private var animator: ValueAnimator? = null
-    private val tileSpacing = 3
+    // 4dp → pixel (lazy, tinh 1 lan sau khi view attach vao window).
+    private val tileSpacingPx: Int by lazy { (4f * resources.displayMetrics.density + 0.5f).toInt() }
     private var tileSize = Rect(0, 0, 0, 0)
     private var renderOffset = Rect(0, 0, 0, 0)
     private val srcRect = Rect(0, 0, 0, 0)
@@ -309,7 +314,13 @@ class GameBoard(
 
         // Halo cyan quanh khung board (ve 1 lan/frame, ngoai vong lap tile).
         boardRectF.set(3.0f, 3.0f, width - 3.0f, height - 3.0f)
-        drawGlowRoundRect(canvas, boardRectF, 16.0f, highlightColor, 2.0f)
+
+        // Nen toi giua cac tile (lo ra o khe ho tile spacing).
+        paint.style = Paint.Style.FILL
+        paint.color = 0xFF0E1230.toInt()
+        canvas.drawRoundRect(boardRectF, 16.0f, 16.0f, paint)
+
+        drawGlowRoundRect(canvas, boardRectF, 16.0f, highlightColor, 3.0f)
 
         // Loe sang lime khi thang (M2).
         if (winGlow > 0.0f) {
@@ -329,11 +340,12 @@ class GameBoard(
                     val x = i * tileSize.width()
                     val y = j * tileSize.height()
 
+                    val sp = tileSpacingPx
                     renderOffset.set(
-                        /* left = */ x + tileSpacing / 2,
-                        /* top = */ y + tileSpacing / 2,
-                        /* right = */ x + tileSize.width() - tileSpacing,
-                        /* bottom = */ y + tileSize.height() - tileSpacing
+                        /* left = */ x + sp / 2,
+                        /* top = */ y + sp / 2,
+                        /* right = */ x + tileSize.width() - sp,
+                        /* bottom = */ y + tileSize.height() - sp
                     )
 
                     if (active) {
@@ -364,10 +376,14 @@ class GameBoard(
                         )
                     }
 
-                    // Vien glow cyan quanh tile dang truot (chi 1 tile/frame).
+                    // Vien glow thuong truc tren moi tile (alpha thap, tao chieu sau).
+                    tmpRectF.set(renderOffset)
+                    restingGlowPaint.color = (accentColor and 0x00FFFFFF) or 0x55000000
+                    canvas.drawRoundRect(tmpRectF, 8.0f, 8.0f, restingGlowPaint)
+
+                    // Vien glow cyan sang hon quanh tile dang truot.
                     if (active) {
-                        tmpRectF.set(renderOffset)
-                        drawGlowRoundRect(canvas, tmpRectF, 8.0f, highlightColor, 4.0f)
+                        drawGlowRoundRect(canvas, tmpRectF, 8.0f, highlightColor, 5.0f)
                     }
                 }
             }

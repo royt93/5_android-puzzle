@@ -12,8 +12,8 @@
         card_view:cardCornerRadius="16dp"
         card_view:cardElevation="6dp"
         card_view:cardUseCompatPadding="true"
-        card_view:strokeColor="@color/neon_cyan_glow"
-        card_view:strokeWidth="1dp">
+        card_view:strokeColor="?attr/colorPrimary"
+        card_view:strokeWidth="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,13 +33,20 @@
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:paddingHorizontal="4dp"
-                android:paddingVertical="2dp"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="4dp"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.App.CardTitle"
-                android:textColor="@color/neon_text_secondary"
+                android:textAllCaps="true"
+                android:letterSpacing="0.05"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:shadowColor="?attr/colorPrimary"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="8"
                 android:visibility="gone"
                 tools:text="@string/app_name"
                 tools:visibility="visible" />

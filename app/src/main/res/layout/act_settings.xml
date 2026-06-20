@@ -354,8 +354,10 @@
                 android:background="@drawable/neon_glass_panel"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:paddingHorizontal="16dp"
-                android:paddingVertical="14dp">
+                android:paddingVertical="6dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -365,12 +367,15 @@
                     android:textColor="@color/neon_text_primary"
                     android:textSize="15sp" />
 
-                <!-- 4 swatches: click → save + recreate; selected = white stroke -->
+                <!-- 4 swatches: click → save + recreate; selected = white stroke + scale -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:paddingVertical="8dp">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/swatchCyan"

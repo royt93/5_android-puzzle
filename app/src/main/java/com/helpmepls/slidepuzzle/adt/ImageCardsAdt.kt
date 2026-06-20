@@ -39,6 +39,7 @@ class ImageCardsAdt(
 
         val card = cards[position]
         holder.titleView.text = card.title
+        holder.titleView.visibility = if (card.title.isNullOrBlank()) View.GONE else View.VISIBLE
 //        holder.imageView.setImageBitmap(card.image)
         Glide.with(holder.imageView.context)
             .load(card.imageResId)

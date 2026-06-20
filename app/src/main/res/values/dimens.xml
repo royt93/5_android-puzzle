@@ -16,6 +16,6 @@
     <dimen name="game_button_height">48dp</dimen>
 
     <!-- Neon / glow -->
-    <dimen name="glow_stroke">1.5dp</dimen>
+    <dimen name="glow_stroke">2dp</dimen>
     <dimen name="neon_corner">20dp</dimen>
 </resources>

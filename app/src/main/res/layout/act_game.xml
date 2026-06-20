@@ -103,6 +103,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topInfoBar">
 
+            <!-- Ambient bloom toa sang tu tam board ra nen (radial gradient oval). -->
+            <ImageView
+                android:id="@+id/boardAmbientGlow"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/neon_board_bloom"
+                android:scaleType="fitXY"
+                android:alpha="0.85"
+                android:elevation="0dp"
+                android:importantForAccessibility="no"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.helpmepls.slidepuzzle.game.GameBoard
                 android:id="@+id/boardView"
@@ -162,15 +176,14 @@
 
             <ImageButton
                 android:id="@+id/btUndo"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/neon_btn_primary"
                 android:contentDescription="@string/undo_action"
                 android:padding="12dp"
                 android:scaleType="centerInside"
-                android:src="@android:drawable/ic_menu_revert"
-                app:tint="?attr/colorPrimary" />
+                android:src="@drawable/ic_undo_neon" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btReset"

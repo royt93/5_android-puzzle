@@ -1,10 +1,13 @@
 package com.helpmepls.slidepuzzle.act
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +29,21 @@ class SplashActivity : BaseActivity() {
         val logo = findViewById<ImageView>(R.id.logo)
         val logoAnimation = AnimationUtils.loadAnimation(this, R.anim.neon_pulse)
         logo.startAnimation(logoAnimation)
+
+        // Halo ring: pulse scale + alpha lớn hơn logo để tạo aura.
+        val halo = findViewById<ImageView>(R.id.logoHalo)
+        halo?.let {
+            val pulseScale = PropertyValuesHolder.ofFloat("scaleX", 1.0f, 1.15f)
+            val pulseScaleY = PropertyValuesHolder.ofFloat("scaleY", 1.0f, 1.15f)
+            val pulseAlpha = PropertyValuesHolder.ofFloat("alpha", 0.3f, 0.7f)
+            ObjectAnimator.ofPropertyValuesHolder(it, pulseScale, pulseScaleY, pulseAlpha).apply {
+                duration = 1100
+                repeatCount = ObjectAnimator.INFINITE
+                repeatMode = ObjectAnimator.REVERSE
+                interpolator = AccelerateDecelerateInterpolator()
+                start()
+            }
+        }
 
         goToMain()
     }

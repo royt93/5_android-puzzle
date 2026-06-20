@@ -93,9 +93,15 @@ class SettingsActivity : BaseActivity() {
     private fun updateSwatchSelection(selectedAccent: String) {
         swatches.forEach { (accent, id) ->
             val btn = findViewById<MaterialButton>(id) ?: return@forEach
-            btn.strokeColor = ColorStateList.valueOf(
-                if (accent == selectedAccent) Color.WHITE else Color.TRANSPARENT
-            )
+            val isSelected = accent == selectedAccent
+            btn.strokeColor = ColorStateList.valueOf(if (isSelected) Color.WHITE else Color.TRANSPARENT)
+            btn.strokeWidth = if (isSelected) 3 else 0
+            btn.elevation = if (isSelected) 16f else 2f
+            btn.animate()
+                .scaleX(if (isSelected) 1.18f else 1.0f)
+                .scaleY(if (isSelected) 1.18f else 1.0f)
+                .setDuration(150)
+                .start()
         }
     }
 
